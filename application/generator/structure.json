@@ -1,0 +1,233 @@
+[
+	{
+		"controller": "Warga",
+		"fields": [
+			{
+				"name": "status",
+				"form": false
+			},
+			{
+				"name": "kode",
+				"form": false
+			},
+			{
+				"name": "nama"
+			},
+			{
+				"name": "kontak"
+			},
+			{
+				"name": "alamat"
+			},
+			{
+				"name": "rtrw",
+				"type": "relation",
+				"model": "Rtrws",
+				"field": "name"
+			},
+			{
+				"name": "saldo"
+			}
+		]
+	},
+	{
+		"controller": "Rtrw",
+		"fields": [
+			{
+				"name": "status",
+				"form": false
+			},
+			{
+				"name": "kode",
+				"form": false
+			},
+			{
+				"name": "nama"
+			},
+			{
+				"name": "latitude"
+			},
+			{
+				"name": "longitude"
+			}
+		]
+	},
+	{
+		"controller": "KategoriSampah",
+		"fields": [
+			{
+				"name": "status",
+				"form": false
+			},
+			{
+				"name": "kode",
+				"form": false
+			},
+			{
+				"name": "nama"
+			},
+			{
+				"name": "contoh"
+			},
+			{
+				"name": "harga",
+				"type": "number"
+			}
+		]
+	},
+	{
+		"controller": "ProdukTukar",
+		"fields": [
+			{
+				"name": "status",
+				"form": false
+			},
+			{
+				"name": "kode",
+				"form": false
+			},
+			{
+				"name": "nama"
+			},
+			{
+				"name": "kategori"
+			},
+			{
+				"name": "harga",
+				"type": "number"
+			},
+			{
+				"name": "stok",
+				"type": "number"
+			},
+			{
+				"name": "terjual",
+				"type": "number"
+			}
+		]
+	},
+	{
+		"controller": "TransaksiGlobal",
+		"fields": [
+			{
+				"name": "status",
+				"form": false
+			},
+			{
+				"name": "kode",
+				"form": false
+			},
+			{
+				"name": "warga",
+				"type": "relation",
+				"model": "Wargas",
+				"field": "name"
+			},
+			{
+				"name": "petugas",
+				"type": "relation",
+				"model": "Users",
+				"field": "name"
+			},
+			{
+				"name": "tipe"
+			},
+			{
+				"name": "keterangan"
+			},
+			{
+				"name": "nilai",
+				"type": "number"
+			}
+		]
+	},
+	{
+		"controller": "TransaksiSampah",
+		"fields": [
+			{
+				"name": "status",
+				"form": false
+			},
+			{
+				"name": "kode",
+				"form": false
+			},
+			{
+				"name": "warga",
+				"type": "relation",
+				"model": "Wargas",
+				"field": "name"
+			},
+			{
+				"name": "petugas",
+				"type": "relation",
+				"model": "Users",
+				"field": "name"
+			},
+		]
+	},
+	{
+		"controller": "RelationshipScore",
+		"fields": [
+			{
+				"name": "status",
+				"form": false
+			},
+			{
+				"name": "kode",
+				"form": false
+			},
+			{
+				"name": "nama"
+			}
+		]
+	},
+	{
+		"controller": "RelationshipScore",
+		"fields": [
+			{
+				"name": "status",
+				"form": false
+			},
+			{
+				"name": "kode",
+				"form": false
+			},
+			{
+				"name": "nama"
+			}
+		]
+	},
+	{
+		"controller": "RelationshipScore",
+		"fields": [
+			{
+				"name": "status",
+				"form": false
+			},
+			{
+				"name": "kode",
+				"form": false
+			},
+			{
+				"name": "nama"
+			}
+		]
+	},
+	{
+		"controller": "RelationshipScore",
+		"fields": [
+			{
+				"name": "status",
+				"form": false
+			},
+			{
+				"name": "kode",
+				"form": false
+			},
+			{
+				"name": "nama"
+			}
+		]
+	}
+]
