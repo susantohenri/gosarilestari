@@ -20,7 +20,7 @@ class Migration_hasilpemilahan extends CI_Migration
         `kategorisampah` varchar(36) NOT NULL,
         `berat` FLOAT NOT NULL DEFAULT 0,
         `harga` FLOAT NOT NULL DEFAULT 0,
-        `total` FLOAT NOT NULL DEFAULT 0,
+        `pendapatan` FLOAT NOT NULL DEFAULT 0,
         PRIMARY KEY (`uuid`),
         KEY `transaksisampah` (`transaksisampah`),
         KEY `kategorisampah` (`kategorisampah`)

@@ -6,7 +6,17 @@ class Migration_seeds extends CI_Migration
 {
     public function up()
     {
-        $this->load->model(['Users', 'Roles', 'Permissions', 'Menus']);
+        $this->load->model([
+            'Users',
+            'Roles',
+            'Permissions',
+            'Menus',
+            'Konfigurasis',
+            'Wargas',
+            'Rtrws',
+            'KategoriSampahs',
+            'ProdukTukars'
+        ]);
         $fas = ['database', 'desktop', 'download', 'ethernet', 'hdd', 'hdd', 'headphones', 'keyboard', 'keyboard', 'laptop', 'memory', 'microchip', 'mobile', 'mobile-alt', 'plug', 'power-off', 'print', 'satellite', 'satellite-dish', 'save', 'save', 'sd-card', 'server', 'sim-card', 'stream', 'tablet', 'tablet-alt', 'tv', 'upload'];
 
         $admin = $this->Roles->create(['name' => 'Admin']);
@@ -54,17 +64,21 @@ class Migration_seeds extends CI_Migration
             'role' => $admin
         ]);
 
+        $this->Konfigurasis->create([
+            'nama' => 'TARGET_SAMPAH_BULAN_INI',
+            'nilai' => '2000'
+        ]);
+
+        $this->Konfigurasis->create([
+            'nama' => 'BATAS_MINIMUM_STOK_RENDAH',
+            'nilai' => '10'
+        ]);
+
         if ('development' === ENVIRONMENT) {
             $this->Users->create([
-                'username' => 'Petugas',
+                'username' => 'Petugas Jaga',
                 'password' => md5('123'),
                 'role' => $petugas
-            ]);
-
-            $this->load->model([
-                'Wargas',
-                'Rtrws',
-                'KategoriSampahs',
             ]);
 
             $rtrw = $this->Rtrws->create([
@@ -73,7 +87,7 @@ class Migration_seeds extends CI_Migration
             ]);
 
             $this->Wargas->create([
-                'nama' => 'Henri Susanto',
+                'nama' => 'Hj. Warga Teladan',
                 'rtrw' => $rtrw
             ]);
 
@@ -87,6 +101,22 @@ class Migration_seeds extends CI_Migration
                 'nama' => 'Kertas',
                 'contoh' => 'koran, buku, tissue',
                 'harga' => 1500
+            ]);
+
+            $this->ProdukTukars->create([
+                'nama' => 'Gas LPG 3KG',
+                'kategori' => 'Gas Subsidi',
+                'harga' => 16000,
+                'stok' => 22,
+                'terjual' => 10
+            ]);
+
+            $this->ProdukTukars->create([
+                'nama' => 'Gas Bright 12KG',
+                'kategori' => 'Gas Non Subsidi',
+                'harga' => 125000,
+                'stok' => 11,
+                'terjual' => 6
             ]);
         }
     }

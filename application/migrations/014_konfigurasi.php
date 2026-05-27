@@ -16,6 +16,7 @@ class Migration_konfigurasi extends CI_Migration
         `deletedAt` datetime DEFAULT NULL,
         `status` tinyint NOT NULL DEFAULT 1,
         `kode` varchar(6) NOT NULL,
+        `nama` varchar(255) NOT NULL,
         `nilai` varchar(255) NOT NULL,
         PRIMARY KEY (`uuid`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8

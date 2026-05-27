@@ -21,12 +21,10 @@ class KategoriSampahs extends MY_Model
     $this->form = array(
       array(
         'name' => 'nama',
-        'width' => 2,
         'label' => 'Nama',
       ),
       array(
         'name' => 'contoh',
-        'width' => 2,
         'label' => 'Contoh',
       ),
       array(

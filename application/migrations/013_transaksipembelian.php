@@ -14,7 +14,7 @@ class Migration_transaksipembelian extends CI_Migration
         `createdAt` datetime DEFAULT NULL,
         `updatedAt` datetime DEFAULT NULL,
         `deletedAt` datetime DEFAULT NULL,
-        `status` tinyint NOT NULL DEFAULT 1,
+        `status` ENUM('DIBAYAR', 'DIAMBIL'),
         `kode` varchar(6) NOT NULL,
         `warga` varchar(36) NOT NULL,
         `petugas` varchar(36) NOT NULL,

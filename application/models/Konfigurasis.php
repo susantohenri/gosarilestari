@@ -11,13 +11,17 @@ class Konfigurasis extends MY_Model
 
     $this->thead = array(
       (object) array('mData' => 'orders', 'sTitle' => 'No', 'visible' => false),
-      (object) array('mData' => 'status', 'sTitle' => 'Status')
+      (object) array('mData' => 'nama', 'sTitle' => 'NAMA'),
+      (object) array('mData' => 'nilai', 'sTitle' => 'NILAI')
     );
 
     $this->form = array(
       array(
+        'name' => 'nama',
+        'label' => 'Nama',
+      ),
+      array(
         'name' => 'nilai',
-        'width' => 2,
         'label' => 'Nilai',
       ),
     );
@@ -30,7 +34,8 @@ class Konfigurasis extends MY_Model
     $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.orders")
-      ->select('konfigurasi.status");
+      ->select("konfigurasi.nama")
+      ->select("konfigurasi.nilai");
     return parent::dt();
   }
 }

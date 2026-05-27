@@ -12,6 +12,7 @@ class TransaksiSampahs extends MY_Model
 		$this->thead = array(
 			(object) array('mData' => 'orders', 'sTitle' => 'No', 'visible' => false),
 			(object) array('mData' => 'kode', 'sTitle' => '#'),
+			(object) array('mData' => 'ftanggal', 'sTitle' => 'TANGGAL'),
 			(object) array('mData' => 'fwarga', 'sTitle' => 'WARGA'),
 			(object) array('mData' => 'fpetugas', 'sTitle' => 'PETUGAS'),
 			(object) array('mData' => 'status', 'sTitle' => 'STATUS'),
@@ -62,14 +63,14 @@ class TransaksiSampahs extends MY_Model
 					array('data-number' => 'true')
 				)
 			),
-			array(
-				'name' => 'pendapatan',
-				'label' => 'Pendapatan',
-				'width' => 2,
-				'attributes' => array(
-					array('data-number' => 'true')
-				)
-			),
+			// array(
+			// 	'name' => 'pendapatan',
+			// 	'label' => 'Pendapatan',
+			// 	'width' => 2,
+			// 	'attributes' => array(
+			// 		array('data-number' => 'true')
+			// 	)
+			// ),
 			array(
 				'name' => 'tagihan',
 				'label' => 'Tagihan',
@@ -78,9 +79,17 @@ class TransaksiSampahs extends MY_Model
 					array('data-number' => 'true')
 				)
 			),
+			[
+				'name' => 'status',
+				'label' => 'Status',
+				'options' => [
+					['text' => 'DISETOR', 'value' => 'DISETOR'],
+					['text' => 'DIPILAH', 'value' => 'DIPILAH']
+				]
+			]
 		);
 
-		$this->childs = array();
+		$this->childs[] = array('label' => 'Hasil Pemilahan', 'controller' => 'HasilPemilahan', 'model' => 'HasilPemilahans');
 	}
 
 	function dt()
@@ -88,8 +97,9 @@ class TransaksiSampahs extends MY_Model
 		$this->datatables
 			->select("{$this->table}.uuid")
 			->select("{$this->table}.orders")
+			->select("DATE_FORMAT(transaksisampah.createdAt, '%d %b %Y') as ftanggal", false)
 			->select("transaksisampah.kode")
-			->select("CONCAT(warga.nama, '<br>', warga.kode) as fwarga", false)
+			->select("warga.nama as fwarga", false)
 			->select("user.username as fpetugas", false)
 			->select("transaksisampah.status")
 			->select("CONCAT(FORMAT(berat, 0), ' KG') as fberat", false)

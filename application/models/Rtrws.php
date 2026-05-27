@@ -21,22 +21,18 @@ class Rtrws extends MY_Model
     $this->form = array(
       array(
         'name' => 'rt',
-        'width' => 2,
         'label' => 'RT',
       ),
       array(
         'name' => 'rw',
-        'width' => 2,
         'label' => 'RW',
       ),
       array(
         'name' => 'latitude',
-        'width' => 2,
         'label' => 'Latitude',
       ),
       array(
         'name' => 'longitude',
-        'width' => 2,
         'label' => 'Longitude',
       ),
     );
