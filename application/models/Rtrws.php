@@ -11,8 +11,7 @@ class Rtrws extends MY_Model
 
     $this->thead = array(
       (object) array('mData' => 'orders', 'sTitle' => 'No', 'visible' => false),
-      (object) array('mData' => 'rt', 'sTitle' => 'RT'),
-      (object) array('mData' => 'rw', 'sTitle' => 'RW'),
+      (object) array('mData' => 'nama', 'sTitle' => 'RT/RW'),
       (object) array('mData' => 'latitude', 'sTitle' => 'LATITUDE'),
       (object) array('mData' => 'longitude', 'sTitle' => 'LONGITUDE'),
 			(object) array('mData' => 'aksi', 'sTitle' => 'AKSI'),
@@ -20,12 +19,8 @@ class Rtrws extends MY_Model
 
     $this->form = array(
       array(
-        'name' => 'rt',
-        'label' => 'RT',
-      ),
-      array(
-        'name' => 'rw',
-        'label' => 'RW',
+        'name' => 'nama',
+        'label' => 'RT/RW',
       ),
       array(
         'name' => 'latitude',
@@ -45,24 +40,11 @@ class Rtrws extends MY_Model
     $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.orders")
-      ->select('rtrw.rt')
-      ->select('rtrw.rw')
+      ->select('rtrw.nama')
       ->select('rtrw.latitude')
       ->select('rtrw.longitude')
 			->select('"" as aksi')
     ;
     return parent::dt();
-  }
-
-  public function select2($field, $term)
-  {
-    return $this->db
-      ->select("uuid as id", false)
-      ->select("CONCAT('RT', rt, '/RW', rw) as text", false)
-      ->where('deletedAt', null)
-      ->limit(10)
-      ->like('rt', $term ?? '')
-      ->or_like('rw', $term ?? '')
-      ->get($this->table)->result();
   }
 }

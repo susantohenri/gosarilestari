@@ -35,6 +35,14 @@ class KategoriSampahs extends MY_Model
           array('data-number' => 'true')
         )
       ),
+			[
+				'name' => 'status',
+				'label' => 'Status',
+				'options' => [
+					['text' => 'Aktif', 'value' => '1'],
+					['text' => 'Tidak Aktif', 'value' => '0']
+				]
+			]
     );
 
     $this->childs = array();
@@ -53,4 +61,15 @@ class KategoriSampahs extends MY_Model
     ;
     return parent::dt();
   }
+
+	public function select2($field, $term)
+	{
+		return $this->db
+			->select("uuid as id", false)
+			->select("$field as text", false)
+			->where('deletedAt', null)
+			->where('status', 1)
+			->limit(10)
+			->like($field, $term ?? '')->get($this->table)->result();
+	}
 }

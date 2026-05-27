@@ -74,6 +74,36 @@ class Migration_seeds extends CI_Migration
             'nilai' => '10'
         ]);
 
+        $this->KategoriSampahs->create([
+            'nama' => 'Plastik',
+            'contoh' => 'PET, botol, kresek',
+            'harga' => 3500
+        ]);
+
+        $this->KategoriSampahs->create([
+            'nama' => 'Kertas',
+            'contoh' => 'koran, kardus, HVS',
+            'harga' => 2000
+        ]);
+
+        $this->KategoriSampahs->create([
+            'nama' => 'Logam',
+            'contoh' => 'Kaleng, besi, alumunium',
+            'harga' => 7000
+        ]);
+
+        $this->KategoriSampahs->create([
+            'nama' => 'Kaca',
+            'contoh' => 'Botol kaca bening',
+            'harga' => 1500
+        ]);
+
+        $this->KategoriSampahs->create([
+            'nama' => 'Minyak Jelantah',
+            'contoh' => 'Per liter, bersih',
+            'harga' => 5500
+        ]);
+
         if ('development' === ENVIRONMENT) {
             $this->Users->create([
                 'username' => 'Petugas Jaga',
@@ -82,25 +112,12 @@ class Migration_seeds extends CI_Migration
             ]);
 
             $rtrw = $this->Rtrws->create([
-                'rt' => '006',
-                'rw' => '004'
+                'nama' => 'RT06/RW04',
             ]);
 
             $this->Wargas->create([
-                'nama' => 'Hj. Warga Teladan',
+                'nama' => 'dr. Warga Teladan',
                 'rtrw' => $rtrw
-            ]);
-
-            $this->KategoriSampahs->create([
-                'nama' => 'Plastik',
-                'contoh' => 'ember, galon, botol',
-                'harga' => 2500
-            ]);
-
-            $this->KategoriSampahs->create([
-                'nama' => 'Kertas',
-                'contoh' => 'koran, buku, tissue',
-                'harga' => 1500
             ]);
 
             $this->ProdukTukars->create([

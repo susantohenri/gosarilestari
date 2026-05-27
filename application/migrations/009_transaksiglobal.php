@@ -16,6 +16,7 @@ class Migration_transaksiglobal extends CI_Migration
         `deletedAt` datetime DEFAULT NULL,
         `status` tinyint NOT NULL DEFAULT 1,
         `kode` varchar(6) NOT NULL,
+        `transaksi` varchar(36) NOT NULL,
         `warga` varchar(36) NOT NULL,
         `petugas` varchar(36) NOT NULL,
         `tipe` ENUM('SETOR_SAMPAH', 'TUKAR_PRODUK', 'POTONG_IURAN') NOT NULL,

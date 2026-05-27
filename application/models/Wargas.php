@@ -13,7 +13,7 @@ class Wargas extends MY_Model
 			(object) array('mData' => 'orders', 'sTitle' => 'No', 'visible' => false),
 			(object) array('mData' => 'fnama', 'sTitle' => 'NAMA WARGA'),
 			(object) array('mData' => 'fkontak', 'sTitle' => 'KONTAK'),
-			(object) array('mData' => 'rtrw', 'sTitle' => 'RT/RW'),
+			(object) array('mData' => 'frtrw', 'sTitle' => 'RT/RW'),
 			(object) array('mData' => 'fsaldo', 'sTitle' => 'SALDO'),
 			(object) array('mData' => 'bergabung', 'sTitle' => 'BERGABUNG'),
 			(object) array('mData' => 'fstatus', 'sTitle' => 'STATUS'),
@@ -52,6 +52,14 @@ class Wargas extends MY_Model
 				'width' => 2,
 				'label' => 'Saldo',
 			),
+			[
+				'name' => 'status',
+				'label' => 'Status',
+				'options' => [
+					['text' => 'Aktif', 'value' => '1'],
+					['text' => 'Tidak Aktif', 'value' => '0']
+				]
+			]
 		);
 
 		$this->childs = array();
@@ -64,7 +72,7 @@ class Wargas extends MY_Model
 			->select("{$this->table}.orders")
 			->select("CONCAT(warga.nama, '<br>', warga.kode) as fnama", false)
 			->select("CONCAT(warga.kontak, '<br>', warga.alamat) as fkontak", false)
-			->select("CONCAT('RT', rtrw.rt, '/RW', rtrw.rw) as rtrw", false)
+			->select("rtrw.nama as frtrw", false)
 			->select("CONCAT('Rp ', FORMAT(saldo, 0, 'id_ID')) as fsaldo", false)
 			->select("DATE_FORMAT(warga.createdAt, '%d %b %Y') as bergabung", false)
 			->select("IF(warga.status = 1, 'Aktif', 'Tidak Aktif') as fstatus", false)
@@ -72,5 +80,16 @@ class Wargas extends MY_Model
 			->join('rtrw', 'rtrw.uuid = warga.rtrw', 'left')
 		;
 		return parent::dt();
+	}
+
+	public function select2($field, $term)
+	{
+		return $this->db
+			->select("uuid as id", false)
+			->select("$field as text", false)
+			->where('deletedAt', null)
+			->where('status', 1)
+			->limit(10)
+			->like($field, $term ?? '')->get($this->table)->result();
 	}
 }

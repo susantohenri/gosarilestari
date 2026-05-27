@@ -45,9 +45,9 @@ class HasilPemilahans extends MY_Model
 				'name' => 'berat',
 				'label' => 'Berat',
 				'width' => 3,
-				'attributes' => array(
-					array('data-number' => 'true')
-				)
+				// 'attributes' => array(
+				// 	array('data-number' => 'true')
+				// )
 			),
 			// array(
 			// 	'name' => 'harga',

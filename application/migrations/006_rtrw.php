@@ -16,8 +16,7 @@ class Migration_rtrw extends CI_Migration
         `deletedAt` datetime DEFAULT NULL,
         `status` tinyint NOT NULL DEFAULT 1,
         `kode` varchar(6) NOT NULL,
-        `rt` varchar(16) NOT NULL,
-        `rw` varchar(16) NOT NULL,
+        `nama` varchar(255) NOT NULL,
         `latitude` varchar(16) NOT NULL,
         `longitude` varchar(16) NOT NULL,
         PRIMARY KEY (`uuid`)

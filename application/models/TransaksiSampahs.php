@@ -57,11 +57,11 @@ class TransaksiSampahs extends MY_Model
 			),
 			array(
 				'name' => 'berat',
-				'label' => 'Berat',
+				'label' => 'Berat (Kg)',
 				'width' => 2,
-				'attributes' => array(
-					array('data-number' => 'true')
-				)
+				// 'attributes' => array(
+				// 	array('data-number' => 'true')
+				// )
 			),
 			// array(
 			// 	'name' => 'pendapatan',
@@ -73,7 +73,7 @@ class TransaksiSampahs extends MY_Model
 			// ),
 			array(
 				'name' => 'tagihan',
-				'label' => 'Tagihan',
+				'label' => 'Tagihan (Rp)',
 				'width' => 2,
 				'attributes' => array(
 					array('data-number' => 'true')
@@ -102,7 +102,7 @@ class TransaksiSampahs extends MY_Model
 			->select("warga.nama as fwarga", false)
 			->select("user.username as fpetugas", false)
 			->select("transaksisampah.status")
-			->select("CONCAT(FORMAT(berat, 0), ' KG') as fberat", false)
+			->select("CONCAT(FORMAT(berat, 1), ' KG') as fberat", false)
 			->select("CONCAT('Rp ', FORMAT(pendapatan, 0, 'id_ID')) as fpendapatan", false)
 			->select("CONCAT('Rp ', FORMAT(tagihan, 0, 'id_ID')) as ftagihan", false)
 			->select('"" as aksi')
@@ -110,5 +110,35 @@ class TransaksiSampahs extends MY_Model
 			->join('user', 'user.uuid = transaksisampah.petugas', 'left')
 		;
 		return parent::dt();
+	}
+
+	public function save($record)
+	{
+		$uuid = parent::save($record);
+		$pendapatan = $this->pendapatan($uuid);
+		$this
+			->db
+			->where('uuid', $uuid)
+			->update('transaksisampah', array(
+				'pendapatan' => $pendapatan,
+			));
+		return $uuid;
+	}
+
+	function pendapatan($uuid)
+	{
+		$this->load->model(['HasilPemilahans', 'KategoriSampahs']);
+		$hasils = $this->HasilPemilahans->find(['transaksisampah' => $uuid]);
+		$kategoris = $this->KategoriSampahs->find();
+
+		$pendapatan = 0;
+		foreach ($hasils as $hasil) {
+			foreach ($kategoris as $kategori) {
+				if ($kategori->uuid === $hasil->kategorisampah) {
+					$pendapatan += $kategori->harga * $hasil->berat;
+				}
+			}
+		}
+		return $pendapatan;
 	}
 }
