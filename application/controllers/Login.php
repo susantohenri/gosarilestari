@@ -31,26 +31,6 @@ class Login extends CI_Controller
         }
     }
 
-    public function Dummy()
-    {
-        if ('development' !== ENVIRONMENT) show_404();
-
-        $this->load->model(['Users', 'Creators', 'Contents']);
-
-        $creators = ['Henri', 'Susanto'];
-        foreach ($creators as $name) {
-            $userId = $this->Users->create(['username' => "user{$name}", 'password' => md5('123')]);
-            $creatorId = $this->Creators->create([
-                'name' => "Creator {$name}",
-                'user' => $userId
-            ]);
-            $this->Contents->create([
-                'title' => "Konten {$name}",
-                'creator' => $creatorId
-            ]);
-        }
-    }
-
     public function Logout()
     {
         $this->load->library('session');

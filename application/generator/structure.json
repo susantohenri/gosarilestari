@@ -156,34 +156,34 @@
 				"name": "warga",
 				"type": "relation",
 				"model": "Wargas",
-				"field": "name"
+				"field": "nama"
 			},
 			{
 				"name": "petugas",
 				"type": "relation",
 				"model": "Users",
-				"field": "name"
-			},
-		]
-	},
-	{
-		"controller": "RelationshipScore",
-		"fields": [
-			{
-				"name": "status",
-				"form": false
+				"field": "nama"
 			},
 			{
-				"name": "kode",
-				"form": false
+				"name": "kategori",
+				"options": [
+					"merah",
+					"kuning",
+					"hijau"
+				]
 			},
 			{
-				"name": "nama"
+				"name": "pendapatan",
+				"type": "int"
+			},
+			{
+				"name": "tagihan",
+				"type": "int"
 			}
 		]
 	},
 	{
-		"controller": "RelationshipScore",
+		"controller": "HasilPemilahan",
 		"fields": [
 			{
 				"name": "status",
@@ -194,12 +194,33 @@
 				"form": false
 			},
 			{
-				"name": "nama"
+				"name": "transaksisampah",
+				"type": "relation",
+				"model": "TransaksiSampahs",
+				"field": "kode"
+			},
+			{
+				"name": "kategorisampah",
+				"type": "relation",
+				"model": "KategoriSampahs",
+				"field": "nama"
+			},
+			{
+				"name": "qty",
+				"type": "int"
+			},
+			{
+				"name": "harga",
+				"type": "int"
+			},
+			{
+				"name": "total",
+				"type": "int"
 			}
 		]
 	},
 	{
-		"controller": "RelationshipScore",
+		"controller": "TransaksiIuran",
 		"fields": [
 			{
 				"name": "status",
@@ -210,12 +231,31 @@
 				"form": false
 			},
 			{
-				"name": "nama"
+				"name": "warga",
+				"type": "relation",
+				"model": "Wargas",
+				"field": "nama"
+			},
+			{
+				"name": "petugas",
+				"type": "relation",
+				"model": "Users",
+				"field": "nama"
+			},
+			{
+				"name": "bulan"
+			},
+			{
+				"name": "tahun"
+			},
+			{
+				"name": "nominal",
+				"type": "int"
 			}
 		]
 	},
 	{
-		"controller": "RelationshipScore",
+		"controller": "TransaksiPembelian",
 		"fields": [
 			{
 				"name": "status",
@@ -226,7 +266,50 @@
 				"form": false
 			},
 			{
-				"name": "nama"
+				"name": "warga",
+				"type": "relation",
+				"model": "Wargas",
+				"field": "nama"
+			},
+			{
+				"name": "petugas",
+				"type": "relation",
+				"model": "Users",
+				"field": "nama"
+			},
+			{
+				"name": "produktukar",
+				"type": "relation",
+				"model": "ProdukTukars",
+				"field": "nama"
+			},
+			{
+				"name": "harga",
+				"type": "int"
+			},
+			{
+				"name": "qty",
+				"type": "int"
+			},
+			{
+				"name": "total",
+				"type": "int"
+			}
+		]
+	},
+	{
+		"controller": "Konfigurasi",
+		"fields": [
+			{
+				"name": "status",
+				"form": false
+			},
+			{
+				"name": "kode",
+				"form": false
+			},
+			{
+				"name": "nilai"
 			}
 		]
 	}

@@ -84,4 +84,15 @@ class Users extends MY_Model
             ->join('role', 'role.uuid = user.role', 'left');
         return parent::dt();
     }
+
+    public function select2($field, $term)
+    {
+        return $this->db
+            ->select("uuid as id", false)
+            ->select("$field as text", false)
+            ->where('deletedAt', null)
+            ->where('username <>', 'admin')
+            ->limit(10)
+            ->like($field, $term ?? '')->get($this->table)->result();
+    }
 }

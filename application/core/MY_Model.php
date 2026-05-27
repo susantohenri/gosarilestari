@@ -48,6 +48,9 @@ class MY_Model extends CI_Model
 
     public function create($record)
     {
+        if ($this->db->field_exists('kode', $this->table)) {
+            $record['kode'] = strtoupper(base_convert(time() + rand(), 10, 36));
+        }
         $generate = $this->db->select('UUID() uuid', false)->get()->row_array();
         $record['uuid'] = $generate['uuid'];
         $record = $this->savechild($record);

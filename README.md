@@ -1,2 +1,74 @@
 # gosarilestari
 CodeIgniter3 Based Trash Bank Progressive Web Apps
+
+# Gosari Lestari - Local Development Setup
+
+## Requirements
+
+-   Podman
+-   Podman Compose
+-   VS Code (optional)
+-   TablePlus (optional)
+
+## Clone repository
+
+``` bash
+git clone git@github.com:susantohenri/gosarilestari.git
+cd gosarilestari
+```
+
+## Start Podman machine (macOS only)
+
+``` bash
+podman machine start
+```
+
+## Build and start containers
+
+``` bash
+podman-compose up --build -d
+```
+
+## Check running containers
+
+``` bash
+podman ps
+```
+
+Expected containers:
+
+-   gosarilestari-app
+-   gosarilestari-db
+
+## Access application
+
+Open:
+
+``` txt
+http://localhost:8080
+```
+
+## Database connection
+
+Use these credentials if connecting from TablePlus or another database
+client:
+
+``` txt
+Host: 127.0.0.1
+Port: 3306
+User: root
+Password: root
+Database: gosarilestaridb
+```
+
+## Stop containers
+
+``` bash
+podman-compose down
+```
+
+## Stop and remove containers + database volume
+
+``` bash
+podman-compose down -v
+```

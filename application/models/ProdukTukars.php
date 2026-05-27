@@ -1,0 +1,78 @@
+<?php defined('BASEPATH') or exit('No direct script access allowed');
+
+class ProdukTukars extends MY_Model
+{
+
+	function __construct()
+	{
+		parent::__construct();
+
+		$this->table = 'produktukar';
+
+		$this->thead = array(
+			(object) array('mData' => 'orders', 'sTitle' => 'No', 'visible' => false),
+			(object) array('mData' => 'kode', 'sTitle' => '#'),
+			(object) array('mData' => 'nama', 'sTitle' => 'PRODUK'),
+			(object) array('mData' => 'kategori', 'sTitle' => 'KATEGORI'),
+			(object) array('mData' => 'fharga', 'sTitle' => 'HARGA'),
+			(object) array('mData' => 'fstok', 'sTitle' => 'STOK'),
+			(object) array('mData' => 'fterjual', 'sTitle' => 'TERJUAL'),
+			(object) array('mData' => 'aksi', 'sTitle' => 'AKSI')
+		);
+
+		$this->form = array(
+			array(
+				'name' => 'nama',
+				'width' => 2,
+				'label' => 'Nama',
+			),
+			array(
+				'name' => 'kategori',
+				'width' => 2,
+				'label' => 'Kategori',
+			),
+			array(
+				'name' => 'harga',
+				'label' => 'Harga',
+				'width' => 2,
+				'attributes' => array(
+					array('data-number' => 'true')
+				)
+			),
+			array(
+				'name' => 'stok',
+				'label' => 'Stok',
+				'width' => 2,
+				'attributes' => array(
+					array('data-number' => 'true')
+				)
+			),
+			array(
+				'name' => 'terjual',
+				'label' => 'Terjual',
+				'width' => 2,
+				'attributes' => array(
+					array('data-number' => 'true')
+				)
+			),
+		);
+
+		$this->childs = array();
+	}
+
+	function dt()
+	{
+		$this->datatables
+			->select("{$this->table}.uuid")
+			->select("{$this->table}.orders")
+			->select("produktukar.kode")
+			->select("produktukar.nama")
+			->select("produktukar.kategori")
+			->select("CONCAT('Rp ', FORMAT(produktukar.harga, 0, 'id_ID')) as fharga", false)
+			->select("FORMAT(produktukar.stok, 0) as fstok", false)
+			->select("FORMAT(produktukar.terjual, 0) as fterjual", false)
+			->select('"" as aksi')
+		;
+		return parent::dt();
+	}
+}

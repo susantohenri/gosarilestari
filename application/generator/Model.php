@@ -4,7 +4,9 @@ class {{modelName}} extends MY_Model {
 
   function __construct () {
     parent::__construct();
+
     $this->table = '{{tableName}}';
+
     $this->thead = array(
       (object) array('mData' => 'orders', 'sTitle' => 'No', 'visible' => false),
       {{theads}}

@@ -157,12 +157,11 @@ class MY_Controller extends CI_Controller
     public function select2($model, $field)
     {
         $this->load->model($model);
-        echo '{"results":'. json_encode($this->$model->select2($field, $this->input->post('term'))) . '}';
+        echo '{"results":' . json_encode($this->$model->select2($field, $this->input->post('term'))) . '}';
     }
 
     public function dt()
     {
         echo $this->{$this->model}->dt();
     }
-
 }
