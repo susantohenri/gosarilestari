@@ -23,7 +23,7 @@ class Migration_seeds extends CI_Migration
         $petugas = $this->Roles->create(['name' => 'Petugas']);
 
         $baseEntities = ['User', 'Role', 'Permission', 'Menu'];
-        $appEntities = ['Warga', 'Rtrw', 'KategoriSampah', 'ProdukTukar', 'TransaksiGlobal', 'TransaksiSampah', 'HasilPemilahan', 'TransaksiIuran', 'TransaksiPembelian', 'Konfigurasi'];
+        $appEntities = ['Warga', 'Rtrw', 'KategoriSampah', 'ProdukTukar', 'Ledger', 'SetorSampah', 'SetorTunai', 'TukarProduk', 'Konfigurasi'];
         $allPermissions = ['index', 'create', 'read', 'update', 'delete'];
 
         foreach (array_merge($baseEntities, $appEntities) as $entity) {
@@ -72,6 +72,11 @@ class Migration_seeds extends CI_Migration
         $this->Konfigurasis->create([
             'nama' => 'BATAS_MINIMUM_STOK_RENDAH',
             'nilai' => '10'
+        ]);
+
+        $this->Konfigurasis->create([
+            'nama' => 'TANGGAL_PENGIRIMAN_NOTIFIKASI',
+            'nilai' => '5'
         ]);
 
         $this->KategoriSampahs->create([

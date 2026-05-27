@@ -1,11 +1,11 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class TransaksiPembelian extends MY_Controller
+class TukarProduk extends MY_Controller
 {
 
 	function __construct()
 	{
-		$this->model = 'TransaksiPembelians';
+		$this->model = 'TukarProduks';
 		parent::__construct();
 	}
 }

@@ -1,20 +1,20 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Migration_transaksisampah extends CI_Migration
+class Migration_setorsampah extends CI_Migration
 {
 
   function up()
   {
 
     $this->db->query("
-      CREATE TABLE `transaksisampah` (
+      CREATE TABLE `setorsampah` (
         `uuid` varchar(36) NOT NULL,
         `orders` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
         `createdAt` datetime DEFAULT NULL,
         `updatedAt` datetime DEFAULT NULL,
         `deletedAt` datetime DEFAULT NULL,
-        `status` ENUM('DISETOR', 'DIPILAH', 'DIBAYAR') DEFAULT 'DISETOR',
+        `status` tinyint NOT NULL DEFAULT 1,
         `kode` varchar(6) NOT NULL,
         `warga` varchar(36) NOT NULL,
         `petugas` varchar(36) NOT NULL,
@@ -22,15 +22,17 @@ class Migration_transaksisampah extends CI_Migration
         `berat` FLOAT NOT NULL DEFAULT 0,
         `pendapatan` FLOAT NOT NULL DEFAULT 0,
         `tagihan`  FLOAT NOT NULL DEFAULT 0,
+        `kategorisampah` varchar(36) NOT NULL,
         PRIMARY KEY (`uuid`),
         KEY `warga` (`warga`),
-        KEY `petugas` (`petugas`)
+        KEY `petugas` (`petugas`),
+        KEY `kategorisampah` (`kategorisampah`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
   }
 
   function down()
   {
-    $this->db->query("DROP TABLE IF EXISTS `transaksisampah`");
+    $this->db->query("DROP TABLE IF EXISTS `setorsampah`");
   }
 }

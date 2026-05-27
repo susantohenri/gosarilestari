@@ -1,37 +1,35 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Migration_transaksipembelian extends CI_Migration
+class Migration_setortunai extends CI_Migration
 {
 
   function up()
   {
 
     $this->db->query("
-      CREATE TABLE `transaksipembelian` (
+      CREATE TABLE `setortunai` (
         `uuid` varchar(36) NOT NULL,
         `orders` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
         `createdAt` datetime DEFAULT NULL,
         `updatedAt` datetime DEFAULT NULL,
         `deletedAt` datetime DEFAULT NULL,
-        `status` ENUM('DIBAYAR', 'DIAMBIL'),
+        `status` tinyint NOT NULL DEFAULT 1,
         `kode` varchar(6) NOT NULL,
         `warga` varchar(36) NOT NULL,
         `petugas` varchar(36) NOT NULL,
-        `produktukar` varchar(36) NOT NULL,
-        `harga` FLOAT NOT NULL DEFAULT 0,
-        `qty` INT(11) NOT NULL,
-        `total` FLOAT NOT NULL DEFAULT 0,
+        `bulan` varchar(16) NOT NULL,
+        `tahun` INT(4) NOT NULL,
+        `nominal` FLOAT NOT NULL DEFAULT 0,
         PRIMARY KEY (`uuid`),
         KEY `warga` (`warga`),
-        KEY `petugas` (`petugas`),
-        KEY `produktukar` (`produktukar`)
+        KEY `petugas` (`petugas`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
   }
 
   function down()
   {
-    $this->db->query("DROP TABLE IF EXISTS `transaksipembelian`");
+    $this->db->query("DROP TABLE IF EXISTS `setortunai`");
   }
 }

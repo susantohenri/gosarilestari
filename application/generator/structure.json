@@ -107,7 +107,7 @@
 		]
 	},
 	{
-		"controller": "TransaksiGlobal",
+		"controller": "Ledger",
 		"fields": [
 			{
 				"name": "status",
@@ -142,7 +142,7 @@
 		]
 	},
 	{
-		"controller": "TransaksiSampah",
+		"controller": "SetorSampah",
 		"fields": [
 			{
 				"name": "status",
@@ -183,44 +183,7 @@
 		]
 	},
 	{
-		"controller": "HasilPemilahan",
-		"fields": [
-			{
-				"name": "status",
-				"form": false
-			},
-			{
-				"name": "kode",
-				"form": false
-			},
-			{
-				"name": "transaksisampah",
-				"type": "relation",
-				"model": "TransaksiSampahs",
-				"field": "kode"
-			},
-			{
-				"name": "kategorisampah",
-				"type": "relation",
-				"model": "KategoriSampahs",
-				"field": "nama"
-			},
-			{
-				"name": "qty",
-				"type": "int"
-			},
-			{
-				"name": "harga",
-				"type": "int"
-			},
-			{
-				"name": "total",
-				"type": "int"
-			}
-		]
-	},
-	{
-		"controller": "TransaksiIuran",
+		"controller": "SetorTunai",
 		"fields": [
 			{
 				"name": "status",
@@ -255,7 +218,7 @@
 		]
 	},
 	{
-		"controller": "TransaksiPembelian",
+		"controller": "TukarProduk",
 		"fields": [
 			{
 				"name": "status",

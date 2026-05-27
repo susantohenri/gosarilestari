@@ -1,13 +1,14 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class TransaksiIurans extends MY_Model
+class SetorTunais extends MY_Model
 {
 
 	function __construct()
 	{
 		parent::__construct();
 
-		$this->table = 'transaksiiuran';
+		// rename tabel menjadi setortunai
+		$this->table = 'setortunai';
 
 		$this->thead = array(
 			(object) array('mData' => 'orders', 'sTitle' => 'No', 'visible' => false),
@@ -31,17 +32,17 @@ class TransaksiIurans extends MY_Model
 					array('data-field' => 'nama')
 				)
 			),
-			array(
-				'name' => 'petugas',
-				'label' => 'Petugas',
-				'options' => array(),
-				'width' => 2,
-				'attributes' => array(
-					array('data-autocomplete' => 'true'),
-					array('data-model' => 'Users'),
-					array('data-field' => 'username')
-				)
-			),
+			// array(
+			// 	'name' => 'petugas',
+			// 	'label' => 'Petugas',
+			// 	'options' => array(),
+			// 	'width' => 2,
+			// 	'attributes' => array(
+			// 		array('data-autocomplete' => 'true'),
+			// 		array('data-model' => 'Users'),
+			// 		array('data-field' => 'username')
+			// 	)
+			// ),
 			array(
 				'name' => 'bulan',
 				'width' => 2,
@@ -87,15 +88,32 @@ class TransaksiIurans extends MY_Model
 		$this->datatables
 			->select("{$this->table}.uuid")
 			->select("{$this->table}.orders")
-			->select("DATE_FORMAT(transaksiiuran.createdAt, '%d %b %Y') as ftanggal", false)
+			->select("DATE_FORMAT(setortunai.createdAt, '%d %b %Y') as ftanggal", false)
 			->select("warga.nama as fwarga", false)
 			->select("user.username as fpetugas", false)
 			->select("CONCAT(bulan, ' ', tahun) as fbulantahun", false)
 			->select("CONCAT('Rp ', FORMAT(nominal, 0, 'id_ID')) as fnominal", false)
 			->select("'' as aksi", false)
-			->join('warga', 'warga.uuid = transaksiiuran.warga', 'left')
-			->join('user', 'user.uuid = transaksiiuran.petugas', 'left')
+			->join('warga', 'warga.uuid = setortunai.warga', 'left')
+			->join('user', 'user.uuid = setortunai.petugas', 'left')
 		;
 		return parent::dt();
+	}
+
+	function create($record)
+	{
+		$record['petugas'] = $this->session->userdata('uuid');
+		$uuid = parent::create($record);
+		$created = $this->findOne($uuid);
+		$this->load->model('Ledgers');
+		$this->Ledgers->save([
+			'kode' => $created['kode'],
+			'warga' => $created['warga'],
+			'petugas' => $created['petugas'],
+			'tipe' => 'SETOR_TUNAI',
+			'keterangan' => "Iuran {$created['bulan']} {$created['tahun']}",
+			'nilai' => $created['nominal']
+		]);
+		return $uuid;
 	}
 }

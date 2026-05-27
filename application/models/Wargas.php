@@ -92,4 +92,13 @@ class Wargas extends MY_Model
 			->limit(10)
 			->like($field, $term ?? '')->get($this->table)->result();
 	}
+
+	function updateSaldo($uuid, $saldo)
+	{
+		return $this
+			->db
+			->where('uuid', $uuid)
+			->set('saldo', $saldo)
+			->update($this->table);
+	}
 }
