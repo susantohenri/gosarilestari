@@ -15,7 +15,8 @@ class Migration_seeds extends CI_Migration
             'Wargas',
             'Rtrws',
             'KategoriSampahs',
-            'ProdukTukars'
+            'ProdukTukars',
+            'Notifikasis'
         ]);
         $fas = ['database', 'desktop', 'download', 'ethernet', 'hdd', 'hdd', 'headphones', 'keyboard', 'keyboard', 'laptop', 'memory', 'microchip', 'mobile', 'mobile-alt', 'plug', 'power-off', 'print', 'satellite', 'satellite-dish', 'save', 'save', 'sd-card', 'server', 'sim-card', 'stream', 'tablet', 'tablet-alt', 'tv', 'upload'];
 
@@ -23,7 +24,7 @@ class Migration_seeds extends CI_Migration
         $petugas = $this->Roles->create(['name' => 'Petugas']);
 
         $baseEntities = ['User', 'Role', 'Permission', 'Menu'];
-        $appEntities = ['Warga', 'Rtrw', 'KategoriSampah', 'ProdukTukar', 'Ledger', 'SetorSampah', 'SetorTunai', 'TukarProduk', 'Konfigurasi'];
+        $appEntities = ['Warga', 'Rtrw', 'KategoriSampah', 'ProdukTukar', 'Ledger', 'SetorSampah', 'SetorTunai', 'TukarProduk', 'Konfigurasi', 'Notifikasi'];
         $allPermissions = ['index', 'create', 'read', 'update', 'delete'];
 
         foreach (array_merge($baseEntities, $appEntities) as $entity) {
@@ -75,7 +76,12 @@ class Migration_seeds extends CI_Migration
         ]);
 
         $this->Konfigurasis->create([
-            'nama' => 'TANGGAL_PENGIRIMAN_NOTIFIKASI',
+            'nama' => 'TANGGAL_PENGIRIMAN_NOTIFIKASI_WARGA',
+            'nilai' => '1'
+        ]);
+
+        $this->Konfigurasis->create([
+            'nama' => 'TANGGAL_PENGIRIMAN_NOTIFIKASI_PETUGAS',
             'nilai' => '5'
         ]);
 

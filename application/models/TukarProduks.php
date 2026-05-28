@@ -7,7 +7,6 @@ class TukarProduks extends MY_Model
 	{
 		parent::__construct();
 
-		// rename tabel menjadi tukarproduk
 		$this->table = 'tukarproduk';
 
 		$this->thead = array(
@@ -118,6 +117,23 @@ class TukarProduks extends MY_Model
 	function create($record)
 	{
 		$record['petugas'] = $this->session->userdata('uuid');
-		return parent::create($record);
+
+		$this->load->model(['ProdukTukars', 'Ledgers']);
+		$produk = $this->ProdukTukars->findOne($record['produktukar']);
+		$record['harga'] = $produk['harga'];
+		$record['total'] = $record['harga'] * $record['qty'];
+		$uuid = parent::create($record);
+		$created = $this->findOne($uuid);
+
+		$this->Ledgers->save([
+			'kode' => $created['kode'],
+			'transaksi' => $created['uuid'],
+			'warga' => $created['warga'],
+			'petugas' => $created['petugas'],
+			'tipe' => 'TUKAR_PRODUK',
+			'keterangan' => $produk['nama'],
+			'nilai' => $record['total'] * -1
+		]);
+		return $uuid;
 	}
 }
