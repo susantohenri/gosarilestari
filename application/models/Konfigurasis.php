@@ -38,4 +38,10 @@ class Konfigurasis extends MY_Model
       ->select("konfigurasi.nilai");
     return parent::dt();
   }
+
+  function getNilai($nama)
+  {
+    $found = $this->findOne(['nama' => $nama]);
+    return $found['nilai'];
+  }
 }
