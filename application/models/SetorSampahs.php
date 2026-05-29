@@ -101,12 +101,12 @@ class SetorSampahs extends MY_Model
 			->select("DATE_FORMAT(setorsampah.createdAt, '%d %b %Y') as ftanggal", false)
 			->select("setorsampah.kode")
 			->select("warga.nama as fwarga", false)
-			->select("user.username as fpetugas", false)
+			->select("user.nama as fpetugas", false)
 			->select("CONCAT(FORMAT(berat, 1), ' KG') as fberat", false)
 			->select("CONCAT('Rp ', FORMAT(pendapatan, 0, 'id_ID')) as fpendapatan", false)
 			->select("CONCAT('Rp ', FORMAT(tagihan, 0, 'id_ID')) as ftagihan", false)
 			->select('"" as aksi')
-			->join('warga', 'warga.uuid = setorsampah.warga', 'left')
+			->join('user warga', 'warga.uuid = setorsampah.warga', 'left')
 			->join('user', 'user.uuid = setorsampah.petugas', 'left')
 		;
 		return parent::dt();

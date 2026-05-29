@@ -90,11 +90,11 @@ class SetorTunais extends MY_Model
 			->select("{$this->table}.orders")
 			->select("DATE_FORMAT(setortunai.createdAt, '%d %b %Y') as ftanggal", false)
 			->select("warga.nama as fwarga", false)
-			->select("user.username as fpetugas", false)
+			->select("user.nama as fpetugas", false)
 			->select("CONCAT(bulan, ' ', tahun) as fbulantahun", false)
 			->select("CONCAT('Rp ', FORMAT(nominal, 0, 'id_ID')) as fnominal", false)
 			->select("'' as aksi", false)
-			->join('warga', 'warga.uuid = setortunai.warga', 'left')
+			->join('user warga', 'warga.uuid = setortunai.warga', 'left')
 			->join('user', 'user.uuid = setortunai.petugas', 'left')
 		;
 		return parent::dt();

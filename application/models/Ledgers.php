@@ -7,7 +7,6 @@ class Ledgers extends MY_Model
 	{
 		parent::__construct();
 
-		// rename tabel menjadi ledger
 		$this->table = 'ledger';
 
 		$this->thead = array(
@@ -77,11 +76,11 @@ class Ledgers extends MY_Model
 			->select("warga.nama as fwarga", false)
 			->select("CASE ledger.tipe WHEN 'SETOR_SAMPAH' THEN 'Setor Sampah' WHEN 'TUKAR_PRODUK' THEN 'Tukar Produk' WHEN 'POTONG_IURAN' THEN 'Potong Iuran' WHEN 'SETOR_TUNAI' THEN 'Setor Tunai' END as tipe")
 			->select("ledger.keterangan")
-			->select("user.username as fpetugas", false)
+			->select("user.nama as fpetugas", false)
 			->select("DATE_FORMAT(ledger.createdAt, '%d %b %Y %H:%i') as fwaktu", false)
 			->select("CONCAT('Rp ', FORMAT(ledger.nilai, 0, 'id_ID')) as fnilai", false)
 			->select("'' as aksi", false)
-			->join("warga", "warga.uuid = ledger.warga", "left")
+			->join("user warga", "warga.uuid = ledger.warga", "left")
 			->join("user", "user.uuid = ledger.petugas", "left")
 		;
 		return parent::dt();

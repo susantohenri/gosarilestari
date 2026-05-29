@@ -21,16 +21,6 @@ class Login extends CI_Controller
         $this->load->view('login');
     }
 
-    public function Migrate($version = null)
-    {
-        if ('development' !== ENVIRONMENT) show_404();
-        $this->load->library('migration');
-        $success = !is_null($version) ? $this->migration->version($version) : $this->migration->latest();
-        if (!$success) {
-            show_error($this->migration->error_string());
-        }
-    }
-
     public function Logout()
     {
         $this->load->library('session');

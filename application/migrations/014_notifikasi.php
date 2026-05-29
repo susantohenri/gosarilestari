@@ -10,7 +10,7 @@ class Migration_notifikasi extends CI_Migration
     $this->db->query("
       CREATE TABLE `notifikasi` (
         `uuid` varchar(36) NOT NULL,
-        `orders` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
+        `orders` int NOT NULL AUTO_INCREMENT,
         `createdAt` datetime DEFAULT NULL,
         `updatedAt` datetime DEFAULT NULL,
         `deletedAt` datetime DEFAULT NULL,
@@ -18,9 +18,13 @@ class Migration_notifikasi extends CI_Migration
         `kode` varchar(6) NOT NULL,
         `user` varchar(36) NOT NULL,
         `judul` varchar(255) NOT NULL,
-        `informasi` TEXT NOT NULL,
-        PRIMARY KEY (`uuid`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        `informasi` text NOT NULL,
+        `period` varchar(7) NOT NULL,
+        `dibaca` tinyint NOT NULL DEFAULT 0,
+        PRIMARY KEY (`uuid`),
+        UNIQUE KEY `orders` (`orders`),
+        KEY `idx_user_period` (`user`, `period`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
     ");
   }
 

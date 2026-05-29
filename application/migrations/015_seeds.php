@@ -22,12 +22,16 @@ class Migration_seeds extends CI_Migration
 
         $admin = $this->Roles->create(['name' => 'Admin']);
         $petugas = $this->Roles->create(['name' => 'Petugas']);
+        $warga = $this->Roles->create(['name' => 'Warga']);
 
         $baseEntities = ['User', 'Role', 'Permission', 'Menu'];
-        $appEntities = ['Warga', 'Rtrw', 'KategoriSampah', 'ProdukTukar', 'Ledger', 'SetorSampah', 'SetorTunai', 'TukarProduk', 'Konfigurasi', 'Notifikasi'];
+        $petugasEntities = ['Warga', 'Rtrw', 'KategoriSampah', 'ProdukTukar', 'Ledger', 'SetorSampah', 'SetorTunai', 'TukarProduk', 'Konfigurasi', 'Notifikasi'];
+        $wargaEntities = ['ProdukTukar', 'Ledger', 'TukarProduk', 'Notifikasi'];
         $allPermissions = ['index', 'create', 'read', 'update', 'delete'];
+        $wargaPermissions = ['index', 'read'];
 
-        foreach (array_merge($baseEntities, $appEntities) as $entity) {
+        // permission superadmin
+        foreach (array_merge($baseEntities, $petugasEntities) as $entity) {
             foreach ($allPermissions as $action) {
                 $this->Permissions->create([
                     'role' => $admin,
@@ -43,7 +47,8 @@ class Migration_seeds extends CI_Migration
             ]);
         }
 
-        foreach ($appEntities as $entity) {
+        // permission petugas
+        foreach ($petugasEntities as $entity) {
             foreach ($allPermissions as $action) {
                 $this->Permissions->create([
                     'role' => $petugas,
@@ -53,6 +58,23 @@ class Migration_seeds extends CI_Migration
             }
             $this->Menus->create([
                 'role' => $petugas,
+                'name' => $entity,
+                'url' => $entity,
+                'icon' => $fas[rand(0, count($fas) - 1)]
+            ]);
+        }
+
+        // permission warga
+        foreach ($wargaEntities as $entity) {
+            foreach ($wargaPermissions as $action) {
+                $this->Permissions->create([
+                    'role' => $warga,
+                    'action' => $action,
+                    'entity' => $entity
+                ]);
+            }
+            $this->Menus->create([
+                'role' => $warga,
                 'name' => $entity,
                 'url' => $entity,
                 'icon' => $fas[rand(0, count($fas) - 1)]
@@ -117,8 +139,9 @@ class Migration_seeds extends CI_Migration
 
         if ('development' === ENVIRONMENT) {
             $this->Users->create([
-                'username' => 'Petugas Jaga',
+                'username' => '081901088918',
                 'password' => md5('123'),
+                'nama' => 'Petugas Jaga',
                 'role' => $petugas
             ]);
 
@@ -127,6 +150,8 @@ class Migration_seeds extends CI_Migration
             ]);
 
             $this->Wargas->create([
+                'username' => '087832607886',
+                'password' => md5('123'),
                 'nama' => 'dr. Warga Teladan',
                 'rtrw' => $rtrw
             ]);

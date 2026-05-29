@@ -7,7 +7,7 @@ class Wargas extends MY_Model
 	{
 		parent::__construct();
 
-		$this->table = 'warga';
+		$this->table = 'user';
 
 		$this->thead = array(
 			(object) array('mData' => 'orders', 'sTitle' => 'No', 'visible' => false),
@@ -65,32 +65,52 @@ class Wargas extends MY_Model
 		$this->childs = array();
 	}
 
+	function getRoleWarga()
+	{
+		$this->load->model('Roles');
+		$role = $this->Roles->findOne(['name' => 'Warga']);
+		return $role['uuid'];
+	}
+
 	function dt()
 	{
 		$this->datatables
 			->select("{$this->table}.uuid")
 			->select("{$this->table}.orders")
-			->select("CONCAT(warga.nama, '<br>', warga.kode) as fnama", false)
-			->select("CONCAT(warga.kontak, '<br>', warga.alamat) as fkontak", false)
+			->select("CONCAT(user.nama, '<br>', user.kode) as fnama", false)
+			->select("CONCAT(user.kontak, '<br>', user.alamat) as fkontak", false)
 			->select("rtrw.nama as frtrw", false)
 			->select("CONCAT('Rp ', FORMAT(saldo, 0, 'id_ID')) as fsaldo", false)
-			->select("DATE_FORMAT(warga.createdAt, '%d %b %Y') as bergabung", false)
-			->select("IF(warga.status = 1, 'Aktif', 'Tidak Aktif') as fstatus", false)
+			->select("DATE_FORMAT(user.createdAt, '%d %b %Y') as bergabung", false)
+			->select("IF(user.status = 1, 'Aktif', 'Tidak Aktif') as fstatus", false)
 			->select("'' as aksi", false)
-			->join('rtrw', 'rtrw.uuid = warga.rtrw', 'left')
+			->join('rtrw', 'rtrw.uuid = user.rtrw', 'left')
+			->join('role', 'role.uuid = user.role', 'left')
+			->where('role.name', 'Warga')
 		;
 		return parent::dt();
 	}
 
+	function create($record)
+	{
+		$record['role'] = $this->getRoleWarga();
+		return parent::create($record);
+	}
+
 	public function select2($field, $term)
 	{
-		return $this->db
-			->select("uuid as id", false)
-			->select("$field as text", false)
-			->where('deletedAt', null)
-			->where('status', 1)
+		return $this
+			->db
+			->select("{$this->table}.uuid as id", false)
+			->select("{$this->table}.{$field} as text", false)
+			->join('role', 'role.uuid = user.role', 'left')
+			->where('role.name', 'Warga')
+			->where('user.deletedAt', null)
+			->where('user.status', 1)
 			->limit(10)
-			->like($field, $term ?? '')->get($this->table)->result();
+			->like($field, $term ?? '')
+			->get($this->table)
+			->result();
 	}
 
 	function updateSaldo($uuid, $saldo)

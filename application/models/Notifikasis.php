@@ -7,6 +7,7 @@ class Notifikasis extends MY_Model
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('Konfigurasis');
 
         $this->table = 'notifikasi';
 
