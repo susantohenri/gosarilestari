@@ -1,119 +1,92 @@
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-
-  <title>gosarilestari.com</title>
+  <title><?= !empty($page_title) ? htmlspecialchars($page_title) . ' — ' : '' ?>Bank Sampah</title>
   <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
-
   <link rel="stylesheet" href="<?= base_url('assets/css/all.min.css') ?>">
-  <link rel="stylesheet" href="<?= base_url('assets/css/adminlte.min.css') ?>">
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-
-  <style type="text/css">
-    a.btn:not([href]):not([tabindex]){color: white}
-    .form-child .form-group.row > div {margin: 5px 0}
-  </style>
+  <link rel="stylesheet" href="<?= base_url('assets/css/app-overrides.css') ?>">
+  <script src="<?= base_url('assets/js/tailwindcss.min.js') ?>"></script>
+  <script src="<?= base_url('assets/js/tailwind.config.js') ?>"></script>
 </head>
-<body class="hold-transition layout-top-nav">
-<div class="wrapper">
+<body class="bg-slate-50 flex h-screen overflow-hidden text-slate-800">
 
-  <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-light navbar-white">
-    <div class="container">
-      <a href="<?= base_url() ?>" class="navbar-brand">
-        <H2><span class="brand-text font-weight-light"><b>gosarilestari</b>.com</span></H2>
+  <div id="sidebar-overlay" class="hidden fixed inset-0 bg-black/40 z-30 md:hidden"></div>
+
+  <aside id="sidebar" class="w-64 bg-white border-r border-slate-200 flex flex-col z-40 -translate-x-full md:translate-x-0 md:relative md:flex shrink-0">
+    <div class="h-16 flex items-center px-6 border-b border-slate-200">
+      <a href="<?= base_url() ?>" class="flex items-center gap-2 text-brand-600">
+        <i class="fa-solid fa-leaf text-xl"></i>
+        <span class="font-bold text-lg text-slate-800">Bank Sampah</span>
       </a>
-      <a href="<?= site_url('Login/Logout') ?>">Logout</a>
     </div>
-  </nav>
-  <!-- /.navbar -->
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container">
-        <div class="row mb-2">
-        <?php if (!in_array(current_url(), [site_url(), base_url()])) : ?>
-          <div class="col-sm-6">
-            <h1 class="m-0 text-dark"><?= $page_title ?></h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="<?= base_url() ?>">Home</a></li>
-              <?php if (in_array($page_name, ['table', 'dashboard'])): ?>
-                <li class="breadcrumb-item active"><?= $page_title ?></li>
-              <?php else: ?>
-                <li class="breadcrumb-item"><a href="<?= site_url($current['controller']) ?>"><?= $page_title ?></a></li>
-                <li class="breadcrumb-item active"><?= ucfirst($page_name) ?></li>
-              <?php endif ?>
-            </ol>
-          </div><!-- /.col -->
-          <?php endif ?>
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
+    <div class="flex-1 overflow-y-auto py-4">
+      <?php
+      $menuFile = 'warga';
+      if ($role_name === 'Admin') {
+          $menuFile = 'superadmin';
+      } elseif ($role_name === 'Petugas') {
+          $menuFile = 'petugas';
+      }
+      include "menus/{$menuFile}.php";
+      ?>
     </div>
-    <!-- /.content-header -->
 
-    <!-- Main content -->
-    <div class="content">
-      <div class="container">
-        <div class="row">
-            <?php include "{$page_name}.php" ?>
-        </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-    <div class="p-3">
-      <h5>Title</h5>
-      <p>Sidebar content</p>
-    </div>
+    <div class="p-4 border-t border-slate-200"></div>
   </aside>
-  <!-- /.control-sidebar -->
 
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <div class="container">
-      <!-- To the right -->
-      <div class="float-right d-none d-sm-inline">
-        henry.dinus@gmail.com 081901088918
+  <main class="flex-1 flex flex-col h-screen overflow-hidden relative min-w-0">
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 md:px-6 z-10 shrink-0">
+      <div class="flex items-center gap-3 flex-1 min-w-0">
+        <button id="menu-toggle" type="button" class="md:hidden w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-colors shrink-0" aria-label="Toggle menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="relative w-full max-w-md hidden sm:block">
+          <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="text" placeholder="Cari warga, transaksi, atau ID..." class="w-full pl-10 pr-4 py-2 bg-slate-100 border-none rounded-lg text-sm focus:ring-2 focus:ring-brand-500 outline-none transition-shadow">
+        </div>
       </div>
-      <!-- Default to the left -->
-      <small><strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.</small>
+      <div class="flex items-center gap-3 md:gap-4 shrink-0">
+        <a href="<?= site_url('Notifikasi') ?>" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-colors" title="Notifikasi">
+          <i class="fa-regular fa-bell"></i>
+        </a>
+        <div class="flex items-center gap-3 pl-3 md:pl-4 border-l border-slate-200">
+          <div class="text-right hidden sm:block">
+            <div class="text-sm font-semibold text-slate-800"><?= htmlspecialchars($this->session->userdata('username')) ?></div>
+            <div class="text-xs text-slate-500"><?= htmlspecialchars($role_name) ?></div>
+          </div>
+          <?php
+          $initials = strtoupper(substr($this->session->userdata('username'), 0, 2));
+          ?>
+          <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center font-bold text-sm">
+            <?= htmlspecialchars($initials) ?>
+          </div>
+          <a href="<?= site_url('Login/Logout') ?>" class="text-sm text-slate-500 hover:text-slate-800 hidden md:inline" title="Logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-4 md:p-6">
+      <?php if (!empty($page_title)) : ?>
+        <h1 class="text-2xl font-bold text-slate-800 mb-6"><?= htmlspecialchars($page_title) ?></h1>
+      <?php endif ?>
+      <?php include "{$page_name}.php" ?>
     </div>
-  </footer>
-</div>
-<!-- ./wrapper -->
+  </main>
 
-<!-- REQUIRED SCRIPTS -->
-
-<!-- jQuery -->
-<script src="<?= base_url('assets/js/jquery.min.js') ?>"></script>
-<!-- Bootstrap 4 -->
-<script src="<?= base_url('assets/js/bootstrap.bundle.min.js') ?>"></script>
-<!-- AdminLTE App -->
-<!-- <script src="../../dist/js/adminlte.min.js"></script> -->
-<script type="text/javascript">
-  var site_url = '<?= site_url('/') ?>'
-  var current_controller = '<?= $current['controller'] ?>'
-  var current_controller_url = '<?= site_url($current['controller']) ?>'
-</script>
-<?php if (isset($js)): foreach ($js as $script): ?>
-  <script type="text/javascript" src="<?= base_url("assets/js/{$script}") ?>"></script>
-<?php endforeach; endif; ?>
+  <script src="<?= base_url('assets/js/jquery.min.js') ?>"></script>
+  <script src="<?= base_url('assets/js/shell.js') ?>"></script>
+  <script type="text/javascript">
+    var site_url = '<?= site_url('/') ?>'
+    var current_controller = '<?= $current['controller'] ?>'
+    var current_controller_url = '<?= site_url($current['controller']) ?>'
+  </script>
+  <?php if (isset($js)) : foreach ($js as $script) : ?>
+    <script type="text/javascript" src="<?= base_url("assets/js/{$script}") ?>"></script>
+  <?php endforeach; endif; ?>
 </body>
 </html>

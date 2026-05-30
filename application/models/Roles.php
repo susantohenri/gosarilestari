@@ -19,8 +19,7 @@ class Roles extends MY_Model
             ],
         ];
 
-        $this->childs[] = ['label' => 'Role Menu', 'controller' => 'Menu', 'model' => 'Menus'];
-        $this->childs[] = ['label' => 'Role Permission', 'controller' => 'Permission', 'model' => 'Permissions'];
+        $this->childs = [];
     }
 
     public function dt()

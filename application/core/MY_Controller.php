@@ -7,7 +7,6 @@ class MY_Controller extends CI_Controller
     public $controller;
     public $model;
     public $page_title;
-    public $subformlabel;
 
     public function __construct()
     {
@@ -19,10 +18,6 @@ class MY_Controller extends CI_Controller
         }
         $this->controller = $this->router->class;
 
-        $page_title = preg_split('#([A-Z][^A-Z]*)#', $this->controller, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-        $page_title = implode(' ', $page_title);
-        $this->subformlabel = $page_title;
-
         if (!isset($this->model)) {
             $this->model = $this->controller . 's';
         }
@@ -33,6 +28,10 @@ class MY_Controller extends CI_Controller
     {
         $vars['error'] = $this->session->flashdata('model_error');
         $vars['account_type'] = $this->session->userdata('role');
+
+        $this->load->model('Roles');
+        $roleRecord = $this->Roles->findOne(['uuid' => $this->session->userdata('role')]);
+        $vars['role_name'] = $roleRecord['name'] ?? 'Warga';
 
         $page_title = preg_split('#([A-Z][^A-Z]*)#', $this->controller, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         $page_title = implode(' ', $page_title);
@@ -80,7 +79,6 @@ class MY_Controller extends CI_Controller
         $vars['page_name'] = 'table';
         $vars['js'] = [
             'jquery.dataTables.min.js',
-            'dataTables.bootstrap4.js',
             'table.js'
         ];
         $vars['thead'] = $this->$model->thead;
@@ -93,27 +91,12 @@ class MY_Controller extends CI_Controller
         $vars = [];
         $vars['page_name'] = 'form';
         $vars['form']     = $this->$model->getForm();
-        $vars['subform'] = $this->$model->getFormChild();
         $vars['uuid'] = '';
         $vars['js'] = [
-            'moment.min.js',
-            'bootstrap-datepicker.js',
-            'daterangepicker.min.js',
             'select2.full.min.js',
             'form.js'
         ];
         $this->loadview('index', $vars);
-    }
-
-    public function subformcreate()
-    {
-        $model = $this->model;
-        $vars = [];
-        $vars['form'] = $this->$model->getForm(false, true);
-        $vars['subformlabel'] = $this->subformlabel;
-        $vars['controller'] = $this->controller;
-        $vars['uuid'] = '';
-        $this->loadview('subform', $vars);
     }
 
     public function read($id)
@@ -122,28 +105,12 @@ class MY_Controller extends CI_Controller
         $vars['page_name'] = 'form';
         $model = $this->model;
         $vars['form'] = $this->$model->getForm($id);
-        $vars['subform'] = $this->$model->getFormChild($id);
         $vars['uuid'] = $id;
         $vars['js'] = [
-            'moment.min.js',
-            'bootstrap-datepicker.js',
-            'daterangepicker.min.js',
             'select2.full.min.js',
             'form.js'
         ];
         $this->loadview('index', $vars);
-    }
-
-    public function subformread($uuid)
-    {
-        $data = [];
-        $model = $this->model;
-        $data['form'] = $this->$model->getForm($uuid, true);
-        $data['subformlabel'] = $this->subformlabel;
-        $data['controller'] = $this->controller;
-        $data['uuid'] = $uuid;
-        $data['item'] = $this->{$this->model}->findOne($uuid);
-        $this->loadview('subform', $data);
     }
 
     public function delete($uuid)
