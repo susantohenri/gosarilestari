@@ -22,6 +22,7 @@ class KategoriSampahs extends MY_Model
       array(
         'name' => 'nama',
         'label' => 'Nama',
+				'attributes' => [['required' => true]]
       ),
       array(
         'name' => 'contoh',

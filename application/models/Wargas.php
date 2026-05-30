@@ -25,6 +25,7 @@ class Wargas extends MY_Model
 				'name' => 'nama',
 				'width' => 2,
 				'label' => 'Nama',
+				'attributes' => [['required' => true]]
 			),
 			array(
 				'name' => 'kontak',

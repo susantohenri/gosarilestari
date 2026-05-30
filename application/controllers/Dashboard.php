@@ -13,8 +13,6 @@ class Dashboard extends MY_Controller
     public function index()
     {
         $vars = [];
-        $this->load->model('Menus');
-        $vars['menu'] = $this->Menus->find(['role' => $this->session->userdata('role')]);
         $vars['page_name'] = 'dashboard';
         $this->loadview('index', $vars);
     }

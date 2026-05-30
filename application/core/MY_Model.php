@@ -227,22 +227,6 @@ class MY_Model extends CI_Model
         return $this->form;
     }
 
-    public function getFormChild($uuid = null)
-    {
-        foreach ($this->childs as &$child) {
-            $childmodel = $child['model'];
-            $this->load->model($childmodel);
-            $child['uuids'] = [];
-            if (!is_null($uuid)) {
-                $this->db->order_by('uuid', 'ASC');
-                foreach ($this->$childmodel->find([$this->table => $uuid]) as $childrecord) {
-                    $child['uuids'][] = $childrecord->uuid;
-                }
-            }
-        }
-        return $this->childs;
-    }
-
     public function savechild($record)
     {
         $childrecords = [];

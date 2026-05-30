@@ -31,7 +31,8 @@ class TukarProduks extends MY_Model
 				'attributes' => array(
 					array('data-autocomplete' => 'true'),
 					array('data-model' => 'Wargas'),
-					array('data-field' => 'nama')
+					array('data-field' => 'nama'),
+					array('required' => true),
 				)
 			),
 			// array(
@@ -53,7 +54,8 @@ class TukarProduks extends MY_Model
 				'attributes' => array(
 					array('data-autocomplete' => 'true'),
 					array('data-model' => 'ProdukTukars'),
-					array('data-field' => 'nama')
+					array('data-field' => 'nama'),
+					array('required' => true),
 				)
 			),
 			// array(
@@ -69,7 +71,8 @@ class TukarProduks extends MY_Model
 				'label' => 'Qty',
 				'width' => 2,
 				'attributes' => array(
-					array('data-number' => 'true')
+					array('data-number' => 'true'),
+					['required' => true]
 				)
 			),
 			// array(
@@ -117,6 +120,9 @@ class TukarProduks extends MY_Model
 	function create($record)
 	{
 		$record['petugas'] = $this->session->userdata('uuid');
+		if ('Warga' === $this->session->userdata('role_name')) {
+			$record['warga'] = $this->session->userdata('uuid');
+		}
 
 		$this->load->model(['ProdukTukars', 'Ledgers']);
 		$produk = $this->ProdukTukars->findOne($record['produktukar']);
@@ -125,6 +131,7 @@ class TukarProduks extends MY_Model
 		$uuid = parent::create($record);
 		$created = $this->findOne($uuid);
 
+		$this->ProdukTukars->sold($record['produktukar'], $record['qty']);
 		$this->Ledgers->save([
 			'kode' => $created['kode'],
 			'transaksi' => $created['uuid'],

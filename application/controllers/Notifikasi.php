@@ -8,4 +8,9 @@ class Notifikasi extends MY_Controller
 		$this->model = 'Notifikasis';
 		parent::__construct();
 	}
+
+	function read ($uuid) {
+		$this->Notifikasis->read($uuid);
+		return parent::read($uuid);
+	}
 }
