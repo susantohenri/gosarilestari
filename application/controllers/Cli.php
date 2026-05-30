@@ -66,7 +66,7 @@ class CLI extends CI_Controller
                     'jenis' => 'RINGKASAN_WARGA',
                     'period' => $period,
                     'judul' => 'Ringkasan sampah periode ' . $judul,
-                    'informasi' => $this->Notifikasis->kontenNotifikasiWarga($row, $period),
+                    'informasi' => $this->Notifikasis->kontenNotifikasiWarga($row, $judul),
                 ];
             }
 
@@ -98,7 +98,7 @@ class CLI extends CI_Controller
                     'jenis' => 'RINGKASAN_PETUGAS',
                     'period' => $period,
                     'judul' => 'Ringkasan operasional periode ' . $judul,
-                    'informasi' => $this->Notifikasis->kontenNotifikasiPetugas($period, $belumBayar, $belumSetor),
+                    'informasi' => $this->Notifikasis->kontenNotifikasiPetugas($judul, $belumBayar, $belumSetor),
                 ];
             }
 

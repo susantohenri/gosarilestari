@@ -20,8 +20,11 @@ class Notifikasis extends MY_Model
     $this->form = [
       [
         'name' => 'informasi',
-        'label' => 'Notifikasi',
+        'label' => 'Informasi',
         'type' => 'textarea',
+        'attributes' => [
+          ['rows' => 7]
+        ]
       ],
     ];
   }
@@ -38,16 +41,15 @@ class Notifikasis extends MY_Model
     return parent::dt();
   }
 
-  public function updateUserdataUnreadNotification($userUuid)
+  public function getUnreadCountByUserId($userUuid)
   {
-    $unread = $this
+    return $this
       ->db
       ->where('deletedAt', null)
       ->where('status', 1)
       ->where('user', $userUuid)
       ->where('isRead', 0)
       ->count_all_results($this->table);
-    $this->session->set_userdata('unread', $unread);
   }
 
   public function read($uuid)
@@ -55,7 +57,6 @@ class Notifikasis extends MY_Model
     $notif = $this->findOne($uuid);
     $notif['isRead'] = 1;
     $this->update($notif);
-    $this->updateUserdataUnreadNotification($notif['user']);
   }
 
   /**
@@ -344,18 +345,18 @@ class Notifikasis extends MY_Model
     $lebih = 'Rp' . number_format((float) $row->kelebihan_bayar, 0, ',', '.');
 
     if ((float) $row->total_berat <= 0 && (float) $row->total_tagihan <= 0) {
-      return "Periode {$period}: belum ada data setor sampah, pendapatan Rp0, total tagihan Rp0, tidak ada sisa tagihan.";
+      return "Periode {$period}:\nbelum ada data setor sampah,\npendapatan Rp0,\ntotal tagihan Rp0,\ntidak ada sisa tagihan.";
     }
 
     if ((float) $row->kelebihan_bayar > 0) {
-      return "Periode {$period}: total sampah terpilah {$totalBerat} kg, pendapatan {$pendapatan}, total tagihan {$tagihan}, pembayaran {$bayar}, tidak ada sisa tagihan, kelebihan bayar {$lebih}.";
+      return "Periode {$period}:\ntotal sampah terpilah {$totalBerat} kg,\npendapatan {$pendapatan},\ntotal tagihan {$tagihan},\npembayaran {$bayar},\ntidak ada sisa tagihan,\nkelebihan bayar {$lebih}.";
     }
 
     if ((float) $row->sisa_tagihan > 0) {
-      return "Periode {$period}: total sampah terpilah {$totalBerat} kg, pendapatan {$pendapatan}, total tagihan {$tagihan}, pembayaran {$bayar}, sisa tagihan {$sisa}.";
+      return "Periode {$period}:\ntotal sampah terpilah {$totalBerat} kg,\npendapatan {$pendapatan},\ntotal tagihan {$tagihan},\npembayaran {$bayar},\nsisa tagihan {$sisa}.";
     }
 
-    return "Periode {$period}: total sampah terpilah {$totalBerat} kg, pendapatan {$pendapatan}, total tagihan {$tagihan}, pembayaran {$bayar}, tidak ada sisa tagihan.";
+    return "Periode {$period}:\ntotal sampah terpilah {$totalBerat} kg,\npendapatan {$pendapatan},\ntotal tagihan {$tagihan},\npembayaran {$bayar},\ntidak ada sisa tagihan.";
   }
 
   /**
@@ -374,7 +375,7 @@ class Notifikasis extends MY_Model
     $jumlahBelumSetor = count($belumSetor);
 
     if ($jumlahBelumBayar === 0 && $jumlahBelumSetor === 0) {
-      return "Periode {$period}: tidak ada warga yang perlu ditindaklanjuti. Semua warga terdata tanpa tunggakan dan tidak ada daftar warga yang belum setor sampah pada periode ini.";
+      return "Periode {$period}: tidak ada warga yang perlu ditindaklanjuti.\nSemua warga terdata tanpa tunggakan dan tidak ada daftar warga yang belum setor sampah pada periode ini.";
     }
 
     $namaBelumBayar = [];
@@ -395,6 +396,6 @@ class Notifikasis extends MY_Model
       ? $jumlahBelumSetor . ' warga belum setor sampah' . (count($namaBelumSetor) ? ' (' . implode(', ', $namaBelumSetor) . ')' : '')
       : 'tidak ada warga yang belum setor sampah';
 
-    return "Periode {$period}: {$textBelumBayar}; {$textBelumSetor}. Silakan tindak lanjuti melalui dashboard petugas.";
+    return "Periode {$period}:\n{$textBelumBayar};\n{$textBelumSetor}.\nSilakan tindak lanjuti melalui dashboard petugas.";
   }
 }

@@ -28,6 +28,7 @@
     <div class="flex-1 overflow-y-auto py-4">
       <?php
       $menuFile = 'warga';
+      $role_name = $this->session->userdata('role_name');
       if ($role_name === 'Admin') {
         $menuFile = 'superadmin';
       } elseif ($role_name === 'Petugas') {
@@ -59,7 +60,7 @@
       <div class="flex items-center gap-3 md:gap-4 shrink-0">
         <a href="<?= site_url('Notifikasi') ?>" class="relative w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-colors" title="Notifikasi">
           <i class="fa-regular fa-bell"></i>
-          <?php if ($this->session->userdata('unread')): ?>
+          <?php if (0 < $unread): ?>
             <span class="absolute top-2 right-2 flex h-3 w-3">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500 border-2 border-white"></span>

@@ -33,17 +33,6 @@ class Ledgers extends MY_Model
 					array('data-field' => 'nama')
 				)
 			),
-			// array(
-			// 	'name' => 'petugas',
-			// 	'label' => 'Petugas',
-			// 	'options' => array(),
-			// 	'width' => 2,
-			// 	'attributes' => array(
-			// 		array('data-autocomplete' => 'true'),
-			// 		array('data-model' => 'Users'),
-			// 		array('data-field' => 'username')
-			// 	)
-			// ),
 			array(
 				'name' => 'tipe',
 				'width' => 2,

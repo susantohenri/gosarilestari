@@ -7,7 +7,6 @@ class SetorTunais extends MY_Model
 	{
 		parent::__construct();
 
-		// rename tabel menjadi setortunai
 		$this->table = 'setortunai';
 
 		$this->thead = array(
@@ -33,17 +32,6 @@ class SetorTunais extends MY_Model
 					array('required' => true)
 				)
 			),
-			// array(
-			// 	'name' => 'petugas',
-			// 	'label' => 'Petugas',
-			// 	'options' => array(),
-			// 	'width' => 2,
-			// 	'attributes' => array(
-			// 		array('data-autocomplete' => 'true'),
-			// 		array('data-model' => 'Users'),
-			// 		array('data-field' => 'username')
-			// 	)
-			// ),
 			array(
 				'name' => 'bulan',
 				'width' => 2,
@@ -67,9 +55,6 @@ class SetorTunais extends MY_Model
 				'name' => 'tahun',
 				'width' => 2,
 				'label' => 'Tahun',
-				// 'options' => array_map(function ($year) {
-				// 	return ['text' => (string) $year, 'value' => $year];
-				// }, range(date('Y') - 2, date('Y') + 1))
 			),
 			array(
 				'name' => 'nominal',

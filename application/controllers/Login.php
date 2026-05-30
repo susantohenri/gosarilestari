@@ -25,11 +25,10 @@ class Login extends CI_Controller
                 'password' => md5($post['password'])
             ]);
             if (isset($login['uuid'])) {
-                $this->load->model(['Notifikasis', 'Roles']);
+                $this->load->model('Roles');
                 $role = $this->Roles->findOne(['uuid' => $login['role']]);
                 $login['role_name'] = $role['name'];
                 $this->session->set_userdata($login);
-                $this->Notifikasis->updateUserdataUnreadNotification($login['uuid']);
                 redirect(base_url());
             }
             $error = 'Username atau password salah.';

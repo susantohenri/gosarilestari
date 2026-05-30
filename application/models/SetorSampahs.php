@@ -7,7 +7,6 @@ class SetorSampahs extends MY_Model
 	{
 		parent::__construct();
 
-		// rename tabel menjadi setorsampah
 		$this->table = 'setorsampah';
 
 		$this->thead = array(
@@ -35,17 +34,6 @@ class SetorSampahs extends MY_Model
 					array('required' => true)
 				)
 			),
-			// array(
-			// 	'name' => 'petugas',
-			// 	'label' => 'Petugas',
-			// 	'options' => array(),
-			// 	'width' => 2,
-			// 	'attributes' => array(
-			// 		array('data-autocomplete' => 'true'),
-			// 		array('data-model' => 'Users'),
-			// 		array('data-field' => 'username')
-			// 	)
-			// ),
 			array(
 				'name' => 'kategori',
 				'label' => 'Kategori Pemilahan',
@@ -71,18 +59,7 @@ class SetorSampahs extends MY_Model
 				'name' => 'berat',
 				'label' => 'Berat (Kg)',
 				'width' => 2,
-				// 'attributes' => array(
-				// 	array('data-number' => 'true')
-				// )
 			),
-			// array(
-			// 	'name' => 'pendapatan',
-			// 	'label' => 'Pendapatan',
-			// 	'width' => 2,
-			// 	'attributes' => array(
-			// 		array('data-number' => 'true')
-			// 	)
-			// ),
 			array(
 				'name' => 'tagihan',
 				'label' => 'Tagihan (Rp)',

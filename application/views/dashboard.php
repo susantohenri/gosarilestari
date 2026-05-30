@@ -12,7 +12,7 @@
       </div>
       <div>
         <div class="font-medium text-slate-800">gosarilestari.com</div>
-        <div class="text-slate-500">Anda masuk sebagai <?= htmlspecialchars($role_name) ?></div>
+        <div class="text-slate-500">Anda masuk sebagai <?= htmlspecialchars($this->session->userdata('role_name')) ?></div>
       </div>
     </div>
   </div>

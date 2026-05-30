@@ -35,17 +35,6 @@ class TukarProduks extends MY_Model
 					array('required' => true),
 				)
 			),
-			// array(
-			// 	'name' => 'petugas',
-			// 	'label' => 'Petugas',
-			// 	'options' => array(),
-			// 	'width' => 2,
-			// 	'attributes' => array(
-			// 		array('data-autocomplete' => 'true'),
-			// 		array('data-model' => 'Users'),
-			// 		array('data-field' => 'username')
-			// 	)
-			// ),
 			array(
 				'name' => 'produktukar',
 				'label' => 'Produk Tukar',
@@ -58,14 +47,6 @@ class TukarProduks extends MY_Model
 					array('required' => true),
 				)
 			),
-			// array(
-			// 	'name' => 'harga',
-			// 	'label' => 'Harga',
-			// 	'width' => 2,
-			// 	'attributes' => array(
-			// 		array('data-number' => 'true')
-			// 	)
-			// ),
 			array(
 				'name' => 'qty',
 				'label' => 'Qty',
@@ -75,14 +56,6 @@ class TukarProduks extends MY_Model
 					['required' => true]
 				)
 			),
-			// array(
-			// 	'name' => 'total',
-			// 	'label' => 'Total',
-			// 	'width' => 2,
-			// 	'attributes' => array(
-			// 		array('data-number' => 'true')
-			// 	)
-			// ),
 			[
 				'name' => 'status',
 				'label' => 'Status',
