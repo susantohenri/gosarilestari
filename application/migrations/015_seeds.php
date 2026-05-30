@@ -82,6 +82,7 @@ class Migration_seeds extends CI_Migration
         }
 
         $this->Users->create([
+            'nama' => 'Administrator',
             'username' => 'admin',
             'password' => md5('admin'),
             'role' => $admin

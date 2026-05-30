@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bank Sampah — Masuk</title>
   <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/css/all.min.css') ?>">
+  <link rel="stylesheet" href="<?= base_url('assets/webfonts/all.min.css') ?>">
   <script src="<?= base_url('assets/js/tailwindcss.min.js') ?>"></script>
   <script src="<?= base_url('assets/js/tailwind.config.js') ?>"></script>
 </head>
+
 <body class="min-h-screen bg-slate-50 flex items-center justify-center p-4 text-slate-800">
   <div class="w-full max-w-md">
     <div class="text-center mb-8">
       <div class="inline-flex items-center gap-2 text-brand-600 mb-2">
         <i class="fa-solid fa-leaf text-3xl"></i>
-        <span class="font-bold text-2xl text-slate-800">Bank Sampah</span>
+        <span class="font-bold text-2xl text-slate-800">GO SARI Lestari</span>
       </div>
-      <p class="text-sm text-slate-500">gosarilestari.com</p>
+      <p class="text-sm text-slate-500">Aplikasi Pengelolaan Sampah Mandiri</p>
     </div>
 
     <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6 md:p-8">
-      <h1 class="text-lg font-bold text-slate-800 mb-1">Masuk</h1>
-      <p class="text-sm text-slate-500 mb-6">Masuk ke akun Anda untuk melanjutkan.</p>
 
       <?php if ($this->session->flashdata('register_success')) : ?>
         <div class="mb-4 p-3 rounded-lg bg-brand-50 text-brand-800 text-sm border border-brand-100">
@@ -62,4 +63,5 @@
     </div>
   </div>
 </body>
+
 </html>

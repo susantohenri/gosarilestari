@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,9 +8,11 @@
   <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/css/all.min.css') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/css/app-overrides.css') ?>">
+  <link rel="stylesheet" href="<?= base_url('assets/webfonts/all.min.css') ?>">
   <script src="<?= base_url('assets/js/tailwindcss.min.js') ?>"></script>
   <script src="<?= base_url('assets/js/tailwind.config.js') ?>"></script>
 </head>
+
 <body class="bg-slate-50 flex h-screen overflow-hidden text-slate-800">
 
   <div id="sidebar-overlay" class="hidden fixed inset-0 bg-black/40 z-30 md:hidden"></div>
@@ -18,7 +21,7 @@
     <div class="h-16 flex items-center px-6 border-b border-slate-200">
       <a href="<?= base_url() ?>" class="flex items-center gap-2 text-brand-600">
         <i class="fa-solid fa-leaf text-xl"></i>
-        <span class="font-bold text-lg text-slate-800">Bank Sampah</span>
+        <span class="font-bold text-lg text-slate-800">GO SARI Lestari</span>
       </a>
     </div>
 
@@ -26,15 +29,20 @@
       <?php
       $menuFile = 'warga';
       if ($role_name === 'Admin') {
-          $menuFile = 'superadmin';
+        $menuFile = 'superadmin';
       } elseif ($role_name === 'Petugas') {
-          $menuFile = 'petugas';
+        $menuFile = 'petugas';
       }
       include "menus/{$menuFile}.php";
       ?>
     </div>
 
-    <div class="p-4 border-t border-slate-200"></div>
+    <div class="p-4 border-t border-slate-200">
+      <a href="<?= site_url('Login/Logout') ?>" class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+        <i class="fa-solid fa-right-from-bracket w-5 text-center"></i>
+        <span>Keluar</span>
+      </a>
+    </div>
   </aside>
 
   <main class="flex-1 flex flex-col h-screen overflow-hidden relative min-w-0">
@@ -43,29 +51,38 @@
         <button id="menu-toggle" type="button" class="md:hidden w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-colors shrink-0" aria-label="Toggle menu">
           <i class="fa-solid fa-bars"></i>
         </button>
-        <div class="relative w-full max-w-md hidden sm:block">
+        <form action="<?= site_url('Ledger') ?>" method="GET" class="relative w-full max-w-md block pr-5">
           <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-          <input type="text" placeholder="Cari warga, transaksi, atau ID..." class="w-full pl-10 pr-4 py-2 bg-slate-100 border-none rounded-lg text-sm focus:ring-2 focus:ring-brand-500 outline-none transition-shadow">
-        </div>
+          <input type="text" name="search" placeholder="Cari warga, transaksi, atau ID..." class="w-full pl-10 pr-4 py-2 bg-slate-100 border-none rounded-lg text-sm focus:ring-2 focus:ring-brand-500 outline-none transition-shadow">
+        </form>
       </div>
       <div class="flex items-center gap-3 md:gap-4 shrink-0">
-        <a href="<?= site_url('Notifikasi') ?>" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-colors" title="Notifikasi">
+        <a href="<?= site_url('Notifikasi') ?>" class="relative w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-colors" title="Notifikasi">
           <i class="fa-regular fa-bell"></i>
+          <?php if ($this->session->userdata('unread')): ?>
+            <span class="absolute top-2 right-2 flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500 border-2 border-white"></span>
+            </span>
+          <?php endif; ?>
         </a>
         <div class="flex items-center gap-3 pl-3 md:pl-4 border-l border-slate-200">
           <div class="text-right hidden sm:block">
-            <div class="text-sm font-semibold text-slate-800"><?= htmlspecialchars($this->session->userdata('username')) ?></div>
+            <div class="text-sm font-semibold text-slate-800"><?= htmlspecialchars($this->session->userdata('nama')) ?></div>
             <div class="text-xs text-slate-500"><?= htmlspecialchars($role_name) ?></div>
           </div>
           <?php
-          $initials = strtoupper(substr($this->session->userdata('username'), 0, 2));
+          $nama = trim($this->session->userdata('nama'));
+          $words = preg_split('/\s+/', $nama);
+
+          $initials = strtoupper(
+            mb_substr($words[0] ?? '', 0, 1) .
+              (count($words) > 1 ? mb_substr(end($words), 0, 1) : '')
+          );
           ?>
           <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center font-bold text-sm">
             <?= htmlspecialchars($initials) ?>
           </div>
-          <a href="<?= site_url('Login/Logout') ?>" class="text-sm text-slate-500 hover:text-slate-800 hidden md:inline" title="Logout">
-            <i class="fa-solid fa-right-from-bracket"></i>
-          </a>
         </div>
       </div>
     </header>
@@ -86,7 +103,9 @@
     var current_controller_url = '<?= site_url($current['controller']) ?>'
   </script>
   <?php if (isset($js)) : foreach ($js as $script) : ?>
-    <script type="text/javascript" src="<?= base_url("assets/js/{$script}") ?>"></script>
-  <?php endforeach; endif; ?>
+      <script type="text/javascript" src="<?= base_url("assets/js/{$script}") ?>"></script>
+  <?php endforeach;
+  endif; ?>
 </body>
+
 </html>

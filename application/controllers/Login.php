@@ -19,13 +19,14 @@ class Login extends CI_Controller
 
         $error = '';
         if ($post = $this->input->post()) {
-            $this->load->model('Users');
+            $this->load->model(['Users', 'Notifikasis']);
             $login = $this->Users->findOne([
                 'username' => $post['username'],
                 'password' => md5($post['password'])
             ]);
             if (isset($login['uuid'])) {
                 $this->session->set_userdata($login);
+                $this->Notifikasis->updateUserdataUnreadNotification($login['uuid']);
                 redirect(base_url());
             }
             $error = 'Username atau password salah.';
