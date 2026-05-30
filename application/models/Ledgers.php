@@ -11,7 +11,7 @@ class Ledgers extends MY_Model
 
 		$this->thead = array(
 			(object) array('mData' => 'orders', 'sTitle' => 'No', 'visible' => false),
-			(object) array('mData' => 'kode', 'sTitle' => 'KODE'),
+			(object) array('mData' => 'kode', 'sTitle' => 'TRANSAKSI'),
 			(object) array('mData' => 'fwarga', 'sTitle' => 'WARGA'),
 			(object) array('mData' => 'tipe', 'sTitle' => 'TIPE'),
 			(object) array('mData' => 'keterangan', 'sTitle' => 'KETERANGAN'),

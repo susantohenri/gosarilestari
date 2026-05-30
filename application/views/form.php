@@ -13,7 +13,7 @@
         </a>
       <?php endif ?>
       <a href="<?= site_url($current['controller']) ?>" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors">
-        <i class="fa fa-arrow-left"></i> Batal
+        <i class="fa fa-arrow-left"></i> Kembali
       </a>
     </div>
 

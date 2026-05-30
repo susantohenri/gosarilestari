@@ -25,6 +25,7 @@ class ProdukTukars extends MY_Model
 				'name' => 'nama',
 				'width' => 2,
 				'label' => 'Nama',
+				'attributes' => [['required' => true]]
 			),
 			array(
 				'name' => 'kategori',
@@ -74,5 +75,14 @@ class ProdukTukars extends MY_Model
 			->select('"" as aksi')
 		;
 		return parent::dt();
+	}
+
+	public function sold($uuid, $qty)
+	{
+		return $this->db
+			->where('uuid', $uuid)
+			->set('stok', 'stok - ' . $qty, FALSE)
+			->set('terjual', 'terjual + ' . $qty, FALSE)
+			->update($this->table);
 	}
 }

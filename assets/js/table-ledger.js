@@ -31,6 +31,7 @@ window.onload = function () {
 
   var footer = []
   var dataTable = $('.table-model').DataTable({
+    dom: 'rtip',
     processing: true,
     serverSide: true,
     ajax,
@@ -48,5 +49,8 @@ window.onload = function () {
       var api = this.api()
       for (var f in footer) $(api.column(f).footer()).html(footer[f])
     }
-  })
+  });
+
+  $('.dataTables_info, .dataTables_paginate')
+    .wrapAll('<div class="flex justify-between items-center w-full mt-3"></div>');
 }

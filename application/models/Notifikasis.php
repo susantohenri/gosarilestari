@@ -13,7 +13,8 @@ class Notifikasis extends MY_Model
 
     $this->thead = [
       (object) ['mData' => 'orders', 'sTitle' => 'No', 'visible' => false],
-      (object) ['mData' => 'judul', 'sTitle' => '&nbsp;'],
+      (object) ['mData' => 'judul', 'sTitle' => 'INFORMASI'],
+      (object) ['mData' => 'dibaca', 'sTitle' => ''],
     ];
 
     $this->form = [
@@ -32,6 +33,7 @@ class Notifikasis extends MY_Model
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.orders")
       ->select("{$this->table}.judul")
+      ->select("IF(isRead = 1, 'Sudah Dibaca', 'Belum Dibaca') as dibaca", false)
       ->where('user', $this->session->userdata('uuid'));
     return parent::dt();
   }

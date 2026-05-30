@@ -6,6 +6,7 @@ class Ledger extends MY_Controller
 	function __construct()
 	{
 		$this->model = 'Ledgers';
+		$this->page_title = 'Riwayat Transaksi';
 		parent::__construct();
 	}
 
@@ -39,6 +40,7 @@ class Ledger extends MY_Controller
 			'table-ledger.js'
 		];
 		$vars['thead'] = $this->$model->thead;
+		$vars['page_title'] = 'Riwayat Transaksi';
 		$this->loadview('index', $vars);
 	}
 }

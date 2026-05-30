@@ -7,13 +7,14 @@ window.onload = function () {
   var ajax = {
     url: current_controller_url + '/dt',
     type: 'POST',
-    dataSrc:function (data) {
-    footer = data.footer
-    return data.data
-  }}
+    dataSrc: function (data) {
+      footer = data.footer
+      return data.data
+    }
+  }
 
   if (current_controller_url.indexOf('/Asset') > -1) {
-    $('#filter_asset_status').change (function () {
+    $('#filter_asset_status').change(function () {
       dataTable.draw()
     })
     ajax.data = function (data) {
@@ -22,23 +23,27 @@ window.onload = function () {
   }
 
   var footer = []
-  var dataTable = $('.table-model').DataTable( {
+  var dataTable = $('.table-model').DataTable({
+    dom: 'rtip',
     processing: true,
     serverSide: true,
     ajax,
     columns: thead,
-    createdRow: function( row, data, dataIndex){
+    createdRow: function (row, data, dataIndex) {
       if (data.prosentase && parseInt(data.prosentase.replace('%', '').split(',').join('')) > 100) $(row).css('background-color', '#ffcccc')
     },
-    fnRowCallback: function(nRow, aData, iDisplayIndex ) {
-      $(nRow).css('cursor', 'pointer').click( function () {
+    fnRowCallback: function (nRow, aData, iDisplayIndex) {
+      $(nRow).css('cursor', 'pointer').click(function () {
         if (!allow_read) return false
         else window.location.href = current_controller_url + '/read/' + aData.uuid
       })
     },
-    drawCallback: function( settings ) {
+    drawCallback: function (settings) {
       var api = this.api()
       for (var f in footer) $(api.column(f).footer()).html(footer[f])
     }
-  })
+  });
+
+  $('.dataTables_info, .dataTables_paginate')
+    .wrapAll('<div class="flex justify-between items-center w-full mt-3"></div>');
 }

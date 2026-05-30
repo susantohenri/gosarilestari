@@ -1,8 +1,6 @@
 <?php include __DIR__ . '/_helpers.php'; ?>
 
 <?php sidebar_section('Menu Utama'); ?>
-<?php sidebar_link('Dashboard', 'Dashboard', 'house', 'Overview', $current); ?>
-<?php sidebar_link('ProdukTukar', 'ProdukTukar', 'box-open', 'Produk Tukar', $current); ?>
 <?php sidebar_link('Ledger', 'Ledger', 'clock-rotate-left', 'Riwayat Transaksi', $current); ?>
 <?php sidebar_link('TukarProduk', 'TukarProduk', 'cart-shopping', 'Tukar Produk', $current); ?>
 <?php sidebar_section_end(); ?>

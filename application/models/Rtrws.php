@@ -21,6 +21,7 @@ class Rtrws extends MY_Model
       array(
         'name' => 'nama',
         'label' => 'RT/RW',
+				'attributes' => [['required' => true]]
       ),
       array(
         'name' => 'latitude',

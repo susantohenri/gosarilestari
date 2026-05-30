@@ -29,7 +29,8 @@ class SetorTunais extends MY_Model
 				'attributes' => array(
 					array('data-autocomplete' => 'true'),
 					array('data-model' => 'Wargas'),
-					array('data-field' => 'nama')
+					array('data-field' => 'nama'),
+					array('required' => true)
 				)
 			),
 			// array(
