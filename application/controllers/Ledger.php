@@ -7,6 +7,7 @@ class Ledger extends MY_Controller
 	{
 		$this->model = 'Ledgers';
 		$this->page_title = 'Riwayat Transaksi';
+		$this->page_subtitle = 'Semua aktivitas setor sampah, potong iuran, dan tukar produk warga';
 		parent::__construct();
 	}
 
@@ -41,6 +42,7 @@ class Ledger extends MY_Controller
 		];
 		$vars['thead'] = $this->$model->thead;
 		$vars['page_title'] = 'Riwayat Transaksi';
+		$vars['overview'] = $this->$model->getOverView();
 		$this->loadview('index', $vars);
 	}
 }

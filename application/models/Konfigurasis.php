@@ -19,6 +19,7 @@ class Konfigurasis extends MY_Model
       array(
         'name' => 'nama',
         'label' => 'Nama',
+        'attributes' => [['readonly' => true]]
       ),
       array(
         'name' => 'nilai',

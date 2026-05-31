@@ -85,4 +85,56 @@ class ProdukTukars extends MY_Model
 			->set('terjual', 'terjual + ' . $qty, FALSE)
 			->update($this->table);
 	}
+
+	public function getOverView()
+	{
+		$this->load->model('Konfigurasis');
+		$rendah = $this->Konfigurasis->getNilai('BATAS_MINIMUM_STOK_RENDAH');
+
+		$produks = $this
+			->db
+			->select('status')
+			->select('stok')
+			->where('deletedAt', null)
+			->get($this->table)
+			->result();
+
+		$aktif = 0;
+		$stokRendah = 0;
+		$habis = 0;
+		foreach ($produks as $produk) {
+			if (1 == $produk->status) {
+				$aktif++;
+			}
+
+			if ($produk->stok <= 0) {
+				$habis++;
+			} else if ($produk->stok <= $rendah) {
+				$stokRendah++;
+			}
+		}
+
+		return [
+			[
+				'icon' => 'fa-cube',
+				'label' => 'Total Produk',
+				'value' => count($produks),
+			],
+			[
+				'icon' => 'fa-check',
+				'label' => 'Aktif',
+				'value' => $aktif,
+			],
+			[
+				'icon' => 'fa-bell',
+				'label' => 'Stok Rendah',
+				'value' => $stokRendah,
+			],
+			[
+				'icon' => 'fa-times',
+				'label' => 'Habis',
+				'value' => $habis,
+			],
+		];
+	}
 }

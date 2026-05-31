@@ -90,6 +90,48 @@ class TukarProduks extends MY_Model
 		return parent::dt();
 	}
 
+	public function validate_stok($produktukar_uuid, $qty)
+	{
+		if (!is_numeric($qty) || intval($qty) <= 0) {
+			throw new RuntimeException('Qty harus lebih besar dari 0');
+		}
+
+		$produk = $this->ProdukTukars->findOne($produktukar_uuid);
+		if (!$produk) {
+			throw new RuntimeException('Produk tukar tidak ditemukan');
+		}
+
+		if (intval($qty) > intval($produk['stok'])) {
+			throw new RuntimeException('Stok tidak cukup. Tersedia: ' . intval($produk['stok']) . ', diminta: ' . intval($qty));
+		}
+
+		return true;
+	}
+
+	public function validate_saldo($warga_uuid, $total)
+	{
+		if (empty($warga_uuid)) {
+			throw new RuntimeException('Warga tidak ditemukan');
+		}
+
+		if (!is_numeric($total) || $total < 0) {
+			throw new RuntimeException('Total transaksi tidak valid');
+		}
+
+		$this->load->model('Ledgers');
+		$flows = $this->Ledgers->find(['warga' => $warga_uuid, 'status' => 1]);
+		$saldo = 0;
+		foreach ($flows as $flow) {
+			$saldo += $flow->nilai;
+		}
+
+		if ($saldo < $total) {
+			throw new RuntimeException('Saldo tidak cukup. Saldo: Rp ' . number_format($saldo, 0, ',', '.') . ', total: Rp ' . number_format($total, 0, ',', '.'));
+		}
+
+		return true;
+	}
+
 	function create($record)
 	{
 		$record['petugas'] = $this->session->userdata('uuid');
@@ -99,8 +141,17 @@ class TukarProduks extends MY_Model
 
 		$this->load->model(['ProdukTukars', 'Ledgers']);
 		$produk = $this->ProdukTukars->findOne($record['produktukar']);
+		if (!$produk) {
+			throw new RuntimeException('Produk tukar tidak ditemukan');
+		}
+
+		$record['qty'] = intval($record['qty']);
 		$record['harga'] = $produk['harga'];
 		$record['total'] = $record['harga'] * $record['qty'];
+
+		$this->validate_stok($record['produktukar'], $record['qty']);
+		$this->validate_saldo($record['warga'], $record['total']);
+
 		$uuid = parent::create($record);
 		$created = $this->findOne($uuid);
 

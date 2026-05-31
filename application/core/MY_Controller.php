@@ -7,6 +7,7 @@ class MY_Controller extends CI_Controller
     public $controller;
     public $model;
     public $page_title;
+    public $page_subtitle;
 
     public function __construct()
     {
@@ -31,7 +32,8 @@ class MY_Controller extends CI_Controller
 
         $page_title = preg_split('#([A-Z][^A-Z]*)#', $this->controller, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         $page_title = implode(' ', $page_title);
-        $vars['page_title']   = isset($this->page_title) ? $this->page_title : $page_title;
+        $vars['page_title'] = isset($this->page_title) ? $this->page_title : $page_title;
+        $vars['page_subtitle'] = isset($this->page_subtitle) ? $this->page_subtitle : '';
 
         if (!isset($vars['form_action'])) {
             $vars['form_action'] = site_url($this->controller);
@@ -79,6 +81,7 @@ class MY_Controller extends CI_Controller
             'table.js'
         ];
         $vars['thead'] = $this->$model->thead;
+        $vars['overview'] = $this->$model->getOverView();
         $this->loadview('index', $vars);
     }
 

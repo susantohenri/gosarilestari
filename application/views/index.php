@@ -58,7 +58,7 @@
         </form>
       </div>
       <div class="flex items-center gap-3 md:gap-4 shrink-0">
-        <a href="<?= site_url('Notifikasi') ?>" class="relative w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-colors" title="Notifikasi">
+        <a href="<?= site_url('Notifikasi') ?>" class="relative w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-colors" title="Notifikasi">
           <i class="fa-regular fa-bell"></i>
           <?php if (0 < $unread): ?>
             <span class="absolute top-2 right-2 flex h-3 w-3">
@@ -89,9 +89,19 @@
     </header>
 
     <div class="flex-1 overflow-y-auto p-4 md:p-6">
-      <?php if (!empty($page_title)) : ?>
-        <h1 class="text-2xl font-bold text-slate-800 mb-6"><?= htmlspecialchars($page_title) ?></h1>
-      <?php endif ?>
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-800 mb-1"><?= $page_title ?></h1>
+          <p class="text-slate-500 text-sm"><?= $page_subtitle ?></p>
+        </div>
+        <div class="flex gap-3">
+          <?php if (in_array("create_{$current['controller']}", $permission)) : ?>
+            <a href="<?= site_url($current['controller'] . '/create') ?>" class="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 text-white rounded-lg text-sm font-medium hover:bg-brand-700 shadow-sm transition-colors">
+              <i class="fa fa-plus"></i> Tambah <?= htmlspecialchars($page_title) ?>
+            </a>
+          <?php endif ?>
+        </div>
+      </div>
       <?php include "{$page_name}.php" ?>
     </div>
   </main>

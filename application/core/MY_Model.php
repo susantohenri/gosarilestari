@@ -311,4 +311,8 @@ class MY_Model extends CI_Model
         }
         return $new_file_location;
     }
+
+    public function getOverView() {
+        return [];
+    }
 }

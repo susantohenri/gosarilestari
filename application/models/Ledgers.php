@@ -95,4 +95,59 @@ class Ledgers extends MY_Model
 		$this->db->insert($this->table, $record);
 		return $record['uuid'];
 	}
+
+	public function getOverView()
+	{
+		$transaksi = $this
+			->db
+			->select('tipe')
+			->select('nilai')
+			->where('deletedAt', null)
+			->get($this->table)
+			->result();
+
+		$setorSampah = 0;
+		$tukarProduk = 0;
+		$potongIuran = 0;
+
+		foreach ($transaksi as $trx) {
+			switch ($trx->tipe) {
+				case 'SETOR_SAMPAH':
+					$setorSampah += $trx->nilai;
+					break;
+				case 'TUKAR_PRODUK':
+					$tukarProduk += $trx->nilai;
+					break;
+				case 'POTONG_IURAN':
+					$potongIuran += $trx->nilai;
+					break;
+			}
+		}
+
+		return [
+			[
+				'icon' => 'fa-clock',
+				'label' => 'Total Transaksi',
+				'value' => count($transaksi),
+			],
+			[
+				'icon' => 'fa-recycle',
+				'label' => 'Setor Sampah',
+				'rp' => true,
+				'value' => $setorSampah,
+			],
+			[
+				'icon' => 'fa-gift',
+				'label' => 'Tukar Produk',
+				'rp' => true,
+				'value' => $tukarProduk * -1,
+			],
+			[
+				'icon' => 'fa-file-text',
+				'label' => 'Potong Iuran',
+				'rp' => true,
+				'value' => $potongIuran * -1,
+			],
+		];
+	}
 }

@@ -52,6 +52,7 @@ class Wargas extends MY_Model
 				'name' => 'saldo',
 				'width' => 2,
 				'label' => 'Saldo',
+				'attributes' => [['readonly' => true]]
 			),
 			[
 				'name' => 'status',
@@ -121,5 +122,54 @@ class Wargas extends MY_Model
 			->where('uuid', $uuid)
 			->set('saldo', $saldo)
 			->update($this->table);
+	}
+
+	function getOverView()
+	{
+		$role = $this->getRoleWarga();
+		$wargas = $this
+			->db
+			->select('status')
+			->select('saldo')
+			->where('role', $role)
+			->where('deletedAt', null)
+			->get($this->table)
+			->result();
+
+		$saldo = 0;
+		$wargaAktif = 0;
+		$wargTidakAktif = 0;
+		foreach ($wargas as $warga) {
+			$saldo += $warga->saldo;
+			if ($warga->status == 1) {
+				$wargaAktif++;
+			} else {
+				$wargTidakAktif++;
+			}
+		}
+
+		return [
+			[
+				'icon' => 'fa-user',
+				'label' => 'Total Warga',
+				'value' => count($wargas),
+			],
+			[
+				'icon' => 'fa-check',
+				'label' => 'Warga Aktif',
+				'value' => $wargaAktif,
+			],
+			[
+				'icon' => 'fa-times',
+				'label' => 'Tidak Aktif',
+				'value' => $wargTidakAktif,
+			],
+			[
+				'icon' => 'fa-wallet',
+				'label' => 'Total Saldo',
+				'rp' => true,
+				'value' => $saldo,
+			],
+		];
 	}
 }
