@@ -108,6 +108,8 @@ class SetorSampahs extends MY_Model
 		$record['petugas'] = $this->session->userdata('uuid');
 		$uuid = parent::create($record);
 
+		$this->load->model(['Ledgers', 'Konfigurasis']);
+
 		// basic ledger object
 		$created = $this->findOne($uuid);
 		$ledgerObj = [
@@ -119,7 +121,7 @@ class SetorSampahs extends MY_Model
 
 		// ledger pendapatan (tukar sampah)
 		if (0 < $created['pendapatan']) {
-			$this->load->model(['Ledgers', 'KategoriSampahs']);
+			$this->load->model('KategoriSampahs');
 			$kategoriSampah = $this->KategoriSampahs->findOne($created['kategorisampah']);
 			$this->Ledgers->save(array_merge($ledgerObj, [
 				'tipe' => 'SETOR_SAMPAH',
@@ -130,7 +132,6 @@ class SetorSampahs extends MY_Model
 
 		// ledger tagihan (potong iuran)
 		if (0 < $created['tagihan']) {
-			$this->load->model(['Ledgers']);
 			$bulan = date('M');
 			$tahun = date('Y');
 			$this->Ledgers->save(array_merge($ledgerObj, [
@@ -140,6 +141,20 @@ class SetorSampahs extends MY_Model
 			]));
 		}
 
+		$sumBerat = $this->sampahTerkumpulBulanIni();
+		$this->Konfigurasis->updateSampahTerkumpul($sumBerat);
+
 		return $uuid;
+	}
+
+	private function sampahTerkumpulBulanIni()
+	{
+		$sum = $this->db
+			->select_sum('berat', 'total_berat')
+			->where('MONTH(createdAt)', date('m'), false)
+			->where('YEAR(createdAt)', date('Y'), false)
+			->get($this->table)
+			->row_array();
+		return number_format($sum['total_berat'], 2);
 	}
 }

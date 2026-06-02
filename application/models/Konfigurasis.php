@@ -45,4 +45,44 @@ class Konfigurasis extends MY_Model
     $found = $this->findOne(['nama' => $nama]);
     return $found['nilai'];
   }
+
+  function updateSampahTerkumpul($berat)
+  {
+    return $this
+      ->db
+      ->where('nama', 'SAMPAH_TERKUMPUL')
+      ->set('nilai', $berat)
+      ->update($this->table);
+  }
+
+  function getSampahTerkumpul()
+  {
+    $konfigs = $this
+      ->db
+      ->select('nama')
+      ->select('nilai')
+      ->where_in('nama', ['SAMPAH_TERKUMPUL', 'TARGET_SAMPAH_BULAN_INI'])
+      ->get($this->table)
+      ->result();
+
+    $berat = 0;
+    $target = 0;
+    foreach ($konfigs as $konf) {
+      switch ($konf->nama) {
+        case 'SAMPAH_TERKUMPUL':
+          $berat = (float) $konf->nilai;
+          break;
+        case 'TARGET_SAMPAH_BULAN_INI':
+          $target = (float) $konf->nilai;
+          break;
+      }
+    }
+
+    return [
+      'berat' => number_format($berat, 2),
+      'bulan_tahun' => date('F Y'),
+      'persen' => number_format($berat / $target * 100, 2),
+      'target' => number_format($target, 0)
+    ];
+  }
 }

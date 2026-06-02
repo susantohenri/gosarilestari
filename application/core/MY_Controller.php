@@ -43,11 +43,12 @@ class MY_Controller extends CI_Controller
             'controller' => $this->controller
         ];
 
-        $this->load->model(['Permissions', 'Notifikasis']);
+        $this->load->model(['Permissions', 'Notifikasis', 'Konfigurasis']);
         if (!isset($vars['permission'])) {
             $vars['permission'] = $this->Permissions->getPermissions();
         }
         $vars['unread'] = $this->Notifikasis->getUnreadCountByUserId($this->session->userdata('uuid'));
+        $vars['sampah_terkumpul'] = $this->Konfigurasis->getSampahTerkumpul();
         $this->load->view($view, $vars);
     }
 
