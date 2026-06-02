@@ -35,9 +35,10 @@ class Ledger extends MY_Controller
 			}
 		}
 		$vars = [];
-		$vars['page_name'] = 'table';
+		$vars['page_name'] = 'table-ledger';
 		$vars['js'] = [
 			'jquery.dataTables.min.js',
+			'select2.full.min.js',
 			'table-ledger.js'
 		];
 		$vars['thead'] = $this->$model->thead;

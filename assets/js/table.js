@@ -13,15 +13,6 @@ window.onload = function () {
     }
   }
 
-  if (current_controller_url.indexOf('/Asset') > -1) {
-    $('#filter_asset_status').change(function () {
-      dataTable.draw()
-    })
-    ajax.data = function (data) {
-      data.Active = $('#filter_asset_status').val()
-    }
-  }
-
   var footer = []
   var dataTable = $('.table-model').DataTable({
     dom: 'rtip',

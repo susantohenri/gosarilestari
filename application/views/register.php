@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bank Sampah — Daftar</title>
+  <title>GO SARI Lestari — Daftar</title>
   <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/css/all.min.css') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/webfonts/all.min.css') ?>">

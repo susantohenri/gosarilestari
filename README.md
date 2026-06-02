@@ -1,7 +1,7 @@
 # gosarilestari
 CodeIgniter3 Based Trash Bank Progressive Web Apps
 
-# Gosari Lestari - Local Development Setup
+# GO SARI Lestari - Local Development Setup
 
 ## Requirements
 
@@ -71,4 +71,10 @@ podman-compose down
 
 ``` bash
 podman-compose down -v
+```
+
+# Production Deployment
+## Setup CRON for notification broadcast (UTC+0)
+```
+0 0 * * * /usr/bin/php /home/u940399048/domains/gosarilestari.com/public_html/index.php Cli BroadcastNotifikasi
 ```
