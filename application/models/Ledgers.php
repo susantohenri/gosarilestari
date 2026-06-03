@@ -58,15 +58,17 @@ class Ledgers extends MY_Model
 
 	function dt()
 	{
-		parse_str($this->input->post('customFilter'), $params);
-		if ('' !== $params['fnama']) {
-			$this->db->like("CONCAT(warga.nama, warga.kode)", $params['fnama'], false);
-		}
-		if ('' !== $params['since']) {
-			$this->db->where('ledger.createdAt >=', date('Y-m-d H:i:s', strtotime("-{$params['since']} days")));
-		}
-		if ('' !== $params['tipe']) {
-			$this->db->where('ledger.tipe', $params['tipe']);
+		if ($customFilter = $this->input->post('customFilter')) {
+			parse_str($customFilter, $params);
+			if ('' !== $params['fnama']) {
+				$this->db->like("CONCAT(warga.nama, warga.kode)", $params['fnama'], false);
+			}
+			if ('' !== $params['since']) {
+				$this->db->where('ledger.createdAt >=', date('Y-m-d H:i:s', strtotime("-{$params['since']} days")));
+			}
+			if ('' !== $params['tipe']) {
+				$this->db->where('ledger.tipe', $params['tipe']);
+			}
 		}
 
 		$this->datatables

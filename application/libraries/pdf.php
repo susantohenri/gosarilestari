@@ -1,57 +1,63 @@
 <?php
 
 defined('BASEPATH') or exit('No direct script access allowed');
-/**
- * CodeIgniter DomPDF Library
- *
- * Generate PDF's from HTML in CodeIgniter
- *
- * @packge        CodeIgniter
- * @subpackage        Libraries
- * @category        Libraries
- * @author        Ardianta Pargo
- * @license        MIT License
- * @link        https://github.com/ardianta/codeigniter-dompdf
- */
+
 use Dompdf\Dompdf;
 
 class Pdf extends Dompdf
 {
     /**
-     * PDF filename
-     * @var String
+     * Default filename
+     *
+     * @var string
      */
     public $filename;
+
     public function __construct()
     {
         parent::__construct();
-        $this->filename = "Export-Assets.pdf";
+
+        $this->filename = 'Export-Assets.pdf';
     }
+
     /**
-     * Get an instance of CodeIgniter
+     * Get CodeIgniter instance
      *
-     * @access    protected
-     * @return    void
+     * @return CI_Controller
      */
     protected function ci()
     {
         return get_instance();
     }
+
     /**
-     * Load a CodeIgniter view into domPDF
+     * Generate PDF from CI View
      *
-     * @access    public
-     * @param    string    $view The view to load
-     * @param    array    $data The view data
-     * @return    void
+     * @param string $view
+     * @param array  $data
+     * @param string $paper
+     * @param string $orientation portrait|landscape
+     * @param bool   $download true=download, false=preview
+     * @return void
      */
-    public function load_view($view, $data = [])
-    {
+    public function load_view(
+        $view,
+        $data = [],
+        $paper = 'A4',
+        $orientation = 'portrait',
+        $download = true
+    ) {
         $html = $this->ci()->load->view($view, $data, true);
-        $this->load_html($html);
-        // Render the PDF
+
+        $this->loadHtml($html);
+        $this->setPaper($paper, $orientation);
+
         $this->render();
-        // Output the generated PDF to Browser
-        $this->stream($this->filename, ["Attachment" => false]);
+
+        $this->stream($this->filename, [
+            'Attachment' => $download
+        ]);
+
+        exit;
     }
 }
