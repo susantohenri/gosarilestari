@@ -8,6 +8,7 @@ class MY_Controller extends CI_Controller
     public $model;
     public $page_title;
     public $page_subtitle;
+    public $header_buttons;
 
     public function __construct()
     {
@@ -23,6 +24,7 @@ class MY_Controller extends CI_Controller
             $this->model = $this->controller . 's';
         }
         $this->load->model($this->model);
+        $this->header_buttons = 'header-buttons';
     }
 
     public function loadview($view, $vars = [])
@@ -49,6 +51,8 @@ class MY_Controller extends CI_Controller
         }
         $vars['unread'] = $this->Notifikasis->getUnreadCountByUserId($this->session->userdata('uuid'));
         $vars['sampah_terkumpul'] = $this->Konfigurasis->getSampahTerkumpul();
+        $vars['header_buttons'] = $this->header_buttons;
+
         $this->load->view($view, $vars);
     }
 

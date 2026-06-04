@@ -6,8 +6,9 @@ class Warga extends MY_Controller
 	function __construct()
 	{
 		$this->model = 'Wargas';
-		$this->page_subtitle = 'Hanya admin yang dapat menambahkan warga baru';
 		parent::__construct();
+		$this->page_subtitle = 'Hanya admin yang dapat menambahkan warga baru';
+		$this->header_buttons = 'custom-header-buttons/warga-header-buttons';
 	}
 
 	public function index()
@@ -34,7 +35,7 @@ class Warga extends MY_Controller
 			}
 		}
 		$vars = [];
-		$vars['page_name'] = 'table-warga';
+		$vars['page_name'] = 'custom-tables/table-warga';
 		$vars['js'] = [
 			'jquery.dataTables.min.js',
 			'select2.full.min.js',

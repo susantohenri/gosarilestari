@@ -39,7 +39,7 @@ class TukarProduk extends MY_Controller
 			}
 		}
 		$vars = [];
-		$vars['page_name'] = 'Warga' !== $this->session->userdata('role_name') ? 'table-tukar-produk-warga' : 'table';
+		$vars['page_name'] = 'Warga' !== $this->session->userdata('role_name') ? 'custom-tables/table-tukar-produk-warga' : 'table';
 		$vars['js'] = [
 			'jquery.dataTables.min.js',
 			'table.js'

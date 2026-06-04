@@ -1,19 +1,3 @@
-<!-- Header Section -->
-<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-  <div>
-    <h1 class="text-2xl font-bold text-slate-800 mb-1">Selamat datang kembali, Pak Ahmad 👋</h1>
-    <p class="text-slate-500 text-sm">Berikut ringkasan aktivitas Bank Sampah Kel. Sukamaju Minggu ke-3 Mei 2026.</p>
-  </div>
-  <div class="flex gap-3">
-    <a href="<?= site_url('ExportImport/ExportLaporan') ?>" class="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 flex items-center gap-2 shadow-sm">
-      <i class="fa-solid fa-download"></i> Export Laporan
-    </a>
-    <button class="px-4 py-2 bg-brand-600 text-white rounded-lg text-sm font-medium hover:bg-brand-700 flex items-center gap-2 shadow-sm">
-      <i class="fa-solid fa-plus"></i> Tambah Warga
-    </button>
-  </div>
-</div>
-
 <!-- Stats Grid -->
 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
   <!-- Stat 1 -->

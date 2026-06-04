@@ -1,3 +1,8 @@
+<?php if (!empty($error)) : ?>
+  <div class="mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-sm border border-red-100">
+    <?= htmlspecialchars($error) ?>
+  </div>
+<?php endif ?>
 <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/select2.min.css') ?>">
 
 <?php if (0 < count($overview)): ?>

@@ -1,3 +1,8 @@
+<?php if (!empty($error)) : ?>
+  <div class="mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-sm border border-red-100">
+    <?= htmlspecialchars($error) ?>
+  </div>
+<?php endif ?>
 <?php if (0 < count($overview)): ?>
   <div class="my-6 grid gap-4 md:grid-cols-2 2xl:grid-cols-4">
     <?php foreach ($overview as $ov) : ?>
