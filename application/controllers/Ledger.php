@@ -6,9 +6,10 @@ class Ledger extends MY_Controller
 	function __construct()
 	{
 		$this->model = 'Ledgers';
+		parent::__construct();
 		$this->page_title = 'Riwayat Transaksi';
 		$this->page_subtitle = 'Semua aktivitas setor sampah, potong iuran, dan tukar produk warga';
-		parent::__construct();
+		$this->header_buttons = 'custom-header-buttons/ledger-header-buttons';
 	}
 
 	public function index()

@@ -6,8 +6,9 @@ class Dashboard extends MY_Controller
 {
     public function __construct()
     {
-        $this->page_title = '';
         parent::__construct();
+        $this->page_title = '';
+		$this->header_buttons = 'custom-header-buttons/dashboard-header-buttons';
     }
 
     public function index()

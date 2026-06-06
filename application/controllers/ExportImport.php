@@ -55,17 +55,13 @@ class ExportImport extends MY_Controller
 
 	public function TemplateImportWarga()
 	{
-		// Set headers
 		header('Content-Type: text/csv');
 		header('Content-Disposition: attachment; filename="Template Import Warga GOSARI Lestari.csv"');
 
-		// Buka output langsung
 		$output = fopen('php://output', 'w');
 
-		// Tulis header
 		fputcsv($output, ['username', 'password', 'nama', 'kontak', 'alamat', 'rtrw']);
 
-		// SAMPLE DATA - 1 row contoh
 		$sample_row = [
 			'ahmadrizki',
 			'123456',
@@ -75,7 +71,6 @@ class ExportImport extends MY_Controller
 			'Kembangputihan RT 006'
 		];
 
-		// Tulis sample row
 		fputcsv($output, $sample_row);
 
 		fclose($output);
@@ -195,23 +190,18 @@ class ExportImport extends MY_Controller
 
 	public function TemplateRestokMassal()
 	{
-		// Set headers
 		header('Content-Type: text/csv');
 		header('Content-Disposition: attachment; filename="Template Restok Massal GOSARI Lestari.csv"');
 
-		// Buka output langsung
 		$output = fopen('php://output', 'w');
 
-		// Tulis header
 		fputcsv($output, ['kode', 'stok']);
 
-		// SAMPLE DATA - 1 row contoh
 		$sample_row = [
 			'TRCLF4',
 			'24',
 		];
 
-		// Tulis sample row
 		fputcsv($output, $sample_row);
 
 		fclose($output);
@@ -320,7 +310,49 @@ class ExportImport extends MY_Controller
 		redirect(site_url('ProdukTukar'));
 	}
 
-	public function ExportLedgerCsv() {}
+	public function ExportLedgerCsv()
+	{
+		$date = date('d/m/Y');
+		header('Content-Type: text/csv');
+		header("Content-Disposition: attachment; filename=Transaksi GO SARI Lestari per {$date}.csv");
 
-	public function ExportLedgerPdf() {}
+		$output = fopen('php://output', 'w');
+
+		fputcsv($output, ['Kode', 'Warga', 'Tipe', 'Keterangan', 'Petugas', 'Waktu', 'Nilai']);
+
+		$this->load->model('Ledgers');
+		$rows = $this->Ledgers->exportCsvPdf();
+		foreach ($rows as $row) fputcsv($output, (array) $row);
+
+		fclose($output);
+		exit;
+	}
+
+	public function ExportLedgerPdf()
+	{
+		$this->load->library('pdf');
+		$date = date('d-m-Y');
+		$this->pdf->filename = "Transaksi GO-SARI Lestari per {$date}.pdf";
+
+		$this->load->model('Ledgers');
+		$data = [
+			'rows' => $this->Ledgers->exportCsvPdf()
+		];
+
+		if ('Warga' === $this->session->userdata('role_name')) {
+			$this->load->model('Rtrws');
+			$rtrw = $this->Rtrws->findOne($this->session->userdata('rtrw'));
+			$data['warga'] = [
+				'nama' => $this->session->userdata('nama'),
+				'rtrw' => $rtrw['nama']
+			];
+		}
+		$this->pdf->load_view(
+			'pdfs/export-ledger-pdf',
+			$data,
+			// 'A4',
+			// 'potrait',
+			// false
+		);
+	}
 }

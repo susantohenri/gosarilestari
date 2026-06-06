@@ -88,6 +88,26 @@ class Ledgers extends MY_Model
 		return parent::dt();
 	}
 
+	function exportCsvPdf()
+	{
+		if ('Warga' === $this->session->userdata('role_name')) {
+			$this->db->where('warga.uuid', $this->session->userdata('uuid'));
+		}
+		return $this
+			->db
+			->select("ledger.kode")
+			->select("CONCAT(warga.nama, ' - ', warga.kode) as fwarga", false)
+			->select("CASE ledger.tipe WHEN 'SETOR_SAMPAH' THEN 'Setor Sampah' WHEN 'TUKAR_PRODUK' THEN 'Tukar Produk' WHEN 'POTONG_IURAN' THEN 'Potong Iuran' WHEN 'SETOR_TUNAI' THEN 'Setor Tunai' END as tipe")
+			->select("ledger.keterangan")
+			->select("user.nama as fpetugas", false)
+			->select("DATE_FORMAT(ledger.createdAt, '%d %b %Y %H:%i') as fwaktu", false)
+			->select("CONCAT('Rp ', FORMAT(ledger.nilai, 0, 'id_ID')) as fnilai", false)
+			->join("user warga", "warga.uuid = ledger.warga", "left")
+			->join("user", "user.uuid = ledger.petugas", "left")
+			->get($this->table)
+			->result();
+	}
+
 	function save($record)
 	{
 		$uuid = parent::save($record);
