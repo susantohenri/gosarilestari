@@ -157,4 +157,109 @@ class SetorSampahs extends MY_Model
 			->row_array();
 		return number_format($sum['total_berat'], 2);
 	}
+
+	function topKategori()
+	{
+		$this
+			->db
+			->select('k.nama as nama_kategori, COALESCE(SUM(ss.berat), 0) as total_berat')
+			->from('setorsampah ss')
+			->join('kategorisampah k', 'k.uuid = ss.kategorisampah')
+			->where('ss.deletedAt IS NULL', NULL, false)
+			->where('ss.status', 1)
+			->where('MONTH(ss.createdAt)', date('m'))
+			->where('YEAR(ss.createdAt)', date('Y'))
+			->group_by('ss.kategorisampah')
+			->order_by('total_berat', 'DESC');
+
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	public function getVolumeSampah7HariPerKategori()
+	{
+		$startDate = date('Y-m-d', strtotime('-6 days'));
+		$endDate = date('Y-m-d');
+
+		$this->db->select('DATE(s.createdAt) as tanggal, k.nama as kategori, SUM(s.berat) as total_berat');
+		$this->db->from('setorsampah s');
+		$this->db->join('kategorisampah k', 's.kategorisampah = k.uuid', 'left');
+		$this->db->where('DATE(s.createdAt) >=', $startDate);
+		$this->db->where('DATE(s.createdAt) <=', $endDate);
+		$this->db->where('s.deletedAt IS NULL');
+		$this->db->where('k.deletedAt IS NULL');
+		$this->db->where('k.nama IS NOT NULL'); // Filter kategori yang terdaftar
+		$this->db->group_by('DATE(s.createdAt), k.nama');
+		$this->db->order_by('tanggal', 'ASC');
+
+		$query = $this->db->get();
+		$rows = $query->result_array();
+
+		return $this->formatChartData($rows);
+	}
+
+	private function formatChartData($rawData)
+	{
+		// Ambil semua tanggal dalam 7 hari terakhir
+		$dates = array();
+		for ($i = 6; $i >= 0; $i--) {
+			$dates[] = date('D', strtotime("-$i days"));
+		}
+
+		// Ambil semua kategori unik
+		$categories = array_unique(array_column($rawData, 'kategori'));
+		$categories = array_filter($categories, function ($cat) {
+			return !empty($cat) && $cat !== null;
+		});
+		$categories = array_values($categories);
+
+		// Jika tidak ada kategori, return data kosong
+		if (empty($categories)) {
+			return array(
+				'labels' => $dates,
+				'datasets' => array()
+			);
+		}
+
+		// Warna untuk tiap kategori (sama seperti contoh)
+		$colors = array(
+			'rgba(54, 162, 235, 0.7)',  // biru (Plastik)
+			'rgba(255, 99, 132, 0.7)',  // merah (Kertas)
+			'rgba(255, 206, 86, 0.7)',  // kuning (Logam)
+			'rgba(75, 192, 192, 0.7)',  // teal (Kaca)
+			'rgba(153, 102, 255, 0.7)', // ungu (Minyak Jelantah)
+			'rgba(255, 159, 64, 0.7)'   // oranye
+		);
+
+		$chartData = array(
+			'labels' => $dates,
+			'datasets' => array()
+		);
+
+		$colorIndex = 0;
+
+		foreach ($categories as $cat) {
+			$dataset = array(
+				'label' => $cat,
+				'data' => array_fill(0, 7, 0),
+				'backgroundColor' => $colors[$colorIndex % count($colors)],
+				'borderRadius' => 4
+			);
+
+			// Isi data sesuai tanggal
+			foreach ($rawData as $row) {
+				if ($row['kategori'] === $cat) {
+					$dayIndex = array_search(date('D', strtotime($row['tanggal'])), $dates);
+					if ($dayIndex !== false) {
+						$dataset['data'][$dayIndex] = (float) $row['total_berat'];
+					}
+				}
+			}
+
+			$chartData['datasets'][] = $dataset;
+			$colorIndex++;
+		}
+
+		return $chartData;
+	}
 }

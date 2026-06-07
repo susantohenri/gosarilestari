@@ -220,7 +220,7 @@ class Ledgers extends MY_Model
 		$this->db->select('SUM(nilai) as total_perubahan')
 			->from('ledger')
 			->where('deletedAt IS NULL', NULL, false)
-			->where('createdAt >= DATE_SUB(NOW(), INTERVAL 7 DAY)', NULL, false);
+			->where('createdAt >= DATE_SUB(NOW(), INTERVAL 1 MONTH)', NULL, false);
 		$perubahan_minggu = $this->db->get()->row()->total_perubahan ?? 0;
 
 		// Hitung manual

@@ -19,13 +19,13 @@ class Dashboard extends MY_Controller
         $bulan = date("F", strtotime($today));
         $tahun = date("Y", strtotime($today));
         $mingguKe = ceil(date("j", strtotime($today)) / 7);
-        $this->page_subtitle = "Ringkasan Aktivitas Bank Sampah Kel. Sukamaju Minggu ke-$mingguKe $bulan $tahun";
+        $this->page_subtitle = "Ringkasan Aktivitas Bank Sampah Minggu ke-$mingguKe $bulan $tahun";
 
         $vars = [];
         $vars['page_name'] = 'dashboard';
         $vars['header_buttons'] = 'custom-header-buttons/dashboard-header-buttons';
 
-        $this->load->model(['Wargas', 'Ledgers']);
+        $this->load->model(['Wargas', 'Ledgers', 'SetorSampahs']);
         $roleWarga = $this->Wargas->getRoleWarga();
         $vars = array_merge($vars, [
             'card_warga' => [
@@ -43,6 +43,12 @@ class Dashboard extends MY_Controller
             'card_tukar_produk' => [
                 'bulan_ini' => $this->Ledgers->getTotalTukarProdukBulanIni(),
                 'progress' => $this->Ledgers->progressTukarProdukPersen()
+            ],
+            'card_grafik' => [
+                'items' => $this->SetorSampahs->getVolumeSampah7HariPerKategori()
+            ],
+            'card_kategori' => [
+                'items' => $this->SetorSampahs->topKategori()
             ]
         ]);
 
