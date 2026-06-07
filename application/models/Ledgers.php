@@ -183,4 +183,25 @@ class Ledgers extends MY_Model
 			],
 		];
 	}
+
+	public function getTransactionDetails($uuid)
+	{
+		$query = $this->db
+			->select('ledger.kode')
+			->select("CASE ledger.tipe WHEN 'SETOR_SAMPAH' THEN 'Setor Sampah' WHEN 'TUKAR_PRODUK' THEN 'Tukar Produk' WHEN 'POTONG_IURAN' THEN 'Potong Iuran' WHEN 'SETOR_TUNAI' THEN 'Setor Tunai' END as tipe")
+			->select('ledger.keterangan')
+			->select("IF(0 < ledger.nilai, 'Saldo Bertambah', 'Saldo Berkurang') as saldo", false)
+			->select('ledger.nilai')
+			->select("IF(0 < ledger.nilai, CONCAT('Rp ', FORMAT(ledger.nilai, 0, 'id_ID')), CONCAT('- Rp ', FORMAT(ledger.nilai * -1, 0, 'id_ID'))) as fnilai")
+			->select("CONCAT(warga.nama) as fwarga")
+			->select('warga.kode as warga_kode')
+			->select('user.nama as fpetugas')
+			->select("DATE_FORMAT(ledger.createdAt, '%d %b %Y %H:%i') as fwaktu")
+			->join("user warga", "warga.uuid = ledger.warga", "left")
+			->join("user", "user.uuid = ledger.petugas", "left")
+			->where('ledger.uuid', $uuid)
+			->get($this->table);
+
+		return $query->row_array();
+	}
 }

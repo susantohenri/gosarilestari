@@ -117,6 +117,11 @@ class Migration_seeds extends CI_Migration
             'action' => 'create',
             'entity' => 'TukarProduk'
         ]);
+        $this->Permissions->create([
+            'role' => $warga,
+            'action' => 'read',
+            'entity' => 'Ledger'
+        ]);
 
         $this->Users->create([
             'nama' => 'Administrator',

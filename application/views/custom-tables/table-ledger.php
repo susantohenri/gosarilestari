@@ -55,6 +55,73 @@
     </div>
   </div>
 </div>
+
+<div id="modal-detail" class="hidden fixed inset-0 z-[60] bg-black/50 items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-[420px] overflow-hidden flex flex-col">
+
+    <div class="p-5 pb-4 flex justify-between items-start">
+      <div>
+        <h2 class="text-lg font-bold text-slate-800 leading-tight">Detail Transaksi</h2>
+        <p class="text-xs text-slate-500 font-medium mt-0.5" data-field="transaction-code"></p>
+      </div>
+      <button type="button" onclick="document.getElementById('modal-detail').classList.add('hidden'); document.getElementById('modal-detail').classList.remove('flex');" class="text-slate-400 hover:text-slate-700 transition-colors p-1">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+    </div>
+
+    <div class="mx-5 mb-5 bg-gradient-to-br from-[#e68a00] to-[#c77700] rounded-xl p-5 text-center text-white shadow-md">
+      <div class="text-sm font-medium opacity-90 mb-1" data-field="transaction-saldo"></div>
+      <div class="text-3xl font-bold tracking-tight mb-1" data-field="transaction-value"></div>
+      <div class="text-sm font-medium opacity-90" data-field="transaction-keterangan"></div>
+    </div>
+
+    <div class="px-5 space-y-4 mb-6">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <span class="text-sm text-slate-500">Tipe Transaksi</span>
+        <span class="text-sm font-semibold text-slate-700 flex items-center gap-2" data-field="transaction-type-display">
+          <!-- <span class="w-2 h-2 rounded-full bg-amber-400"></span> -->
+          <span data-field="transaction-type"></span>
+        </span>
+      </div>
+
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <span class="text-sm text-slate-500">Warga</span>
+        <span class="text-sm font-semibold text-slate-700 flex items-center gap-2" data-field="citizen-name"></span>
+      </div>
+
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <span class="text-sm text-slate-500">ID Nasabah</span>
+        <span class="text-sm font-semibold text-slate-700" data-field="citizen-id"></span>
+      </div>
+
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <span class="text-sm text-slate-500">Petugas</span>
+        <span class="text-sm font-semibold text-slate-700" data-field="officer-name"></span>
+      </div>
+
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <span class="text-sm text-slate-500">Waktu</span>
+        <span class="text-sm font-semibold text-slate-700" data-field="transaction-time"></span>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <span class="text-sm text-slate-500">Kode Transaksi</span>
+        <span class="text-sm font-semibold text-slate-700" data-field="transaction-code"></span>
+      </div>
+    </div>
+
+    <div class="p-4 flex justify-end gap-3 border-t border-slate-100 bg-slate-50">
+      <a target="_blank" id="print_button" class="flex items-center justify-center gap-2 px-4 py-2 border border-slate-300 text-slate-700 bg-white rounded-lg text-sm font-semibold hover:bg-slate-100 transition-colors shadow-sm">
+        <i class="fa-solid fa-file-invoice"></i> Cetak Struk
+      </a>
+      <button onclick="document.getElementById('modal-detail').classList.add('hidden'); document.getElementById('modal-detail').classList.remove('flex');" class="px-5 py-2 bg-brand-600 text-white rounded-lg text-sm font-semibold hover:bg-brand-700 transition-colors shadow-sm">
+        Tutup
+      </button>
+    </div>
+
+  </div>
+</div>
+
 <script type="text/javascript">
   var thead = <?= json_encode($thead) ?>;
   var allow_read = <?= in_array("read_{$current['controller']}", $permission) ? 1 : 0 ?>

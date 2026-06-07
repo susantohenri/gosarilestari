@@ -355,4 +355,11 @@ class ExportImport extends MY_Controller
 			// false
 		);
 	}
+
+	public function PrintReceipt($ledger)
+	{
+		$this->load->model('Ledgers');
+		$data = $this->Ledgers->getTransactionDetails($ledger);
+		$this->load->view('print-receipt', $data);
+	}
 }
