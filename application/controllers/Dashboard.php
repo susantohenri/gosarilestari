@@ -8,7 +8,7 @@ class Dashboard extends MY_Controller
     {
         parent::__construct();
         $this->page_title = '';
-		$this->header_buttons = 'custom-header-buttons/dashboard-header-buttons';
+        $this->header_buttons = 'custom-header-buttons/dashboard-header-buttons';
     }
 
     public function index()
@@ -24,6 +24,28 @@ class Dashboard extends MY_Controller
         $vars = [];
         $vars['page_name'] = 'dashboard';
         $vars['header_buttons'] = 'custom-header-buttons/dashboard-header-buttons';
+
+        $this->load->model(['Wargas', 'Ledgers']);
+        $roleWarga = $this->Wargas->getRoleWarga();
+        $vars = array_merge($vars, [
+            'card_warga' => [
+                'warga_aktif' => $this->Wargas->wargaAktif($roleWarga),
+                'mendaftar_minggu_ini' => $this->Wargas->mendaftarMingguIni($roleWarga)
+            ],
+            'card_saldo' => [
+                'beredar' => $this->Wargas->saldoBeredar($roleWarga),
+                'progress' => $this->Ledgers->progressSaldoPersen()
+            ],
+            'card_setoran' => [
+                'bulan_ini' => $this->Ledgers->getTotalSetorTunaiBulanIni(),
+                'progress' => $this->Ledgers->progressSetorTunaiPersen()
+            ],
+            'card_tukar_produk' => [
+                'bulan_ini' => $this->Ledgers->getTotalTukarProdukBulanIni(),
+                'progress' => $this->Ledgers->progressTukarProdukPersen()
+            ]
+        ]);
+
         $this->loadview('index', $vars);
     }
 }

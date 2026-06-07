@@ -204,4 +204,114 @@ class Ledgers extends MY_Model
 
 		return $query->row_array();
 	}
+
+	public function progressSaldoPersen()
+	{
+		// Hitung total saldo
+		$this->db->select('SUM(u.saldo) as total_saldo')
+			->from('user u')
+			->join('role r', 'r.uuid = u.role')
+			->where('u.deletedAt IS NULL', NULL, false)
+			->where('u.status', 1)
+			->where('r.name', 'warga');
+		$total_saldo = $this->db->get()->row()->total_saldo ?? 0;
+
+		// Hitung perubahan minggu ini
+		$this->db->select('SUM(nilai) as total_perubahan')
+			->from('ledger')
+			->where('deletedAt IS NULL', NULL, false)
+			->where('createdAt >= DATE_SUB(NOW(), INTERVAL 7 DAY)', NULL, false);
+		$perubahan_minggu = $this->db->get()->row()->total_perubahan ?? 0;
+
+		// Hitung manual
+		$saldo_awal = $total_saldo - $perubahan_minggu;
+		return ($saldo_awal == 0) ? 0 : ($perubahan_minggu / abs($saldo_awal)) * 100;
+	}
+
+	public function getTotalSetorTunaiBulanIni()
+	{
+		$this->db->select('COALESCE(SUM(nilai), 0) as total_setor_tunai')
+			->from('ledger')
+			->where('deletedAt IS NULL', NULL, false)
+			->where('tipe', 'SETOR_TUNAI')
+			->where('MONTH(createdAt)', date('m'))
+			->where('YEAR(createdAt)', date('Y'));
+
+		$result = $this->db->get()->row();
+		return (float)($result->total_setor_tunai ?? 0);
+	}
+
+	public function progressSetorTunaiPersen()
+	{
+		// Total setor tunai bulan ini
+		$sql_bulan_ini = "
+        SELECT COALESCE(SUM(nilai), 0) as total
+        FROM ledger
+        WHERE deletedAt IS NULL
+          AND tipe = 'SETOR_TUNAI'
+          AND MONTH(createdAt) = MONTH(CURRENT_DATE())
+          AND YEAR(createdAt) = YEAR(CURRENT_DATE())
+    ";
+		$total_bulan_ini = (float)$this->db->query($sql_bulan_ini)->row()->total;
+
+		// Total setor tunai bulan lalu
+		$sql_bulan_lalu = "
+        SELECT COALESCE(SUM(nilai), 0) as total
+        FROM ledger
+        WHERE deletedAt IS NULL
+          AND tipe = 'SETOR_TUNAI'
+          AND MONTH(createdAt) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH)
+          AND YEAR(createdAt) = YEAR(CURRENT_DATE() - INTERVAL 1 MONTH)
+    ";
+		$total_bulan_lalu = (float)$this->db->query($sql_bulan_lalu)->row()->total;
+
+		// Hitung persentase perubahan (sama logic dengan saldo)
+		if ($total_bulan_lalu == 0) {
+			return 0;
+		}
+
+		$perubahan = $total_bulan_ini - $total_bulan_lalu;
+		return ($perubahan / abs($total_bulan_lalu)) * 100;
+	}
+
+	public function getTotalTukarProdukBulanIni()
+	{
+		$this->db->select('COALESCE(SUM(ABS(nilai)), 0) as total')
+			->from('ledger')
+			->where('deletedAt IS NULL', NULL, false)
+			->where('tipe', 'TUKAR_PRODUK')
+			->where('MONTH(createdAt)', date('m'))
+			->where('YEAR(createdAt)', date('Y'));
+
+		$result = $this->db->get()->row();
+		return (float)($result->total ?? 0);
+	}
+
+	public function progressTukarProdukPersen()
+	{
+		// Total bulan ini (pake ABS karena nilai di ledger negatif)
+		$this->db->select('COALESCE(SUM(ABS(nilai)), 0) as total')
+			->from('ledger')
+			->where('deletedAt IS NULL', NULL, false)
+			->where('tipe', 'TUKAR_PRODUK')
+			->where('MONTH(createdAt)', date('m'))
+			->where('YEAR(createdAt)', date('Y'));
+		$bulan_ini = (float)($this->db->get()->row()->total ?? 0);
+
+		// Total bulan lalu
+		$this->db->select('COALESCE(SUM(ABS(nilai)), 0) as total')
+			->from('ledger')
+			->where('deletedAt IS NULL', NULL, false)
+			->where('tipe', 'TUKAR_PRODUK')
+			->where('MONTH(createdAt)', date('m', strtotime('-1 month')))
+			->where('YEAR(createdAt)', date('Y', strtotime('-1 month')));
+		$bulan_lalu = (float)($this->db->get()->row()->total ?? 0);
+
+		if ($bulan_lalu == 0) {
+			return 0;
+		}
+
+		$perubahan = $bulan_ini - $bulan_lalu;
+		return ($perubahan / abs($bulan_lalu)) * 100;
+	}
 }

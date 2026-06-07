@@ -7,11 +7,11 @@
         <i class="fa-solid fa-users"></i>
       </div>
       <span class="flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-        <i class="fa-solid fa-arrow-trend-up"></i> +3 minggu ini
+        <i class="fa-solid fa-arrow-trend-up"></i> +<?= $card_warga['mendaftar_minggu_ini'] ?> minggu ini
       </span>
     </div>
     <div class="text-slate-500 text-sm font-medium mb-1">Total Warga Aktif</div>
-    <div class="text-2xl font-bold text-slate-800">92</div>
+    <div class="text-2xl font-bold text-slate-800"><?= $card_warga['warga_aktif'] ?></div>
   </div>
 
   <!-- Stat 2 -->
@@ -20,12 +20,13 @@
       <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
         <i class="fa-solid fa-wallet"></i>
       </div>
-      <span class="flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-        <i class="fa-solid fa-arrow-trend-up"></i> +8.2%
+      <?php $progressColor = 0 <= $card_saldo['progress'] ? 'green' : 'red'  ?>
+      <span class="flex items-center gap-1 text-xs font-semibold text-<?= $progressColor ?>-600 bg-<?= $progressColor ?>-50 px-2 py-1 rounded-full">
+        <i class="fa-solid fa-arrow-trend-up"></i> <?= number_format($card_saldo['progress'], 1) ?>%
       </span>
     </div>
     <div class="text-slate-500 text-sm font-medium mb-1">Saldo Beredar</div>
-    <div class="text-2xl font-bold text-slate-800">Rp 452.700</div>
+    <div class="text-2xl font-bold text-slate-800">Rp <?= number_format($card_saldo['beredar'], 0, ',', '.') ?></div>
   </div>
 
   <!-- Stat 3 -->
@@ -34,12 +35,13 @@
       <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-lg">
         <i class="fa-solid fa-scale-balanced"></i>
       </div>
-      <span class="flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-        <i class="fa-solid fa-arrow-trend-up"></i> +12.4%
+      <?php $progressColor = 0 <= $card_setoran['progress'] ? 'green' : 'red'  ?>
+      <span class="flex items-center gap-1 text-xs font-semibold text-<?= $progressColor ?>-600 bg-<?= $progressColor ?>-50 px-2 py-1 rounded-full">
+        <i class="fa-solid fa-arrow-trend-up"></i> <?= number_format($card_setoran['progress'], 1) ?>%
       </span>
     </div>
     <div class="text-slate-500 text-sm font-medium mb-1">Setoran Bulan Ini</div>
-    <div class="text-2xl font-bold text-slate-800">Rp 48.750</div>
+    <div class="text-2xl font-bold text-slate-800">Rp <?= number_format($card_setoran['bulan_ini'], 0, ',', '.') ?></div>
   </div>
 
   <!-- Stat 4 -->
@@ -48,12 +50,13 @@
       <div class="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center text-lg">
         <i class="fa-solid fa-basket-shopping"></i>
       </div>
-      <span class="flex items-center gap-1 text-xs font-semibold text-red-500 bg-red-50 px-2 py-1 rounded-full">
-        <i class="fa-solid fa-arrow-trend-down"></i> -3.1%
+      <?php $progressColor = 0 <= $card_tukar_produk['progress'] ? 'green' : 'red'  ?>
+      <span class="flex items-center gap-1 text-xs font-semibold text-<?= $progressColor ?>-500 bg-<?= $progressColor ?>-50 px-2 py-1 rounded-full">
+        <i class="fa-solid fa-arrow-trend-down"></i> <?= number_format($card_tukar_produk['progress'], 1) ?>%
       </span>
     </div>
     <div class="text-slate-500 text-sm font-medium mb-1">Tukar Produk</div>
-    <div class="text-2xl font-bold text-slate-800">Rp 89.000</div>
+    <div class="text-2xl font-bold text-slate-800">Rp <?= number_format($card_tukar_produk['bulan_ini'], 0, ',', '.') ?></div>
   </div>
 </div>
 
@@ -111,22 +114,6 @@
 
   <!-- Right Side Widgets -->
   <div class="flex flex-col gap-6">
-
-    <!-- Target Widget -->
-    <div class="bg-brand-600 p-6 rounded-xl text-white shadow-md relative overflow-hidden">
-      <i class="fa-solid fa-leaf absolute -right-4 -bottom-4 text-7xl text-brand-500 opacity-50"></i>
-      <h3 class="text-brand-100 text-sm font-medium mb-1">Bulan Mei 2026</h3>
-      <div class="text-xl font-bold mb-4">Sampah terkumpul</div>
-      <div class="text-4xl font-black mb-2">1.247 <span class="text-lg font-medium">kg</span></div>
-
-      <div class="w-full bg-brand-800 rounded-full h-2 mb-2">
-        <div class="bg-white h-2 rounded-full" style="width: 62%"></div>
-      </div>
-      <div class="text-xs text-brand-100 flex justify-between">
-        <span>62% dari target</span>
-        <span>Target 2.000 kg</span>
-      </div>
-    </div>
 
     <!-- Top Kategori Widget -->
     <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm flex-1">

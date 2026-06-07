@@ -182,4 +182,41 @@ class Wargas extends MY_Model
 			],
 		];
 	}
+
+	function wargaAktif($roleWarga)
+	{
+		return $this
+			->db
+			->where('status', 1)
+			->where('deletedAt', null)
+			->where('role', $roleWarga)
+			->count_all_results($this->table);
+	}
+
+	function mendaftarMingguIni($roleWarga)
+	{
+		$startOfWeek = date('Y-m-d 00:00:00', strtotime('monday this week'));
+		$endOfWeek = date('Y-m-d 23:59:59', strtotime('sunday this week'));
+
+		return $this
+			->db
+			->where('status', 1)
+			->where('deletedAt', null)
+			->where('role', $roleWarga)
+			->where('createdAt >=', "'{$startOfWeek}'", false)
+			->where('createdAt <=', "'{$endOfWeek}'", false)
+			->count_all_results($this->table);
+	}
+
+	function saldoBeredar($roleWarga)
+	{
+		$this
+			->db
+			->select('SUM(u.saldo) as total_saldo', false)
+			->from('user u')
+			->where('u.deletedAt IS NULL', NULL, false)
+			->where('u.status', 1)
+			->where('role', $roleWarga);
+		return $this->db->get()->row()->total_saldo ?? 0;
+	}
 }
