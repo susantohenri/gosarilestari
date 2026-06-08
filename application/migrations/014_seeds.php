@@ -186,7 +186,116 @@ class Migration_seeds extends CI_Migration
             'harga' => 5500
         ]);
 
-        $rtrws = [["nama" => "Kembangputihan RT 001", "latitude" => "-7.8732", "longitude" => "110.2998"], ["nama" => "Kembangputihan RT 002", "latitude" => "-7.8732", "longitude" => "110.2998"], ["nama" => "Kembangputihan RT 003", "latitude" => "-7.8732", "longitude" => "110.2998"], ["nama" => "Kembangputihan RT 004", "latitude" => "-7.8732", "longitude" => "110.2998"], ["nama" => "Kembangputihan RT 005", "latitude" => "-7.8732", "longitude" => "110.2998"], ["nama" => "Kembangputihan RT 006", "latitude" => "-7.8732", "longitude" => "110.2998"], ["nama" => "Kentolan Lor RT 001", "latitude" => "-7.8754", "longitude" => "110.3014"], ["nama" => "Kentolan Lor RT 002", "latitude" => "-7.8754", "longitude" => "110.3014"], ["nama" => "Kentolan Lor RT 003", "latitude" => "-7.8754", "longitude" => "110.3014"], ["nama" => "Kentolan Lor RT 004", "latitude" => "-7.8754", "longitude" => "110.3014"], ["nama" => "Kentolan Lor RT 005", "latitude" => "-7.8754", "longitude" => "110.3014"], ["nama" => "Kentolan Lor RT 006", "latitude" => "-7.8754", "longitude" => "110.3014"], ["nama" => "Kentolan Kidul RT 001", "latitude" => "-7.8781", "longitude" => "110.3017"], ["nama" => "Kentolan Kidul RT 002", "latitude" => "-7.8781", "longitude" => "110.3017"], ["nama" => "Kentolan Kidul RT 003", "latitude" => "-7.8781", "longitude" => "110.3017"], ["nama" => "Kentolan Kidul RT 004", "latitude" => "-7.8781", "longitude" => "110.3017"], ["nama" => "Gandekan RT 001", "latitude" => "-7.8794", "longitude" => "110.3042"], ["nama" => "Gandekan RT 002", "latitude" => "-7.8794", "longitude" => "110.3042"], ["nama" => "Gandekan RT 003", "latitude" => "-7.8794", "longitude" => "110.3042"], ["nama" => "Gandekan RT 004", "latitude" => "-7.8794", "longitude" => "110.3042"], ["nama" => "Gandekan RT 005", "latitude" => "-7.8794", "longitude" => "110.3042"], ["nama" => "Dukuh RT 001", "latitude" => "-7.8817", "longitude" => "110.3065"], ["nama" => "Dukuh RT 002", "latitude" => "-7.8817", "longitude" => "110.3065"], ["nama" => "Dukuh RT 003", "latitude" => "-7.8817", "longitude" => "110.3065"], ["nama" => "Dukuh RT 004", "latitude" => "-7.8817", "longitude" => "110.3065"], ["nama" => "Dukuh RT 005", "latitude" => "-7.8817", "longitude" => "110.3065"], ["nama" => "Dukuh RT 006", "latitude" => "-7.8817", "longitude" => "110.3065"], ["nama" => "Iroyudan RT 001", "latitude" => "-7.8836", "longitude" => "110.3083"], ["nama" => "Iroyudan RT 002", "latitude" => "-7.8836", "longitude" => "110.3083"], ["nama" => "Iroyudan RT 003", "latitude" => "-7.8836", "longitude" => "110.3083"], ["nama" => "Iroyudan RT 004", "latitude" => "-7.8836", "longitude" => "110.3083"], ["nama" => "Iroyudan RT 005", "latitude" => "-7.8836", "longitude" => "110.3083"], ["nama" => "Iroyudan RT 006", "latitude" => "-7.8836", "longitude" => "110.3083"], ["nama" => "Kadisono RT 001", "latitude" => "-7.8851", "longitude" => "110.3111"], ["nama" => "Kadisono RT 002", "latitude" => "-7.8851", "longitude" => "110.3111"], ["nama" => "Kadisono RT 003", "latitude" => "-7.8851", "longitude" => "110.3111"], ["nama" => "Kadisono RT 004", "latitude" => "-7.8851", "longitude" => "110.3111"], ["nama" => "Kembanggede RT 001", "latitude" => "-7.8874", "longitude" => "110.3137"], ["nama" => "Kembanggede RT 002", "latitude" => "-7.8874", "longitude" => "110.3137"], ["nama" => "Kembanggede RT 003", "latitude" => "-7.8874", "longitude" => "110.3137"], ["nama" => "Kembanggede RT 004", "latitude" => "-7.8874", "longitude" => "110.3137"], ["nama" => "Karangber RT 001", "latitude" => "-7.8898", "longitude" => "110.3155"], ["nama" => "Karangber RT 002", "latitude" => "-7.8898", "longitude" => "110.3155"], ["nama" => "Karangber RT 003", "latitude" => "-7.8898", "longitude" => "110.3155"], ["nama" => "Karangber RT 004", "latitude" => "-7.8898", "longitude" => "110.3155"], ["nama" => "Santan RT 001", "latitude" => "-7.8912", "longitude" => "110.3178"], ["nama" => "Santan RT 002", "latitude" => "-7.8912", "longitude" => "110.3178"], ["nama" => "Santan RT 003", "latitude" => "-7.8912", "longitude" => "110.3178"], ["nama" => "Santan RT 004", "latitude" => "-7.8912", "longitude" => "110.3178"], ["nama" => "Kalakijo RT 001", "latitude" => "-7.8934", "longitude" => "110.3202"], ["nama" => "Kalakijo RT 002", "latitude" => "-7.8934", "longitude" => "110.3202"], ["nama" => "Kalakijo RT 003", "latitude" => "-7.8934", "longitude" => "110.3202"], ["nama" => "Kalakijo RT 004", "latitude" => "-7.8934", "longitude" => "110.3202"], ["nama" => "Kalakijo RT 005", "latitude" => "-7.8934", "longitude" => "110.3202"], ["nama" => "Kalakijo RT 006", "latitude" => "-7.8934", "longitude" => "110.3202"], ["nama" => "Kedung RT 001", "latitude" => "-7.8961", "longitude" => "110.3225"], ["nama" => "Kedung RT 002", "latitude" => "-7.8961", "longitude" => "110.3225"], ["nama" => "Kedung RT 003", "latitude" => "-7.8961", "longitude" => "110.3225"], ["nama" => "Kedung RT 004", "latitude" => "-7.8961", "longitude" => "110.3225"], ["nama" => "Bungsing RT 001", "latitude" => "-7.8995", "longitude" => "110.3257"], ["nama" => "Bungsing RT 002", "latitude" => "-7.8995", "longitude" => "110.3257"], ["nama" => "Bungsing RT 003", "latitude" => "-7.8995", "longitude" => "110.3257"], ["nama" => "Bungsing RT 004", "latitude" => "-7.8995", "longitude" => "110.3257"], ["nama" => "Watugedug RT 001", "latitude" => "-7.9032", "longitude" => "110.3291"], ["nama" => "Watugedug RT 002", "latitude" => "-7.9032", "longitude" => "110.3291"], ["nama" => "Watugedug RT 003", "latitude" => "-7.9032", "longitude" => "110.3291"], ["nama" => "Watugedug RT 004", "latitude" => "-7.9032", "longitude" => "110.3291"], ["nama" => "Watugedug RT 005", "latitude" => "-7.9032", "longitude" => "110.3291"], ["nama" => "Watugedug RT 006", "latitude" => "-7.9032", "longitude" => "110.3291"], ["nama" => "Pringgading RT 001", "latitude" => "-7.9076", "longitude" => "110.3338"], ["nama" => "Pringgading RT 002", "latitude" => "-7.9076", "longitude" => "110.3338"], ["nama" => "Pringgading RT 003", "latitude" => "-7.9076", "longitude" => "110.3338"], ["nama" => "Pringgading RT 004", "latitude" => "-7.9076", "longitude" => "110.3338"], ["nama" => "Pringgading RT 005", "latitude" => "-7.9076", "longitude" => "110.3338"], ["nama" => "Pringgading RT 006", "latitude" => "-7.9076", "longitude" => "110.3338"], ["nama" => "Pringgading RT 007", "latitude" => "-7.9076", "longitude" => "110.3338"], ["nama" => "Pringgading RT 008", "latitude" => "-7.9076", "longitude" => "110.3338"], ["nama" => "Pringgading RT 009", "latitude" => "-7.9076", "longitude" => "110.3338"], ["nama" => "Pringgading RT 010", "latitude" => "-7.9076", "longitude" => "110.3338"]];
+        $rtrws = [
+            // Kembangputihan
+            ["nama" => "Kembangputihan RT 001", "latitude" => "-7.8727", "longitude" => "110.2998"],
+            ["nama" => "Kembangputihan RT 002", "latitude" => "-7.8729", "longitude" => "110.3002"],
+            ["nama" => "Kembangputihan RT 003", "latitude" => "-7.8735", "longitude" => "110.3002"],
+            ["nama" => "Kembangputihan RT 004", "latitude" => "-7.8737", "longitude" => "110.2998"],
+            ["nama" => "Kembangputihan RT 005", "latitude" => "-7.8735", "longitude" => "110.2994"],
+            ["nama" => "Kembangputihan RT 006", "latitude" => "-7.8729", "longitude" => "110.2994"],
+
+            // Kentolan Lor
+            ["nama" => "Kentolan Lor RT 001", "latitude" => "-7.8749", "longitude" => "110.3014"],
+            ["nama" => "Kentolan Lor RT 002", "latitude" => "-7.8751", "longitude" => "110.3018"],
+            ["nama" => "Kentolan Lor RT 003", "latitude" => "-7.8757", "longitude" => "110.3018"],
+            ["nama" => "Kentolan Lor RT 004", "latitude" => "-7.8759", "longitude" => "110.3014"],
+            ["nama" => "Kentolan Lor RT 005", "latitude" => "-7.8757", "longitude" => "110.3010"],
+            ["nama" => "Kentolan Lor RT 006", "latitude" => "-7.8751", "longitude" => "110.3010"],
+
+            // Kentolan Kidul
+            ["nama" => "Kentolan Kidul RT 001", "latitude" => "-7.8777", "longitude" => "110.3021"],
+            ["nama" => "Kentolan Kidul RT 002", "latitude" => "-7.8785", "longitude" => "110.3021"],
+            ["nama" => "Kentolan Kidul RT 003", "latitude" => "-7.8785", "longitude" => "110.3013"],
+            ["nama" => "Kentolan Kidul RT 004", "latitude" => "-7.8777", "longitude" => "110.3013"],
+
+            // Gandekan
+            ["nama" => "Gandekan RT 001", "latitude" => "-7.8789", "longitude" => "110.3042"],
+            ["nama" => "Gandekan RT 002", "latitude" => "-7.8792", "longitude" => "110.3046"],
+            ["nama" => "Gandekan RT 003", "latitude" => "-7.8797", "longitude" => "110.3045"],
+            ["nama" => "Gandekan RT 004", "latitude" => "-7.8797", "longitude" => "110.3039"],
+            ["nama" => "Gandekan RT 005", "latitude" => "-7.8792", "longitude" => "110.3038"],
+
+            // Dukuh
+            ["nama" => "Dukuh RT 001", "latitude" => "-7.8812", "longitude" => "110.3065"],
+            ["nama" => "Dukuh RT 002", "latitude" => "-7.8814", "longitude" => "110.3069"],
+            ["nama" => "Dukuh RT 003", "latitude" => "-7.8820", "longitude" => "110.3069"],
+            ["nama" => "Dukuh RT 004", "latitude" => "-7.8822", "longitude" => "110.3065"],
+            ["nama" => "Dukuh RT 005", "latitude" => "-7.8820", "longitude" => "110.3061"],
+            ["nama" => "Dukuh RT 006", "latitude" => "-7.8814", "longitude" => "110.3061"],
+
+            // Iroyudan
+            ["nama" => "Iroyudan RT 001", "latitude" => "-7.8808", "longitude" => "110.3094"],
+            ["nama" => "Iroyudan RT 002", "latitude" => "-7.8805", "longitude" => "110.3098"],
+            ["nama" => "Iroyudan RT 003", "latitude" => "-7.8811", "longitude" => "110.3098"],
+            ["nama" => "Iroyudan RT 004", "latitude" => "-7.8813", "longitude" => "110.3094"],
+            ["nama" => "Iroyudan RT 005", "latitude" => "-7.8811", "longitude" => "110.3090"],
+            ["nama" => "Iroyudan RT 006", "latitude" => "-7.8805", "longitude" => "110.3090"],
+
+            // Kadisono
+            ["nama" => "Kadisono RT 001", "latitude" => "-7.8847", "longitude" => "110.3115"],
+            ["nama" => "Kadisono RT 002", "latitude" => "-7.8855", "longitude" => "110.3115"],
+            ["nama" => "Kadisono RT 003", "latitude" => "-7.8855", "longitude" => "110.3107"],
+            ["nama" => "Kadisono RT 004", "latitude" => "-7.8847", "longitude" => "110.3107"],
+
+            // Kembanggede
+            ["nama" => "Kembanggede RT 001", "latitude" => "-7.8870", "longitude" => "110.3141"],
+            ["nama" => "Kembanggede RT 002", "latitude" => "-7.8878", "longitude" => "110.3141"],
+            ["nama" => "Kembanggede RT 003", "latitude" => "-7.8878", "longitude" => "110.3133"],
+            ["nama" => "Kembanggede RT 004", "latitude" => "-7.8870", "longitude" => "110.3133"],
+
+            // Karangber
+            ["nama" => "Karangber RT 001", "latitude" => "-7.8894", "longitude" => "110.3159"],
+            ["nama" => "Karangber RT 002", "latitude" => "-7.8902", "longitude" => "110.3159"],
+            ["nama" => "Karangber RT 003", "latitude" => "-7.8902", "longitude" => "110.3151"],
+            ["nama" => "Karangber RT 004", "latitude" => "-7.8894", "longitude" => "110.3151"],
+
+            // Santan
+            ["nama" => "Santan RT 001", "latitude" => "-7.8908", "longitude" => "110.3182"],
+            ["nama" => "Santan RT 002", "latitude" => "-7.8916", "longitude" => "110.3182"],
+            ["nama" => "Santan RT 003", "latitude" => "-7.8916", "longitude" => "110.3174"],
+            ["nama" => "Santan RT 004", "latitude" => "-7.8908", "longitude" => "110.3174"],
+
+            // Kalakijo
+            ["nama" => "Kalakijo RT 001", "latitude" => "-7.8929", "longitude" => "110.3202"],
+            ["nama" => "Kalakijo RT 002", "latitude" => "-7.8931", "longitude" => "110.3206"],
+            ["nama" => "Kalakijo RT 003", "latitude" => "-7.8937", "longitude" => "110.3206"],
+            ["nama" => "Kalakijo RT 004", "latitude" => "-7.8939", "longitude" => "110.3202"],
+            ["nama" => "Kalakijo RT 005", "latitude" => "-7.8937", "longitude" => "110.3198"],
+            ["nama" => "Kalakijo RT 006", "latitude" => "-7.8931", "longitude" => "110.3198"],
+
+            // Kedung
+            ["nama" => "Kedung RT 001", "latitude" => "-7.8957", "longitude" => "110.3229"],
+            ["nama" => "Kedung RT 002", "latitude" => "-7.8965", "longitude" => "110.3229"],
+            ["nama" => "Kedung RT 003", "latitude" => "-7.8965", "longitude" => "110.3221"],
+            ["nama" => "Kedung RT 004", "latitude" => "-7.8957", "longitude" => "110.3221"],
+
+            // Bungsing
+            ["nama" => "Bungsing RT 001", "latitude" => "-7.8991", "longitude" => "110.3261"],
+            ["nama" => "Bungsing RT 002", "latitude" => "-7.8999", "longitude" => "110.3261"],
+            ["nama" => "Bungsing RT 003", "latitude" => "-7.8999", "longitude" => "110.3253"],
+            ["nama" => "Bungsing RT 004", "latitude" => "-7.8991", "longitude" => "110.3253"],
+
+            // Watugedug
+            ["nama" => "Watugedug RT 001", "latitude" => "-7.9027", "longitude" => "110.3291"],
+            ["nama" => "Watugedug RT 002", "latitude" => "-7.9029", "longitude" => "110.3295"],
+            ["nama" => "Watugedug RT 003", "latitude" => "-7.9035", "longitude" => "110.3295"],
+            ["nama" => "Watugedug RT 004", "latitude" => "-7.9037", "longitude" => "110.3291"],
+            ["nama" => "Watugedug RT 005", "latitude" => "-7.9035", "longitude" => "110.3287"],
+            ["nama" => "Watugedug RT 006", "latitude" => "-7.9029", "longitude" => "110.3287"],
+
+            // Pringgading
+            ["nama" => "Pringgading RT 001", "latitude" => "-7.9071", "longitude" => "110.3338"],
+            ["nama" => "Pringgading RT 002", "latitude" => "-7.9072", "longitude" => "110.3341"],
+            ["nama" => "Pringgading RT 003", "latitude" => "-7.9075", "longitude" => "110.3343"],
+            ["nama" => "Pringgading RT 004", "latitude" => "-7.9078", "longitude" => "110.3342"],
+            ["nama" => "Pringgading RT 005", "latitude" => "-7.9080", "longitude" => "110.3339"],
+            ["nama" => "Pringgading RT 006", "latitude" => "-7.9080", "longitude" => "110.3335"],
+            ["nama" => "Pringgading RT 007", "latitude" => "-7.9077", "longitude" => "110.3333"],
+            ["nama" => "Pringgading RT 008", "latitude" => "-7.9074", "longitude" => "110.3333"],
+            ["nama" => "Pringgading RT 009", "latitude" => "-7.9072", "longitude" => "110.3335"],
+            ["nama" => "Pringgading RT 010", "latitude" => "-7.9076", "longitude" => "110.3337"]
+        ];
         $rtrwids = [];
         foreach ($rtrws as $rtrw) {
             $rtrwids[] = $this->Rtrws->create($rtrw);

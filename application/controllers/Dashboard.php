@@ -44,6 +44,9 @@ class Dashboard extends MY_Controller
                 'bulan_ini' => $this->Ledgers->getTotalTukarProdukBulanIni(),
                 'progress' => $this->Ledgers->progressTukarProdukPersen()
             ],
+            'card_map' => [
+                'data' => $this->SetorSampahs->peta()
+            ],
             'card_grafik' => [
                 'items' => $this->SetorSampahs->getVolumeSampah7HariPerKategori()
             ],

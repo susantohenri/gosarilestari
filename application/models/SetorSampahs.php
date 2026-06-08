@@ -262,4 +262,82 @@ class SetorSampahs extends MY_Model
 
 		return $chartData;
 	}
+
+	public function peta()
+	{
+		$this->db->select('
+        r.uuid,
+        r.nama as nama_rtrw,
+        r.kode,
+        r.latitude,
+        r.longitude,
+        COUNT(DISTINCT u.uuid) as total_warga,
+        COUNT(s.uuid) as total_setoran,
+        COALESCE(SUM(s.berat), 0) as total_berat,
+        MAX(s.createdAt) as last_update,
+        
+        -- Hitung jumlah per kategori
+        SUM(CASE WHEN LOWER(TRIM(s.kategori)) = "merah" THEN 1 ELSE 0 END) as jml_merah,
+        SUM(CASE WHEN LOWER(TRIM(s.kategori)) = "kuning" THEN 1 ELSE 0 END) as jml_kuning,
+        SUM(CASE WHEN LOWER(TRIM(s.kategori)) IN ("hijau", "biru") THEN 1 ELSE 0 END) as jml_hijau
+    ');
+
+		$this->db->from('rtrw r');
+		$this->db->join('user u', 'u.rtrw = r.uuid AND u.status = 1 AND u.deletedAt IS NULL', 'left');
+		$this->db->join('setorsampah s', 's.warga = u.uuid AND s.status = 1 AND s.deletedAt IS NULL', 'left');
+
+		$this->db->where('r.status', 1);
+		$this->db->where('r.deletedAt IS NULL');
+		$this->db->where('r.latitude !=', '');
+		$this->db->where('r.longitude !=', '');
+		$this->db->where('r.latitude !=', '0');
+		$this->db->where('r.longitude !=', '0');
+
+		$this->db->group_by('r.uuid, r.nama, r.kode, r.latitude, r.longitude');
+		$this->db->order_by('r.nama', 'ASC');
+
+		$query = $this->db->get();
+		$rows = $query->result();
+
+		$result = [];
+
+		foreach ($rows as $row) {
+			$total_setoran = (int) $row->total_setoran;
+
+			// Tentukan status dominan
+			if ($total_setoran == 0) {
+				$status = 'belum_ada_setoran';
+				$warna = '#9ca3af';
+			} else {
+				$persen_merah = ((int) $row->jml_merah / $total_setoran) * 100;
+				$persen_hijau = ((int) $row->jml_hijau / $total_setoran) * 100;
+
+				if ($persen_merah >= 50) {
+					$status = 'merah';
+					$warna = '#ef4444';
+				} elseif ($persen_hijau >= 50) {
+					$status = 'hijau';
+					$warna = '#22c55e';
+				} else {
+					$status = 'kuning';
+					$warna = '#eab308';
+				}
+			}
+
+			$result[] = (object) [
+				'nama_rtrw' => $row->nama_rtrw,
+				'kode' => $row->kode,
+				'latitude' => floatval($row->latitude),
+				'longitude' => floatval($row->longitude),
+				'status' => $status,
+				'warna' => $warna,
+				'total_setoran' => $total_setoran,
+				'total_berat' => round((float) $row->total_berat, 2),
+				'total_warga' => (int) $row->total_warga,
+				'last_update' => $row->last_update ? date('d/m/Y', strtotime($row->last_update)) : '-'
+			];
+		}
+
+		return $result;
+	}
 }
