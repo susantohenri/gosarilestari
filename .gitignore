@@ -17,3 +17,6 @@ application/logs/*
 !application/logs/.htaccess
 /vendor/
 system
+
+#env
+application/config/production/database.php

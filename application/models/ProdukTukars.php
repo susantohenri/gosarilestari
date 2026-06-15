@@ -137,4 +137,15 @@ class ProdukTukars extends MY_Model
 			],
 		];
 	}
+
+	public function getCategories()
+	{
+		return $this
+			->db
+			->select('kategori')
+			->select("COUNT(uuid) AS product_count", false)
+			->group_by('kategori')
+			->get($this->table)
+			->result();
+	}
 }
