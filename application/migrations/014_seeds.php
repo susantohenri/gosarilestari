@@ -24,7 +24,7 @@ class Migration_seeds extends CI_Migration
         $petugas = $this->Roles->create(['name' => 'Petugas']);
         $warga = $this->Roles->create(['name' => 'Warga']);
 
-        $baseEntities = ['User', 'Role', 'Permission', 'Menu'];
+        $baseEntities = ['User', 'Role', 'Permission', 'Menu', 'Petugas'];
         $petugasEntities = ['Warga', 'Rtrw', 'KategoriSampah', 'ProdukTukar'];
         $transaksiEntities = ['SetorSampah', 'SetorTunai', 'TukarProduk'];
         $wargaEntities = ['TukarProduk', 'Notifikasi'];

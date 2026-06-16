@@ -22,16 +22,21 @@ class Login extends CI_Controller
             $this->load->model(['Users']);
             $login = $this->Users->findOne([
                 'username' => $post['username'],
-                'password' => md5($post['password'])
             ]);
-            if (isset($login['uuid'])) {
+
+            if (!isset($login['uuid'])) {
+                $error = 'Pengguna tidak ditemukan.';
+            } else if ($login['password'] !== md5($post['password'])) {
+                $error = 'Kata sandi tidak tepat.';
+            } else if (1 != $login['status']) {
+                $error = 'Status pengguna tidak aktif.';
+            } else {
                 $this->load->model('Roles');
                 $role = $this->Roles->findOne(['uuid' => $login['role']]);
                 $login['role_name'] = $role['name'];
                 $this->session->set_userdata($login);
                 redirect(base_url());
             }
-            $error = 'Username atau password salah.';
         }
 
         $this->load->view('login', ['error' => $error]);

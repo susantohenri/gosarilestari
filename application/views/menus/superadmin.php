@@ -13,10 +13,7 @@
 <?php sidebar_section_end(); ?>
 
 <?php sidebar_section('Sistem'); ?>
-<?php sidebar_link('User', 'User', 'user-gear', 'Pengguna', $current); ?>
-<?php sidebar_link('Role', 'Role', 'shield-halved', 'Role', $current); ?>
-<?php sidebar_link('Permission', 'Permission', 'key', 'Permission', $current); ?>
-<?php sidebar_link('Menu', 'Menu', 'bars', 'Menu', $current); ?>
+<?php sidebar_link('Petugas', 'Petugas', 'user-gear', 'Petugas', $current); ?>
 <?php sidebar_link('Konfigurasi', 'Konfigurasi', 'gear', 'Konfigurasi', $current); ?>
 <?php sidebar_link('Notifikasi', 'Notifikasi', 'bell', 'Notifikasi', $current); ?>
 <?php sidebar_section_end(); ?>

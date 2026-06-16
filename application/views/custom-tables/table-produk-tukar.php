@@ -61,7 +61,7 @@
             </span>
             <div class="flex gap-2">
               <a href="<?= site_url("ProdukTukar/Read/{$prod->uuid}") ?>" class="flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200">
-                <i class="fa fa-file"></i>
+                <i class="fa fa-file text-yellow-500"></i>
               </a>
               <a href="<?= site_url("ProdukTukar/Delete/{$prod->uuid}") ?>" class="flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200">
                 <i class="fa fa-trash text-red-700"></i>

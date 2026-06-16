@@ -64,6 +64,18 @@ class Wargas extends MY_Model
 			]
 		);
 
+		$this->form[] = [
+			'type' => 'password',
+			'name' => 'password',
+			'label' => 'Kata Sandi'
+		];
+
+		$this->form[] = [
+			'type' => 'password',
+			'name' => 'confirm_password',
+			'label' => 'Ulang Kata Sandi'
+		];
+
 		$this->childs = array();
 	}
 
@@ -101,6 +113,28 @@ class Wargas extends MY_Model
 			->where('role.name', 'Warga')
 		;
 		return parent::dt();
+	}
+
+	public function findOne($param)
+	{
+		$record = parent::findOne($param);
+		$record['confirm_password'] = '';
+		return $record;
+	}
+
+	public function save($data)
+	{
+		if (strlen($data['password']) > 0) {
+			if ($data['password'] !== $data['confirm_password']) {
+				return ['error' => ['message' => 'Password tidak sesuai']];
+			} else {
+				$data['password'] = md5($data['password']);
+			}
+		} else {
+			unset($data['password']);
+		}
+		unset($data['confirm_password']);
+		return parent::save($data);
 	}
 
 	function create($record)

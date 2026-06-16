@@ -12,7 +12,8 @@ class Konfigurasis extends MY_Model
     $this->thead = array(
       (object) array('mData' => 'orders', 'sTitle' => 'No', 'visible' => false),
       (object) array('mData' => 'nama', 'sTitle' => 'NAMA'),
-      (object) array('mData' => 'nilai', 'sTitle' => 'NILAI')
+      (object) array('mData' => 'nilai', 'sTitle' => 'NILAI'),
+      (object) array('mData' => 'aksi', 'sTitle' => '')
     );
 
     $this->form = array(
@@ -32,12 +33,26 @@ class Konfigurasis extends MY_Model
 
   function dt()
   {
+    $controller = $this->router->class;
+    $edit = site_url("{$controller}/Read/");
+
+    $this
+      ->db
+      ->select("CONCAT(
+                '<a class=\"mr-1 border p-1 rounded-sm\" href=\"{$edit}', {$this->table}.uuid, '\"><i class=\"fa fa-file-lines text-yellow-500\"></i></a>'
+            ) as aksi", false);
+
     $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.orders")
       ->select("konfigurasi.nama")
       ->select("konfigurasi.nilai");
-    return parent::dt();
+
+    return $this
+      ->datatables
+      ->from($this->table)
+      ->where("{$this->table}.deletedAt", null)
+      ->generate();
   }
 
   function getNilai($nama)
