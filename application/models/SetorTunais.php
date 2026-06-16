@@ -16,7 +16,6 @@ class SetorTunais extends MY_Model
 			(object) array('mData' => 'fpetugas', 'sTitle' => 'Petugas'),
 			(object) array('mData' => 'fbulantahun', 'sTitle' => 'Bulan'),
 			(object) array('mData' => 'fnominal', 'sTitle' => 'Nominal'),
-			(object) array('mData' => 'aksi', 'sTitle' => ''),
 		);
 
 		$this->form = array(

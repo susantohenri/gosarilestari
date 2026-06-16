@@ -18,7 +18,6 @@ class SetorSampahs extends MY_Model
 			(object) array('mData' => 'fberat', 'sTitle' => 'BERAT'),
 			(object) array('mData' => 'fpendapatan', 'sTitle' => 'PENDAPATAN'),
 			(object) array('mData' => 'ftagihan', 'sTitle' => 'TAGIHAN'),
-			(object) array('mData' => 'aksi', 'sTitle' => ''),
 		);
 
 		$this->form = array(

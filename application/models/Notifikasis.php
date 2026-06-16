@@ -14,7 +14,8 @@ class Notifikasis extends MY_Model
     $this->thead = [
       (object) ['mData' => 'orders', 'sTitle' => 'No', 'visible' => false],
       (object) ['mData' => 'judul', 'sTitle' => 'INFORMASI'],
-      (object) ['mData' => 'dibaca', 'sTitle' => ''],
+      (object) ['mData' => 'dibaca', 'sTitle' => 'STATUS'],
+      (object) ['mData' => 'aksi', 'sTitle' => 'BACA'],
     ];
 
     $this->form = [
@@ -31,6 +32,15 @@ class Notifikasis extends MY_Model
 
   public function dt()
   {
+
+    $controller = $this->router->class;
+    $edit = site_url("{$controller}/Read/");
+
+    $this
+      ->db
+      ->select("CONCAT(
+                '<a class=\"mr-1 border p-1 rounded-sm\" href=\"{$edit}', {$this->table}.uuid, '\"><i class=\"fa fa-envelope-open text-yellow-500\"></i></a>'
+            ) as aksi", false);
     $this
       ->datatables
       ->select("{$this->table}.uuid")
@@ -38,7 +48,12 @@ class Notifikasis extends MY_Model
       ->select("{$this->table}.judul")
       ->select("IF(isRead = 1, 'Sudah Dibaca', 'Belum Dibaca') as dibaca", false)
       ->where('user', $this->session->userdata('uuid'));
-    return parent::dt();
+
+      return $this
+      ->datatables
+      ->from($this->table)
+      ->where("{$this->table}.deletedAt", null)
+      ->generate();
   }
 
   public function getUnreadCountByUserId($userUuid)

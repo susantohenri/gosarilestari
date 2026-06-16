@@ -79,7 +79,22 @@ class MY_Model extends CI_Model
 
     public function dt()
     {
-        return $this->datatables->from($this->table)->where("{$this->table}.deletedAt", null)->generate();
+        $controller = $this->router->class;
+        $edit = site_url("{$controller}/Read/");
+        $delete = site_url("{$controller}/Delete/");
+
+        $this
+            ->db
+            ->select("CONCAT(
+                '<a class=\"mr-1 border p-1 rounded-sm\" href=\"{$edit}', {$this->table}.uuid, '\"><i class=\"fa fa-file-lines text-yellow-500\"></i></a>'
+                '<a class=\"ml-1 border p-1 rounded-sm\" href=\"{$delete}', {$this->table}.uuid, '\"><i class=\"fa fa-trash text-red-700\"></i></a>'
+            ) as aksi", false);
+
+        return $this
+            ->datatables
+            ->from($this->table)
+            ->where("{$this->table}.deletedAt", null)
+            ->generate();
     }
 
     public function find($param = [])
@@ -312,7 +327,8 @@ class MY_Model extends CI_Model
         return $new_file_location;
     }
 
-    public function getOverView() {
+    public function getOverView()
+    {
         return [];
     }
 }

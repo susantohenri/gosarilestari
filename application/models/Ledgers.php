@@ -18,7 +18,6 @@ class Ledgers extends MY_Model
 			(object) array('mData' => 'fpetugas', 'sTitle' => 'PETUGAS'),
 			(object) array('mData' => 'fwaktu', 'sTitle' => 'WAKTU'),
 			(object) array('mData' => 'fnilai', 'sTitle' => 'NILAI'),
-			(object) array('mData' => 'aksi', 'sTitle' => '')
 		);
 
 		$this->form = array(

@@ -19,7 +19,6 @@ class TukarProduks extends MY_Model
 			(object) array('mData' => 'fqty', 'sTitle' => 'QTY'),
 			(object) array('mData' => 'ftotal', 'sTitle' => 'TOTAL'),
 			(object) array('mData' => 'fstatus', 'sTitle' => 'STATUS'),
-			(object) array('mData' => 'aksi', 'sTitle' => ''),
 		);
 
 		$this->form = array(
