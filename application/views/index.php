@@ -6,11 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= !empty($page_title) ? htmlspecialchars($page_title) . ' — ' : '' ?>GO SARI Lestari</title>
   <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
+
+  <link rel="manifest" href="<?= base_url('manifest.json') ?>">
+  <meta name="theme-color" content="#16a34a">
+  <link rel="apple-touch-icon" href="<?= base_url('icon-192x192.png') ?>">
+
   <link rel="stylesheet" href="<?= base_url('assets/css/all.min.css') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/css/app-overrides.css') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/webfonts/all.min.css') ?>">
+
   <script src="<?= base_url('assets/js/tailwindcss.min.js') ?>"></script>
   <script src="<?= base_url('assets/js/tailwind.config.js') ?>"></script>
+
 </head>
 
 <body class="bg-slate-50 flex h-screen overflow-hidden text-slate-800">
@@ -125,6 +132,15 @@
       <script type="text/javascript" src="<?= base_url("assets/js/{$script}") ?>"></script>
   <?php endforeach;
   endif; ?>
+  <script>
+    if ('service-worker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('<?= base_url('service-worker.js') ?>')
+          .then(reg => console.log('Service Worker terdaftar!', reg))
+          .catch(err => console.error('Gagal daftar Service Worker:', err));
+      });
+    }
+  </script>
 </body>
 
 </html>
