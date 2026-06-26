@@ -20,11 +20,11 @@
 
 </head>
 
-<body class="bg-slate-50 flex h-screen overflow-hidden text-slate-800">
+<body class="bg-slate-50 flex h-screen overflow-y-auto text-slate-800">
 
   <div id="sidebar-overlay" class="hidden fixed inset-0 bg-black/40 z-30 md:hidden"></div>
 
-  <aside id="sidebar" class="w-64 bg-white border-r border-slate-200 flex flex-col z-40 -translate-x-full md:translate-x-0 md:relative md:flex shrink-0">
+  <aside id="sidebar" class="overflow-y-auto w-64 bg-white border-r border-slate-200 flex flex-col z-40 -translate-x-full md:translate-x-0 md:relative md:flex shrink-0">
     <div class="h-16 flex items-center px-6 border-b border-slate-200">
       <a href="<?= base_url() ?>" class="flex items-center gap-2 text-brand-600">
         <i class="fa-solid fa-leaf text-xl"></i>

@@ -8,13 +8,13 @@
   function openSidebar() {
     sidebar.classList.remove('-translate-x-full')
     overlay.classList.remove('hidden')
-    document.body.classList.add('overflow-hidden', 'md:overflow-hidden')
+    document.body.classList.add('overflow-y-auto', 'md:overflow-y-auto')
   }
 
   function closeSidebar() {
     sidebar.classList.add('-translate-x-full')
     overlay.classList.add('hidden')
-    document.body.classList.remove('overflow-hidden', 'md:overflow-hidden')
+    document.body.classList.remove('overflow-y-auto', 'md:overflow-y-auto')
   }
 
   toggle.addEventListener('click', function () {
