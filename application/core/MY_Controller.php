@@ -53,6 +53,9 @@ class MY_Controller extends CI_Controller
         $vars['sampah_terkumpul'] = $this->Konfigurasis->getSampahTerkumpul();
         $vars['header_buttons'] = $this->header_buttons;
 
+        if (!isset($vars['js']) || !in_array('select2.full.min.js', $vars['js'])) {
+            $vars['js'][] = 'select2.full.min.js';
+        }
         $this->load->view($view, $vars);
     }
 

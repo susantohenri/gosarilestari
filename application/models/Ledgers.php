@@ -13,6 +13,7 @@ class Ledgers extends MY_Model
 			(object) array('mData' => 'orders', 'sTitle' => 'No', 'visible' => false),
 			(object) array('mData' => 'kode', 'sTitle' => 'TRANSAKSI'),
 			(object) array('mData' => 'fwarga', 'sTitle' => 'WARGA'),
+			(object) array('mData' => 'warga_uuid', 'sTitle' => '', 'visible' => false),
 			(object) array('mData' => 'tipe', 'sTitle' => 'TIPE'),
 			(object) array('mData' => 'keterangan', 'sTitle' => 'KETERANGAN'),
 			(object) array('mData' => 'fpetugas', 'sTitle' => 'PETUGAS'),
@@ -74,6 +75,7 @@ class Ledgers extends MY_Model
 			->select("{$this->table}.uuid")
 			->select("{$this->table}.orders")
 			->select("ledger.kode")
+			->select("warga.uuid AS warga_uuid", false)
 			->select("CONCAT(warga.nama, '<br>', warga.kode) as fwarga", false)
 			->select("CASE ledger.tipe WHEN 'SETOR_SAMPAH' THEN 'Setor Sampah' WHEN 'TUKAR_PRODUK' THEN 'Tukar Produk' WHEN 'POTONG_IURAN' THEN 'Potong Iuran' WHEN 'SETOR_TUNAI' THEN 'Setor Tunai' END as tipe")
 			->select("ledger.keterangan")

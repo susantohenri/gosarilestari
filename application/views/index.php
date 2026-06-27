@@ -73,7 +73,8 @@
         </button>
         <form action="<?= site_url('Ledger') ?>" method="GET" class="relative w-full max-w-md block pr-5">
           <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-          <input type="text" name="search" placeholder="Cari warga, transaksi, atau ID..." class="w-full pl-10 pr-4 py-2 bg-slate-100 border-none rounded-lg text-sm focus:ring-2 focus:ring-brand-500 outline-none transition-shadow">
+          <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/select2.min.css') ?>">
+          <select name="search" class="w-full pl-10 pr-4 py-2 bg-slate-100 border-none rounded-lg text-sm focus:ring-2 focus:ring-brand-500 outline-none transition-shadow"></select>
         </form>
       </div>
       <div class="flex items-center gap-3 md:gap-4 shrink-0">
@@ -122,7 +123,6 @@
   </main>
 
   <script src="<?= base_url('assets/js/jquery.min.js') ?>"></script>
-  <script src="<?= base_url('assets/js/shell.js') ?>"></script>
   <script type="text/javascript">
     var site_url = '<?= site_url('/') ?>'
     var current_controller = '<?= $current['controller'] ?>'
@@ -141,6 +141,7 @@
       });
     }
   </script>
+  <script src="<?= base_url('assets/js/shell.js') ?>"></script>
 </body>
 
 </html>

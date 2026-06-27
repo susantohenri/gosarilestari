@@ -27,4 +27,19 @@
   window.addEventListener('resize', function () {
     if (window.innerWidth >= 768) closeSidebar()
   })
+
+  // global search
+  const model = `Wargas`;
+  const field = `nama`;
+  jQuery('[name="search"]').select2({
+    minimumInputLength: 2,
+    placeholder: 'Cari transaksi dg nama warga',
+    ajax: {
+      url: current_controller_url + '/select2/' + model + '/' + field,
+      type: 'POST',
+      dataType: 'json'
+    }
+  }).on('change', function () {
+    jQuery(this).closest('form').submit();
+  });
 })()

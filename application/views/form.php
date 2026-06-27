@@ -1,4 +1,3 @@
-<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/select2.min.css') ?>">
 <form enctype="multipart/form-data" action="<?= site_url($current['controller']) ?>" method="POST" class="main-form">
   <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
     <div class="flex flex-wrap items-center justify-end gap-2 p-4 md:p-6 border-b border-slate-100">
