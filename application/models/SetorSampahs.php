@@ -14,10 +14,11 @@ class SetorSampahs extends MY_Model
 			(object) array('mData' => 'kode', 'sTitle' => '#'),
 			(object) array('mData' => 'ftanggal', 'sTitle' => 'TANGGAL'),
 			(object) array('mData' => 'fwarga', 'sTitle' => 'WARGA'),
+			(object) array('mData' => 'frtrw', 'sTitle' => 'RT/RW'),
 			(object) array('mData' => 'fpetugas', 'sTitle' => 'PETUGAS'),
 			(object) array('mData' => 'fberat', 'sTitle' => 'BERAT'),
+			(object) array('mData' => 'fkategori', 'sTitle' => 'KATEGORI'),
 			(object) array('mData' => 'fpendapatan', 'sTitle' => 'PENDAPATAN'),
-			(object) array('mData' => 'ftagihan', 'sTitle' => 'TAGIHAN'),
 		);
 
 		$this->form = array(
@@ -72,18 +73,24 @@ class SetorSampahs extends MY_Model
 
 	function dt()
 	{
+		if ($mapFilter = $this->input->post('mapFilter')) {
+			$this->db->where('rtrw.uuid', $mapFilter['rtrw']);
+			$this->db->where('setorsampah.kategori', $mapFilter['kategori']);
+		}
 		$this->datatables
 			->select("{$this->table}.uuid")
 			->select("{$this->table}.orders")
 			->select("DATE_FORMAT(setorsampah.createdAt, '%d %b %Y') as ftanggal", false)
 			->select("setorsampah.kode")
 			->select("warga.nama as fwarga", false)
+			->select("rtrw.nama as frtrw", false)
 			->select("user.nama as fpetugas", false)
 			->select("CONCAT(FORMAT(berat, 1), ' KG') as fberat", false)
+			->select("CASE WHEN 'merah' = setorsampah.kategori THEN 'Tidak Terpilah' WHEN 'kuning' = setorsampah.kategori THEN 'Terpilah Sebagian' WHEN 'hijau' = setorsampah.kategori THEN 'Terpilah dg baik' END as fkategori", false)
 			->select("CONCAT('Rp ', FORMAT(pendapatan, 0, 'id_ID')) as fpendapatan", false)
-			->select("CONCAT('Rp ', FORMAT(tagihan, 0, 'id_ID')) as ftagihan", false)
 			->select('"" as aksi')
 			->join('user warga', 'warga.uuid = setorsampah.warga', 'left')
+			->join('rtrw', 'rtrw.uuid = warga.rtrw', 'left')
 			->join('user', 'user.uuid = setorsampah.petugas', 'left')
 		;
 		return parent::dt();
@@ -305,30 +312,36 @@ class SetorSampahs extends MY_Model
 
 			// Tentukan status dominan
 			if ($total_setoran == 0) {
-				$status = 'belum_ada_setoran';
+				$status = 'Kosong';
+				$kategori = '';
 				$warna = '#9ca3af';
 			} else {
 				$persen_merah = ((int) $row->jml_merah / $total_setoran) * 100;
 				$persen_hijau = ((int) $row->jml_hijau / $total_setoran) * 100;
 
 				if ($persen_merah >= 50) {
-					$status = 'merah';
+					$status = 'Tidak Terpilah';
+					$kategori = 'merah';
 					$warna = '#ef4444';
 				} elseif ($persen_hijau >= 50) {
-					$status = 'hijau';
+					$status = 'Terpilah dg Baik';
+					$kategori = 'hijau';
 					$warna = '#22c55e';
 				} else {
-					$status = 'kuning';
+					$status = 'Tepilah Sebagian';
+					$kategori = 'kuning';
 					$warna = '#eab308';
 				}
 			}
 
 			$result[] = (object) [
+				'uuid_rtrw' => $row->uuid,
 				'nama_rtrw' => $row->nama_rtrw,
 				'kode' => $row->kode,
 				'latitude' => floatval($row->latitude),
 				'longitude' => floatval($row->longitude),
 				'status' => $status,
+				'kategori' => $kategori,
 				'warna' => $warna,
 				'total_setoran' => $total_setoran,
 				'total_berat' => round((float) $row->total_berat, 2),

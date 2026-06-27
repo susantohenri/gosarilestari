@@ -117,15 +117,15 @@
   mapData.forEach(item => {
     if (!item.latitude || !item.longitude) return;
 
-    // Popup sederhana (hanya info dasar)
     const popupContent = `
         <div style="min-width: 180px; font-size: 13px;">
-            <strong>📍 ${item.nama_rtrw} (${item.kode})</strong><br>
-            🟢 Status: ${item.status === 'merah' ? 'Tidak Terpilah' : (item.status === 'kuning' ? 'Terpilah Sebagian' : 'Terpilah Baik')}<br>
+            <strong>📍 ${item.nama_rtrw}</strong><br>
+            🟢 Status: ${item.status}<br>
             🗑️ Total setoran: ${item.total_setoran} kali<br>
             ⚖️ Total berat: ${item.total_berat} kg<br>
             👥 Warga: ${item.total_warga} orang<br>
-            📅 Update: ${item.last_update}
+            📅 Update: ${item.last_update}<br><br>
+            <a href='<?= site_url('SetorSampah?mapFilter=') ?>Sampah ${item.status} di ${item.nama_rtrw}|${item.uuid_rtrw}|${item.kategori}'><b>Lihat Detail</b></a>
         </div>
     `;
 

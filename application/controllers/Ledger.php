@@ -48,18 +48,17 @@ class Ledger extends MY_Controller
 		$this->loadview('index', $vars);
 	}
 
-    public function detail($uuid)
-    {
-        $model = $this->model;
-        $transaction = $this->{$model}->getTransactionDetails($uuid);
-        if ($transaction) {
-            echo json_encode($transaction);
-        } else {
-            $this->output
-                ->set_status_header(404)
-                ->set_content_type('application/json')
-                ->set_output(json_encode(['error' => 'Transaction not found']));
-        }
-    }
+	public function detail($uuid)
+	{
+		$model = $this->model;
+		$transaction = $this->{$model}->getTransactionDetails($uuid);
+		if ($transaction) {
+			echo json_encode($transaction);
+		} else {
+			$this->output
+				->set_status_header(404)
+				->set_content_type('application/json')
+				->set_output(json_encode(['error' => 'Transaction not found']));
+		}
+	}
 }
-

@@ -110,7 +110,7 @@
     <div class="flex-1 overflow-y-auto p-4 md:p-6">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
         <div>
-          <h1 class="text-2xl font-bold text-slate-800 mb-1"><?= $page_title ?></h1>
+          <h1 id="page_title" class="text-2xl font-bold text-slate-800 mb-1"><?= $page_title ?></h1>
           <p class="text-slate-500 text-sm"><?= $page_subtitle ?></p>
         </div>
         <div class="flex gap-3">
