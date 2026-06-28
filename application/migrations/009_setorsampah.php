@@ -21,7 +21,6 @@ class Migration_setorsampah extends CI_Migration
         `kategori` varchar(255) NOT NULL,
         `berat` FLOAT NOT NULL DEFAULT 0,
         `pendapatan` FLOAT NOT NULL DEFAULT 0,
-        `tagihan`  FLOAT NOT NULL DEFAULT 0,
         `kategorisampah` varchar(36) NOT NULL,
         PRIMARY KEY (`uuid`),
         KEY `warga` (`warga`),

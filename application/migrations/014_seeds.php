@@ -131,6 +131,11 @@ class Migration_seeds extends CI_Migration
         ]);
 
         $this->Konfigurasis->create([
+            'nama' => 'SETORAN_BULANAN',
+            'nilai' => '40000'
+        ]);
+
+        $this->Konfigurasis->create([
             'nama' => 'TARGET_SAMPAH_BULAN_INI',
             'nilai' => '2000'
         ]);
@@ -154,6 +159,12 @@ class Migration_seeds extends CI_Migration
             'nama' => 'SAMPAH_TERKUMPUL',
             'nilai' => '0',
             'deletedAt' => date('Y-m-d H:i:s')
+        ]);
+
+        $this->KategoriSampahs->create([
+            'nama' => 'Sampah Tidak Terpilah',
+            'contoh' => '',
+            'harga' => 0
         ]);
 
         $this->KategoriSampahs->create([

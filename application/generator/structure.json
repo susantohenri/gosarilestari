@@ -175,10 +175,6 @@
 			{
 				"name": "pendapatan",
 				"type": "int"
-			},
-			{
-				"name": "tagihan",
-				"type": "int"
 			}
 		]
 	},

@@ -59,14 +59,6 @@ class SetorSampahs extends MY_Model
 				'name' => 'berat',
 				'label' => 'Berat (Kg)',
 				'width' => 2,
-			),
-			array(
-				'name' => 'tagihan',
-				'label' => 'Tagihan (Rp)',
-				'width' => 2,
-				'attributes' => array(
-					array('data-number' => 'true')
-				)
 			)
 		);
 	}
@@ -133,17 +125,6 @@ class SetorSampahs extends MY_Model
 				'tipe' => 'SETOR_SAMPAH',
 				'keterangan' => "{$kategoriSampah['nama']} {$created['berat']} Kg",
 				'nilai' => $created['pendapatan']
-			]));
-		}
-
-		// ledger tagihan (potong iuran)
-		if (0 < $created['tagihan']) {
-			$bulan = date('M');
-			$tahun = date('Y');
-			$this->Ledgers->save(array_merge($ledgerObj, [
-				'tipe' => 'POTONG_IURAN',
-				'keterangan' => "Iuran {$bulan} {$tahun}",
-				'nilai' => $created['tagihan'] * -1
 			]));
 		}
 

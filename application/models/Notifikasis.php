@@ -49,7 +49,7 @@ class Notifikasis extends MY_Model
       ->select("IF(isRead = 1, 'Sudah Dibaca', 'Belum Dibaca') as dibaca", false)
       ->where('user', $this->session->userdata('uuid'));
 
-      return $this
+    return $this
       ->datatables
       ->from($this->table)
       ->where("{$this->table}.deletedAt", null)
@@ -72,80 +72,6 @@ class Notifikasis extends MY_Model
     $notif = $this->findOne($uuid);
     $notif['isRead'] = 1;
     $this->update($notif);
-  }
-
-  /**
-   * Mendapatkan daftar ringkasan data warga yang belum menerima notifikasi pada periode tertentu.
-   * Digunakan untuk proses broadcast bulanan.
-   * 
-   * @param string $targetStart Awal bulan target (Y-m-d H:i:s).
-   * @param string $currentStart Awal bulan berjalan (Y-m-d H:i:s).
-   * @param string $bulan Angka bulan target.
-   * @param string $tahun Angka tahun target.
-   * @param string $period Format MM-YYYY.
-   * @return array Daftar objek ringkasan warga.
-   * 
-   * Sample Output:
-   * [
-   *   {
-   *     "user_uuid": "...", "nama_warga": "Budi", "total_berat": 10.5,
-   *     "total_pendapatan": 25000, "total_tagihan": 15000, "total_bayar": 15000,
-   *     "sisa_tagihan": 0, "kelebihan_bayar": 10000
-   *   }
-   * ]
-   */
-  public function getUnnotifiedWargaSummary($targetStart, $currentStart, $bulan, $tahun, $period)
-  {
-    $sql = "
-            SELECT
-              u.uuid AS user_uuid,
-              u.nama AS nama_warga,
-              COALESCE(s.total_berat, 0) AS total_berat,
-              COALESCE(s.total_pendapatan, 0) AS total_pendapatan,
-              COALESCE(s.total_tagihan, 0) AS total_tagihan,
-              COALESCE(b.total_bayar, 0) AS total_bayar,
-              GREATEST(COALESCE(s.total_tagihan, 0) - COALESCE(b.total_bayar, 0), 0) AS sisa_tagihan,
-              GREATEST(COALESCE(b.total_bayar, 0) - COALESCE(s.total_tagihan, 0), 0) AS kelebihan_bayar
-            FROM user u
-            INNER JOIN role r ON r.uuid = u.role
-            LEFT JOIN (
-              SELECT
-                ss.warga,
-                SUM(ss.berat) AS total_berat,
-                SUM(ss.pendapatan) AS total_pendapatan,
-                SUM(ss.tagihan) AS total_tagihan
-              FROM setorsampah ss
-              WHERE ss.status = 1
-                AND ss.deletedAt IS NULL
-                AND ss.createdAt >= ?
-                AND ss.createdAt < ?
-              GROUP BY ss.warga
-            ) s ON s.warga = u.uuid
-            LEFT JOIN (
-              SELECT
-                st.warga,
-                SUM(st.nominal) AS total_bayar
-              FROM setortunai st
-              WHERE st.status = 1
-                AND st.deletedAt IS NULL
-                AND st.bulan = ?
-                AND st.tahun = ?
-              GROUP BY st.warga
-            ) b ON b.warga = u.uuid
-            WHERE r.name = 'warga'
-              AND u.status = 1
-              AND u.deletedAt IS NULL
-              AND NOT EXISTS (
-                SELECT 1
-                FROM notifikasi n
-                WHERE n.user = u.uuid
-                  AND n.jenis = 'RINGKASAN_WARGA'
-                  AND n.period = ?
-                  AND n.deletedAt IS NULL
-              )
-        ";
-
-    return $this->db->query($sql, [$targetStart, $currentStart, $bulan, $tahun, $period])->result();
   }
 
   /**
@@ -203,91 +129,23 @@ class Notifikasis extends MY_Model
    *   }
    * ]
    */
-  public function getWargaBelumBayar($targetStart, $currentStart, $bulan, $tahun)
+  public function getWargaBelumBayar()
   {
-    $sql = "
-            SELECT
-              x.warga_uuid,
-              x.warga_nama,
-              x.total_tagihan,
-              x.total_bayar,
-              x.sisa_tagihan
-            FROM (
-              SELECT
-                u.uuid AS warga_uuid,
-                u.nama AS warga_nama,
-                COALESCE(s.total_tagihan, 0) AS total_tagihan,
-                COALESCE(b.total_bayar, 0) AS total_bayar,
-                GREATEST(COALESCE(s.total_tagihan, 0) - COALESCE(b.total_bayar, 0), 0) AS sisa_tagihan
-              FROM user u
-              INNER JOIN role r ON r.uuid = u.role
-              LEFT JOIN (
-                SELECT warga, SUM(tagihan) AS total_tagihan
-                FROM setorsampah
-                WHERE status = 1
-                  AND deletedAt IS NULL
-                  AND createdAt >= ?
-                  AND createdAt < ?
-                GROUP BY warga
-              ) s ON s.warga = u.uuid
-              LEFT JOIN (
-                SELECT warga, SUM(nominal) AS total_bayar
-                FROM setortunai
-                WHERE status = 1
-                  AND deletedAt IS NULL
-                  AND bulan = ?
-                  AND tahun = ?
-                GROUP BY warga
-              ) b ON b.warga = u.uuid
-              WHERE r.name = 'warga'
-                AND u.status = 1
-                AND u.deletedAt IS NULL
-            ) x
-            WHERE x.sisa_tagihan > 0
-            ORDER BY x.sisa_tagihan DESC, x.warga_nama ASC
-        ";
-
-    return $this->db->query($sql, [$targetStart, $currentStart, $bulan, $tahun])->result();
-  }
-
-  /**
-   * Mendapatkan daftar warga yang sama sekali belum menyetorkan sampah pada periode waktu tertentu.
-   * 
-   * @param string $targetStart Awal range waktu.
-   * @param string $currentStart Akhir range waktu.
-   * @return array Daftar objek warga belum setor.
-   * 
-   * Sample Output:
-   * [
-   *   {
-   *     "warga_uuid": "...", "warga_nama": "Iwan", "alamat": "Blok A", "kontak": "081..."
-   *   }
-   * ]
-   */
-  public function getWargaBelumSetor($targetStart, $currentStart)
-  {
-    $sql = "
-            SELECT
-              u.uuid AS warga_uuid,
-              u.nama AS warga_nama,
-              u.alamat,
-              u.kontak
-            FROM user u
-            INNER JOIN role r ON r.uuid = u.role
-            LEFT JOIN setorsampah ss
-              ON ss.warga = u.uuid
-             AND ss.status = 1
-             AND ss.deletedAt IS NULL
-             AND ss.createdAt >= ?
-             AND ss.createdAt < ?
-            WHERE r.name = 'warga'
-              AND u.status = 1
-              AND u.deletedAt IS NULL
-              AND ss.uuid IS NULL
-            ORDER BY u.nama ASC
-        ";
-
-    return $this->db->query($sql, [$targetStart, $currentStart])->result();
+    $this->load->model('Wargas');
+    $role = $this->Wargas->getRoleWarga();
+    return $this
+      ->db
+      ->select("uuid AS warga_uuid", false)
+      ->select("nama AS warga_nama", false)
+      ->select("-1 * saldo AS total_tagihan", false)
+      ->select("0 AS total_bayar", false)
+      ->select("-1 * saldo AS sisa_tagihan", false)
+      ->where('status', 1)
+      ->where('deletedAt', null)
+      ->where('role', $role)
+      ->where('saldo <', '0', false)
+      ->get('user')
+      ->result();
   }
 
   /**
@@ -342,54 +200,19 @@ class Notifikasis extends MY_Model
   }
 
   /**
-   * Menyusun pesan teks informasi untuk notifikasi ringkasan warga.
-   * 
-   * @param object $row Objek data ringkasan warga.
-   * @param string $period Periode (MM-YYYY).
-   * @return string Pesan teks terformat.
-   * 
-   * Sample Output: "Periode 05-2024: total sampah terpilah 10,00 kg, pendapatan Rp20.000, total tagihan Rp5.000, pembayaran Rp5.000, tidak ada sisa tagihan."
-   */
-  function kontenNotifikasiWarga($row, $period)
-  {
-    $totalBerat = number_format((float) $row->total_berat, 2, ',', '.');
-    $pendapatan = 'Rp' . number_format((float) $row->total_pendapatan, 0, ',', '.');
-    $tagihan = 'Rp' . number_format((float) $row->total_tagihan, 0, ',', '.');
-    $bayar = 'Rp' . number_format((float) $row->total_bayar, 0, ',', '.');
-    $sisa = 'Rp' . number_format((float) $row->sisa_tagihan, 0, ',', '.');
-    $lebih = 'Rp' . number_format((float) $row->kelebihan_bayar, 0, ',', '.');
-
-    if ((float) $row->total_berat <= 0 && (float) $row->total_tagihan <= 0) {
-      return "Periode {$period}:\nbelum ada data setor sampah,\npendapatan Rp0,\ntotal tagihan Rp0,\ntidak ada sisa tagihan.";
-    }
-
-    if ((float) $row->kelebihan_bayar > 0) {
-      return "Periode {$period}:\ntotal sampah terpilah {$totalBerat} kg,\npendapatan {$pendapatan},\ntotal tagihan {$tagihan},\npembayaran {$bayar},\ntidak ada sisa tagihan,\nkelebihan bayar {$lebih}.";
-    }
-
-    if ((float) $row->sisa_tagihan > 0) {
-      return "Periode {$period}:\ntotal sampah terpilah {$totalBerat} kg,\npendapatan {$pendapatan},\ntotal tagihan {$tagihan},\npembayaran {$bayar},\nsisa tagihan {$sisa}.";
-    }
-
-    return "Periode {$period}:\ntotal sampah terpilah {$totalBerat} kg,\npendapatan {$pendapatan},\ntotal tagihan {$tagihan},\npembayaran {$bayar},\ntidak ada sisa tagihan.";
-  }
-
-  /**
    * Menyusun pesan teks informasi untuk notifikasi ringkasan petugas.
    * 
    * @param string $period Periode (MM-YYYY).
    * @param array $belumBayar Daftar warga belum bayar.
-   * @param array $belumSetor Daftar warga belum setor.
    * @return string Pesan teks terformat.
    * 
    * Sample Output: "Periode 05-2024: 2 warga belum bayar (Ani, Budi); 1 warga belum setor sampah (Iwan). Silakan tindak lanjuti melalui dashboard petugas."
    */
-  function kontenNotifikasiPetugas($period, $belumBayar, $belumSetor)
+  function kontenNotifikasiPetugas($period, $belumBayar)
   {
     $jumlahBelumBayar = count($belumBayar);
-    $jumlahBelumSetor = count($belumSetor);
 
-    if ($jumlahBelumBayar === 0 && $jumlahBelumSetor === 0) {
+    if ($jumlahBelumBayar === 0) {
       return "Periode {$period}: tidak ada warga yang perlu ditindaklanjuti.\nSemua warga terdata tanpa tunggakan dan tidak ada daftar warga yang belum setor sampah pada periode ini.";
     }
 
@@ -398,19 +221,10 @@ class Notifikasis extends MY_Model
       $namaBelumBayar[] = $item->warga_nama;
     }
 
-    $namaBelumSetor = [];
-    foreach (array_slice($belumSetor, 0, 10) as $item) {
-      $namaBelumSetor[] = $item->warga_nama;
-    }
-
     $textBelumBayar = $jumlahBelumBayar > 0
       ? $jumlahBelumBayar . ' warga belum bayar' . (count($namaBelumBayar) ? ' (' . implode(', ', $namaBelumBayar) . ')' : '')
       : 'tidak ada warga yang menunggak';
 
-    $textBelumSetor = $jumlahBelumSetor > 0
-      ? $jumlahBelumSetor . ' warga belum setor sampah' . (count($namaBelumSetor) ? ' (' . implode(', ', $namaBelumSetor) . ')' : '')
-      : 'tidak ada warga yang belum setor sampah';
-
-    return "Periode {$period}:\n{$textBelumBayar};\n{$textBelumSetor}.\nSilakan tindak lanjuti melalui dashboard petugas.";
+    return "Periode {$period}:\n{$textBelumBayar};\nSilakan tindak lanjuti melalui dashboard petugas.";
   }
 }
