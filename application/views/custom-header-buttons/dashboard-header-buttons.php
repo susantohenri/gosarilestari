@@ -2,7 +2,7 @@
   class="px-4 py-2 bg-yellow-500 border border-yellow-200 text-white rounded-lg text-sm font-medium hover:bg-yellow-600 flex items-center gap-2 shadow-sm">
   <i class="fa-solid fa-download"></i> Export Laporan
 </a>
-<?php if ('Warga' !== $this->session->userdata('role_name')) : ?>
+<?php if ('Warga' !== $role_name) : ?>
   <a href="<?= site_url('Warga/create') ?>"
     class="px-4 py-2 bg-brand-600 text-white rounded-lg text-sm font-medium hover:bg-brand-700 flex items-center gap-2 shadow-sm">
     <i class="fa-solid fa-plus"></i> Tambah Warga

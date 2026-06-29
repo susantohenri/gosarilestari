@@ -333,4 +333,34 @@ class SetorSampahs extends MY_Model
 
 		return $result;
 	}
+
+	public function getPopUp()
+	{
+		$sampahWarga = $this
+			->db
+			->select("FORMAT(SUM(berat), 2) AS berat", false)
+			->select("kategori")
+			->where('warga', $this->session->userdata('uuid'))
+			->where("MONTH(createdAt)", date('m'))
+			->where("YEAR(createdAt)", date('Y'))
+			->group_by('kategori')
+			->get($this->table)
+			->result();
+
+		$result = [
+			'merah' => 0,
+			'kuning' => 0,
+			'hijau' => 0,
+			'total' => 0,
+		];
+		foreach ($sampahWarga as $sampah) {
+			$result['total'] += $sampah->berat;
+			$result[$sampah->kategori] = $sampah->berat;
+		}
+
+		$result['merah'] = $result['merah'] / $result['total'] * 100;
+		$result['kuning'] = $result['kuning'] / $result['total'] * 100;
+		$result['hijau'] = $result['hijau'] / $result['total'] * 100;
+		return $result;
+	}
 }

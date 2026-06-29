@@ -70,7 +70,7 @@ class Konfigurasis extends MY_Model
       ->update($this->table);
   }
 
-  function getSampahTerkumpul()
+  function getPopUp()
   {
     $konfigs = $this
       ->db

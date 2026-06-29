@@ -30,7 +30,7 @@ class MY_Controller extends CI_Controller
     public function loadview($view, $vars = [])
     {
         $vars['error'] = $this->session->flashdata('model_error');
-        $vars['account_type'] = $this->session->userdata('role');
+        $vars['role_name'] = $this->session->userdata('role_name');
 
         $page_title = preg_split('#([A-Z][^A-Z]*)#', $this->controller, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         $page_title = implode(' ', $page_title);
@@ -45,13 +45,19 @@ class MY_Controller extends CI_Controller
             'controller' => $this->controller
         ];
 
-        $this->load->model(['Permissions', 'Notifikasis', 'Konfigurasis']);
+        $this->load->model(['Permissions', 'Notifikasis']);
         if (!isset($vars['permission'])) {
             $vars['permission'] = $this->Permissions->getPermissions();
         }
         $vars['unread'] = $this->Notifikasis->getUnreadCountByUserId($this->session->userdata('uuid'));
-        $vars['sampah_terkumpul'] = $this->Konfigurasis->getSampahTerkumpul();
         $vars['header_buttons'] = $this->header_buttons;
+        if ('Warga' === $vars['role_name']) {
+            $this->load->model('SetorSampahs');
+            $vars['sampah_terkumpul'] = $this->SetorSampahs->getPopUp();
+        } else {
+            $this->load->model('Konfigurasis');
+            $vars['sampah_terkumpul'] = $this->Konfigurasis->getPopUp();
+        }
 
         if (!isset($vars['js']) || !in_array('select2.full.min.js', $vars['js'])) {
             $vars['js'][] = 'select2.full.min.js';
