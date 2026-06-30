@@ -164,9 +164,8 @@ class SetorSampahs extends MY_Model
 		return $query->result();
 	}
 
-	public function getVolumeSampah7HariPerKategori($wargaUuid)
+	public function getVolumeSampah7HariPerKategori()
 	{
-		if (null !== $wargaUuid) $this->db->where('s.warga', $wargaUuid);
 		$startDate = date('Y-m-d', strtotime('-6 days'));
 		$endDate = date('Y-m-d');
 

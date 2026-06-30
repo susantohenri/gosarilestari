@@ -49,7 +49,7 @@ class Dashboard extends MY_Controller
                 'data' => $this->SetorSampahs->peta()
             ],
             'card_grafik' => [
-                'items' => $this->SetorSampahs->getVolumeSampah7HariPerKategori($wargaUuid)
+                'items' => $this->SetorSampahs->getVolumeSampah7HariPerKategori()
             ],
             'card_kategori' => [
                 'items' => $this->SetorSampahs->topKategori($wargaUuid)

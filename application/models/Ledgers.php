@@ -136,6 +136,10 @@ class Ledgers extends MY_Model
 
 	public function getOverView()
 	{
+		if ('Warga' === $this->session->userdata('role_name')) {
+			$this->db->where('ledger.warga', $this->session->userdata('uuid'));
+		}
+
 		$transaksi = $this
 			->db
 			->select('tipe')

@@ -70,6 +70,9 @@ class TukarProduks extends MY_Model
 
 	function dt()
 	{
+		if ('Warga' === $this->session->userdata('role_name')) {
+			$this->db->where('warga.uuid', $this->session->userdata('uuid'));
+		}
 		$this->datatables
 			->select("{$this->table}.uuid")
 			->select("{$this->table}.orders")
