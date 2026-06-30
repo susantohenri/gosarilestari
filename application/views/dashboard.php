@@ -156,11 +156,10 @@
   </div>
 </div>
 
-<!-- Bottom Section (Charts & Info) -->
-<div class="grid grid-cols-1 xl:grid-cols-3 gap-6 pb-6">
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-6 pb-6">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Chart Area -->
-  <div class="xl:col-span-2 bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+  <div class="flex flex-col gap-6 bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
     <div class="flex justify-between items-center mb-6">
       <div>
         <h2 class="text-lg font-bold text-slate-800">Volume Sampah Tersetor</h2>
@@ -169,7 +168,6 @@
       <a href="<?= site_url('SetorSampah') ?>" class="text-sm text-brand-600 font-medium hover:text-brand-700">Detail &gt;</a>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <div style="height: 300px; width: 100%; position: relative;">
       <canvas id="volumeChart" style="height: 100%; width: 100%;"></canvas>
     </div>
@@ -217,25 +215,56 @@
     </script>
   </div>
 
-  <!-- Right Side Widgets -->
   <div class="flex flex-col gap-6">
 
-    <!-- Top Kategori Widget -->
     <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm flex-1">
-      <h2 class="text-lg font-bold text-slate-800 mb-1">Top Kategori</h2>
+      <h2 class="text-lg font-bold text-slate-800 mb-1">Hasil Pemilahan Sampah</h2>
       <p class="text-sm text-slate-500 mb-4">Berdasarkan volume bulan ini</p>
 
-      <div class="space-y-4">
-        <?php foreach ($card_kategori['items'] as $index => $item): ?>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600">#<?= $index + 1 ?></div>
-              <span class="text-sm font-semibold text-slate-700"><?= $item->nama_kategori ?></span>
-            </div>
-            <span class="text-sm font-bold text-slate-800"><?= number_format($item->total_berat, 1) ?> kg</span>
-          </div>
-        <?php endforeach; ?>
+      <div style="height: 300px; width: 100%; position: relative;">
+        <canvas id="pieChart" style="height: 100%; width: 100%;"></canvas>
       </div>
+      <script type="text/javascript">
+        const topKategoriData = {
+          "labels": ["Tidak Terpilah", "Terpilah Sebagian", "Terpilah dg Baik"],
+          "datasets": [{
+            "data": <?= json_encode($card_pie['items']) ?>,
+            "backgroundColor": ["rgb(220, 38, 38)", "rgb(234, 179, 8)", "rgb(22, 163, 74)"],
+            "borderColor": ["rgb(220, 38, 38)", "rgb(234, 179, 8)", "rgb(22, 163, 74)"],
+            "borderWidth": 1
+          }]
+        };
+        const pie = document.getElementById('pieChart').getContext('2d');
+
+        new Chart(pie, {
+          type: 'pie',
+          data: {
+            labels: topKategoriData.labels,
+            datasets: [{
+              data: topKategoriData.datasets[0].data,
+              backgroundColor: topKategoriData.datasets[0].backgroundColor,
+              borderColor: topKategoriData.datasets[0].borderColor,
+              borderWidth: 1,
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'top',
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    return ` ${context.formattedValue} Kg`;
+                  }
+                }
+              }
+            }
+          }
+        });
+      </script>
     </div>
 
   </div>

@@ -51,8 +51,8 @@ class Dashboard extends MY_Controller
             'card_grafik' => [
                 'items' => $this->SetorSampahs->getVolumeSampah7HariPerKategori()
             ],
-            'card_kategori' => [
-                'items' => $this->SetorSampahs->topKategori($wargaUuid)
+            'card_pie' => [
+                'items' => $this->SetorSampahs->pieChart()
             ]
         ]);
 

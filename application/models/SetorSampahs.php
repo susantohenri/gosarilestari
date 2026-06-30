@@ -145,25 +145,6 @@ class SetorSampahs extends MY_Model
 		return number_format($sum['total_berat'], 2);
 	}
 
-	function topKategori($wargaUuid)
-	{
-		if (null !== $wargaUuid) $this->db->where('ss.warga', $wargaUuid);
-		$this
-			->db
-			->select('k.nama as nama_kategori, COALESCE(SUM(ss.berat), 0) as total_berat')
-			->from('setorsampah ss')
-			->join('kategorisampah k', 'k.uuid = ss.kategorisampah')
-			->where('ss.deletedAt IS NULL', NULL, false)
-			->where('ss.status', 1)
-			->where('MONTH(ss.createdAt)', date('m'))
-			->where('YEAR(ss.createdAt)', date('Y'))
-			->group_by('ss.kategorisampah')
-			->order_by('total_berat', 'DESC');
-
-		$query = $this->db->get();
-		return $query->result();
-	}
-
 	public function getVolumeSampah7HariPerKategori()
 	{
 		$startDate = date('Y-m-d', strtotime('-6 days'));
@@ -364,5 +345,36 @@ class SetorSampahs extends MY_Model
 		$result['kuning'] = $result['kuning'] / $result['total'] * 100;
 		$result['hijau'] = $result['hijau'] / $result['total'] * 100;
 		return $result;
+	}
+
+	public function pieChart()
+	{
+		$pie = [0, 0, 0];
+
+		$result = $this
+			->db
+			->select('kategori')
+			->select('FORMAT(SUM(berat), 1) AS berat', false)
+			->where('MONTH(createdAt)', 'MONTH(NOW())', false)
+			->where('YEAR(createdAt)', 'YEAR(NOW())', false)
+			->group_by('kategori')
+			->get($this->table)
+			->result();
+
+		foreach ($result as $kategori) {
+			switch ($kategori->kategori) {
+				case 'merah':
+					$pie[0] = $kategori->berat;
+					break;
+				case 'kuning':
+					$pie[1] = $kategori->berat;
+					break;
+				case 'hijau':
+					$pie[2] = $kategori->berat;
+					break;
+			}
+		}
+
+		return $pie;
 	}
 }
