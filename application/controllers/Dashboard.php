@@ -56,6 +56,8 @@ class Dashboard extends MY_Controller
             ]
         ]);
 
+        $vars['js'][] = 'jquery.dataTables.min.js';
+        $vars['js'][] = 'dashboard.js';
         $this->loadview('index', $vars);
     }
 }

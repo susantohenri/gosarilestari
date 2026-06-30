@@ -60,34 +60,36 @@
   </div>
 </div>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<div id="map" class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm h-[50vh] w-full mb-8"></div>
-<script>
-  const mapData = <?= json_encode($card_map['data']) ?>;
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-6 pb-6">
+  <div class="flex flex-col gap-6 bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <div id="map" class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm h-[50vh] w-full"></div>
+    <script>
+      const mapData = <?= json_encode($card_map['data']) ?>;
 
-  // Default center (ambil dari data pertama atau fallback)
-  let defaultCenter = [-7.8800, 110.3050];
-  let defaultZoom = 12;
+      // Default center (ambil dari data pertama atau fallback)
+      let defaultCenter = [-7.8800, 110.3050];
+      let defaultZoom = 12;
 
-  if (mapData.length > 0 && mapData[0].latitude && mapData[0].longitude) {
-    defaultCenter = [mapData[0].latitude, mapData[0].longitude];
-    defaultZoom = 13;
-  }
+      if (mapData.length > 0 && mapData[0].latitude && mapData[0].longitude) {
+        defaultCenter = [mapData[0].latitude, mapData[0].longitude];
+        defaultZoom = 13;
+      }
 
-  // Inisialisasi peta
-  const map = L.map('map').setView(defaultCenter, defaultZoom);
+      // Inisialisasi peta
+      const map = L.map('map').setView(defaultCenter, defaultZoom);
 
-  // Tile layer
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    subdomains: 'abcd',
-    maxZoom: 19
-  }).addTo(map);
+      // Tile layer
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+      }).addTo(map);
 
-  // Fungsi membuat marker dengan warna sesuai status
-  function createMarker(lat, lng, color, popupHtml) {
-    const markerHtml = `
+      // Fungsi membuat marker dengan warna sesuai status
+      function createMarker(lat, lng, color, popupHtml) {
+        const markerHtml = `
         <div style="
             background-color: ${color};
             width: 24px;
@@ -98,26 +100,26 @@
         "></div>
     `;
 
-    const icon = L.divIcon({
-      html: markerHtml,
-      iconSize: [24, 24],
-      className: 'custom-marker',
-      popupAnchor: [0, -12]
-    });
+        const icon = L.divIcon({
+          html: markerHtml,
+          iconSize: [24, 24],
+          className: 'custom-marker',
+          popupAnchor: [0, -12]
+        });
 
-    return L.marker([lat, lng], {
-      icon: icon
-    }).bindPopup(popupHtml);
-  }
+        return L.marker([lat, lng], {
+          icon: icon
+        }).bindPopup(popupHtml);
+      }
 
-  // Array untuk menyimpan bounds
-  const bounds = [];
+      // Array untuk menyimpan bounds
+      const bounds = [];
 
-  // Loop data dan tambahkan marker
-  mapData.forEach(item => {
-    if (!item.latitude || !item.longitude) return;
+      // Loop data dan tambahkan marker
+      mapData.forEach(item => {
+        if (!item.latitude || !item.longitude) return;
 
-    const popupContent = `
+        const popupContent = `
         <div style="min-width: 180px; font-size: 13px;">
             <strong>📍 ${item.nama_rtrw}</strong><br>
             🟢 Status: ${item.status}<br>
@@ -129,17 +131,30 @@
         </div>
     `;
 
-    const marker = createMarker(item.latitude, item.longitude, item.warna, popupContent);
-    marker.addTo(map);
+        const marker = createMarker(item.latitude, item.longitude, item.warna, popupContent);
+        marker.addTo(map);
 
-    bounds.push([item.latitude, item.longitude]);
-  });
+        bounds.push([item.latitude, item.longitude]);
+      });
 
-  // Fit peta ke semua marker
-  if (bounds.length > 0) {
-    map.fitBounds(bounds);
-  }
-</script>
+      // Fit peta ke semua marker
+      if (bounds.length > 0) {
+        map.fitBounds(bounds);
+      }
+    </script>
+  </div>
+  <div class="flex flex-col gap-6 bg-white p-6 rounded-xl border border-slate-100 shadow-sm text-right">
+    <table id="warga_minus">
+      <thead>
+        <tr>
+          <th>warga</th>
+          <th style="text-align: right;">tagihan belum terbayar</th>
+          <th style="text-align: right;">sampah belum terpilah</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</div>
 
 <!-- Bottom Section (Charts & Info) -->
 <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 pb-6">
