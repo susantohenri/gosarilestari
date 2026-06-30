@@ -9,8 +9,12 @@ class Notifikasi extends MY_Controller
 		parent::__construct();
 	}
 
-	function read ($uuid) {
-		$this->Notifikasis->read($uuid);
-		return parent::read($uuid);
+	function read($id)
+	{
+		$vars = [
+			'page_name' => 'notifikasi',
+			'notif' => $this->Notifikasis->read($id)
+		];
+		$this->loadview('index', $vars);
 	}
 }

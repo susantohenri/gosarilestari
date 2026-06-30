@@ -30,6 +30,8 @@ class Login extends CI_Controller
                 $error = 'Kata sandi tidak tepat.';
             } else if (1 != $login['status']) {
                 $error = 'Status pengguna tidak aktif.';
+            } else if (null === $login['activatedAt']) {
+                $error = 'Pengguna belum diaktivasi.';
             } else {
                 $this->load->model('Roles');
                 $role = $this->Roles->findOne(['uuid' => $login['role']]);
@@ -48,7 +50,7 @@ class Login extends CI_Controller
             redirect(base_url());
         }
 
-        $this->load->model(['Wargas', 'Rtrws', 'Users']);
+        $this->load->model(['Rtrws', 'Users']);
         $rtrws = $this->Rtrws->find();
         $error = '';
         $old = [
@@ -61,11 +63,13 @@ class Login extends CI_Controller
 
         if ($post = $this->input->post()) {
             $old = array_merge($old, array_intersect_key($post, $old));
-            $error = $this->validateRegister($post);
+            $error = $this->validateRegister($post, $rtrws);
 
             if ($error === '') {
-                $this->Wargas->create([
-                    'nama' => trim($post['nama']),
+                $this->load->model(['Wargas', 'Notifikasis']);
+                $nama = trim($post['nama']);
+                $uuid = $this->Wargas->create([
+                    'nama' => $nama,
                     'alamat' => trim($post['alamat']),
                     'rtrw' => $post['rtrw'],
                     'kontak' => trim($post['kontak']),
@@ -73,7 +77,18 @@ class Login extends CI_Controller
                     'password' => md5($post['password']),
                     'saldo' => 0,
                     'status' => 1,
+                    'activatedAt' => null
                 ]);
+                $admins = $this->Users->getAdmins();
+                $wargaUrl = site_url("Warga/Read/{$uuid}");
+                foreach ($admins as $admin) {
+                    $this->Notifikasis->create([
+                        'user' => $admin->uuid,
+                        'period' => strtoupper(base_convert(time() + rand(), 10, 36)),
+                        'judul' => 'Permohonan aktivasi warga baru - ' . $nama,
+                        'informasi' => "Silakan klik link berikut untuk melihat detail permohonan warga baru: <u><a href='{$wargaUrl}'>{$nama}</a></u>"
+                    ]);
+                }
                 $this->session->set_flashdata('register_success', 'Registrasi berhasil. Silakan masuk.');
                 redirect(site_url('Login'));
             }
@@ -86,7 +101,7 @@ class Login extends CI_Controller
         ]);
     }
 
-    private function validateRegister($post)
+    private function validateRegister($post, $rtrws)
     {
         $required = ['nama', 'alamat', 'rtrw', 'kontak', 'username', 'password', 'confirm_password'];
         foreach ($required as $field) {
@@ -104,8 +119,11 @@ class Login extends CI_Controller
             return 'Username sudah digunakan.';
         }
 
-        $rtrw = $this->Rtrws->findOne(['uuid' => $post['rtrw']]);
-        if (empty($rtrw['uuid'])) {
+        $filtered = array_filter($rtrws, function ($item) use ($post) {
+            return $item->uuid === $post['rtrw'];
+        });
+        $rtrw = reset($filtered);
+        if (empty($rtrw->uuid)) {
             return 'RT/RW tidak valid.';
         }
 

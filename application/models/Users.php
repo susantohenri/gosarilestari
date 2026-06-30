@@ -95,4 +95,14 @@ class Users extends MY_Model
             ->limit(10)
             ->like($field, $term ?? '')->get($this->table)->result();
     }
+
+    public function getAdmins()
+    {
+        $this
+            ->db
+            ->select("{$this->table}.*")
+            ->join('role', 'user.role = role.uuid')
+            ->where('role.name', 'Admin');
+        return $this->find();
+    }
 }

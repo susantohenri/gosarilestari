@@ -99,7 +99,7 @@ class MY_Model extends CI_Model
 
     public function find($param = [])
     {
-        $param['deletedAt'] = null;
+        $param["{$this->table}.deletedAt"] = null;
         return $this->db->get_where($this->table, $param)->result();
     }
 

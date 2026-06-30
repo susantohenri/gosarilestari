@@ -16,6 +16,7 @@ class Migration_user extends CI_Migration
         `role` varchar(36) NOT NULL,
         `createdAt` datetime DEFAULT NULL,
         `updatedAt` datetime DEFAULT NULL,
+        `activatedAt` datetime DEFAULT CURRENT_TIMESTAMP,
         `deletedAt` datetime DEFAULT NULL,
         `status` tinyint NOT NULL DEFAULT 1,
         `kode` varchar(6) NOT NULL,

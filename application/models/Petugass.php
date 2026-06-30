@@ -49,8 +49,6 @@ class Petugass extends MY_Model
 			'name' => 'confirm_password',
 			'label' => 'Ulang Kata Sandi'
 		];
-
-		$this->childs = array();
 	}
 
 	function getRolePetugas()

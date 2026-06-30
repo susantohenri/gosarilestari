@@ -57,8 +57,6 @@ class ProdukTukars extends MY_Model
 				)
 			),
 		);
-
-		$this->childs = array();
 	}
 
 	function dt()

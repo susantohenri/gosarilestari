@@ -45,4 +45,31 @@ class Warga extends MY_Controller
 		$vars['overview'] = $this->$model->getOverView();
 		$this->loadview('index', $vars);
 	}
+
+	public function read($id)
+	{
+		$vars = [];
+		$vars['page_name'] = 'form';
+		$model = $this->model;
+		$vars['form'] = $this->$model->getForm($id);
+		$vars['uuid'] = $id;
+		$vars['js'] = [
+			'select2.full.min.js',
+			'form.js',
+			'activation.js'
+		];
+		$this->loadview('index', $vars);
+	}
+
+	public function activation($uuid)
+	{
+		$warga = $this->{$this->model}->findOne($uuid);
+		echo !!$warga['activatedAt'];
+	}
+
+	public function activate($uuid)
+	{
+		$this->{$this->model}->activate($uuid);
+		redirect(site_url('Warga'));
+	}
 }

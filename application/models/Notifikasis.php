@@ -32,6 +32,10 @@ class Notifikasis extends MY_Model
 
   public function dt()
   {
+    $this
+      ->db
+      ->order_by("{$this->table}.createdAt", 'DESC')
+      ->order_by("{$this->table}.isRead", 'ASC');
 
     $controller = $this->router->class;
     $edit = site_url("{$controller}/Read/");
@@ -72,6 +76,7 @@ class Notifikasis extends MY_Model
     $notif = $this->findOne($uuid);
     $notif['isRead'] = 1;
     $this->update($notif);
+    return $notif;
   }
 
   /**
@@ -227,4 +232,5 @@ class Notifikasis extends MY_Model
 
     return "Periode {$period}:\n{$textBelumBayar};\nSilakan tindak lanjuti melalui dashboard petugas.";
   }
+
 }

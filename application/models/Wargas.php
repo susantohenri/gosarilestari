@@ -65,6 +65,11 @@ class Wargas extends MY_Model
 		);
 
 		$this->form[] = [
+			'name' => 'username',
+			'label' => 'Username'
+		];
+
+		$this->form[] = [
 			'type' => 'password',
 			'name' => 'password',
 			'label' => 'Kata Sandi'
@@ -75,8 +80,6 @@ class Wargas extends MY_Model
 			'name' => 'confirm_password',
 			'label' => 'Ulang Kata Sandi'
 		];
-
-		$this->childs = array();
 	}
 
 	function getRoleWarga()
@@ -111,6 +114,7 @@ class Wargas extends MY_Model
 			->join('rtrw', 'rtrw.uuid = user.rtrw', 'left')
 			->join('role', 'role.uuid = user.role', 'left')
 			->where('role.name', 'Warga')
+			->where('activatedAt <>', null, false)
 		;
 		return parent::dt();
 	}
@@ -153,6 +157,7 @@ class Wargas extends MY_Model
 			->where('role.name', 'Warga')
 			->where('user.deletedAt', null)
 			->where('user.status', 1)
+			->where('activatedAt <>', null, false)
 			->limit(10)
 			->like($field, $term ?? '')
 			->get($this->table)
@@ -177,6 +182,7 @@ class Wargas extends MY_Model
 			->select('saldo')
 			->where('role', $role)
 			->where('deletedAt', null)
+			->where('activatedAt <>', null, false)
 			->get($this->table)
 			->result();
 
@@ -223,6 +229,7 @@ class Wargas extends MY_Model
 			->db
 			->where('status', 1)
 			->where('deletedAt', null)
+			->where('activatedAt <>', null, false)
 			->where('role', $roleWarga)
 			->count_all_results($this->table);
 	}
@@ -237,8 +244,8 @@ class Wargas extends MY_Model
 			->where('status', 1)
 			->where('deletedAt', null)
 			->where('role', $roleWarga)
-			->where('createdAt >=', "'{$startOfWeek}'", false)
-			->where('createdAt <=', "'{$endOfWeek}'", false)
+			->where('activatedAt >=', "'{$startOfWeek}'", false)
+			->where('activatedAt <=', "'{$endOfWeek}'", false)
 			->count_all_results($this->table);
 	}
 
@@ -253,5 +260,15 @@ class Wargas extends MY_Model
 			->where('u.status', 1)
 			->where('role', $roleWarga);
 		return $this->db->get()->row()->total_saldo ?? 0;
+	}
+
+	function activate($uuid)
+	{
+		$warga = $this->findOne($uuid);
+		if (!$warga) return false;
+		if (null !== $warga['activatedAt']) return false;
+		$warga['activatedAt'] = date('Y-m-d H:i:s');
+		unset($warga['confirm_password']);
+		return parent::update($warga);
 	}
 }
