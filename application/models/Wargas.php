@@ -242,8 +242,9 @@ class Wargas extends MY_Model
 			->count_all_results($this->table);
 	}
 
-	function saldoBeredar($roleWarga)
+	function saldoBeredar($roleWarga, $wargaUuid)
 	{
+		if (null !== $wargaUuid) $this->db->where('u.uuid', $wargaUuid);
 		$this
 			->db
 			->select('SUM(u.saldo) as total_saldo', false)

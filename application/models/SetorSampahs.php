@@ -145,8 +145,9 @@ class SetorSampahs extends MY_Model
 		return number_format($sum['total_berat'], 2);
 	}
 
-	function topKategori()
+	function topKategori($wargaUuid)
 	{
+		if (null !== $wargaUuid) $this->db->where('ss.warga', $wargaUuid);
 		$this
 			->db
 			->select('k.nama as nama_kategori, COALESCE(SUM(ss.berat), 0) as total_berat')
@@ -163,8 +164,9 @@ class SetorSampahs extends MY_Model
 		return $query->result();
 	}
 
-	public function getVolumeSampah7HariPerKategori()
+	public function getVolumeSampah7HariPerKategori($wargaUuid)
 	{
+		if (null !== $wargaUuid) $this->db->where('s.warga', $wargaUuid);
 		$startDate = date('Y-m-d', strtotime('-6 days'));
 		$endDate = date('Y-m-d');
 
@@ -357,6 +359,7 @@ class SetorSampahs extends MY_Model
 			$result['total'] += $sampah->berat;
 			$result[$sampah->kategori] = $sampah->berat;
 		}
+		if (0 === $result['total']) return $result;
 
 		$result['merah'] = $result['merah'] / $result['total'] * 100;
 		$result['kuning'] = $result['kuning'] / $result['total'] * 100;

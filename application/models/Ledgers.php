@@ -58,6 +58,10 @@ class Ledgers extends MY_Model
 
 	function dt()
 	{
+		if ('Warga' === $this->session->userdata('role_name')) {
+			$this->db->where('warga.uuid', $this->session->userdata('uuid'));
+		}
+
 		if ($customFilter = $this->input->post('customFilter')) {
 			parse_str($customFilter, $params);
 			if ('' !== $params['fnama']) {
@@ -206,9 +210,10 @@ class Ledgers extends MY_Model
 		return $query->row_array();
 	}
 
-	public function progressSaldoPersen()
+	public function progressSaldoPersen($wargaUuid)
 	{
 		// Hitung total saldo
+		if (null !== $wargaUuid) $this->db->where('u.uuid', $wargaUuid);
 		$this->db->select('SUM(u.saldo) as total_saldo')
 			->from('user u')
 			->join('role r', 'r.uuid = u.role')
@@ -218,6 +223,7 @@ class Ledgers extends MY_Model
 		$total_saldo = $this->db->get()->row()->total_saldo ?? 0;
 
 		// Hitung perubahan minggu ini
+		if (null !== $wargaUuid) $this->db->where('ledger.warga', $wargaUuid);
 		$this->db->select('SUM(nilai) as total_perubahan')
 			->from('ledger')
 			->where('deletedAt IS NULL', NULL, false)
@@ -229,8 +235,9 @@ class Ledgers extends MY_Model
 		return ($saldo_awal == 0) ? 0 : ($perubahan_minggu / abs($saldo_awal)) * 100;
 	}
 
-	public function getTotalSetorTunaiBulanIni()
+	public function getTotalSetorTunaiBulanIni($wargaUuid)
 	{
+		if (null !== $wargaUuid) $this->db->where('ledger.warga', $wargaUuid);
 		$this->db->select('COALESCE(SUM(nilai), 0) as total_setor_tunai')
 			->from('ledger')
 			->where('deletedAt IS NULL', NULL, false)
@@ -242,7 +249,7 @@ class Ledgers extends MY_Model
 		return (float)($result->total_setor_tunai ?? 0);
 	}
 
-	public function progressSetorTunaiPersen()
+	public function progressSetorTunaiPersen($wargaUuid)
 	{
 		// Total setor tunai bulan ini
 		$sql_bulan_ini = "
@@ -253,6 +260,7 @@ class Ledgers extends MY_Model
           AND MONTH(createdAt) = MONTH(CURRENT_DATE())
           AND YEAR(createdAt) = YEAR(CURRENT_DATE())
     ";
+		if (null !== $wargaUuid) $sql_bulan_ini .= " AND ledger.warga = '{$wargaUuid}'";
 		$total_bulan_ini = (float)$this->db->query($sql_bulan_ini)->row()->total;
 
 		// Total setor tunai bulan lalu
@@ -264,6 +272,7 @@ class Ledgers extends MY_Model
           AND MONTH(createdAt) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH)
           AND YEAR(createdAt) = YEAR(CURRENT_DATE() - INTERVAL 1 MONTH)
     ";
+		if (null !== $wargaUuid) $sql_bulan_ini .= " AND ledger.warga = '{$wargaUuid}'";
 		$total_bulan_lalu = (float)$this->db->query($sql_bulan_lalu)->row()->total;
 
 		// Hitung persentase perubahan (sama logic dengan saldo)
@@ -275,8 +284,9 @@ class Ledgers extends MY_Model
 		return ($perubahan / abs($total_bulan_lalu)) * 100;
 	}
 
-	public function getTotalTukarProdukBulanIni()
+	public function getTotalTukarProdukBulanIni($wargaUuid)
 	{
+		if (null !== $wargaUuid) $this->db->where('ledger.warga', $wargaUuid);
 		$this->db->select('COALESCE(SUM(ABS(nilai)), 0) as total')
 			->from('ledger')
 			->where('deletedAt IS NULL', NULL, false)
@@ -288,9 +298,10 @@ class Ledgers extends MY_Model
 		return (float)($result->total ?? 0);
 	}
 
-	public function progressTukarProdukPersen()
+	public function progressTukarProdukPersen($wargaUuid)
 	{
 		// Total bulan ini (pake ABS karena nilai di ledger negatif)
+		if (null !== $wargaUuid) $this->db->where('ledger.warga', $wargaUuid);
 		$this->db->select('COALESCE(SUM(ABS(nilai)), 0) as total')
 			->from('ledger')
 			->where('deletedAt IS NULL', NULL, false)
@@ -300,6 +311,7 @@ class Ledgers extends MY_Model
 		$bulan_ini = (float)($this->db->get()->row()->total ?? 0);
 
 		// Total bulan lalu
+		if (null !== $wargaUuid) $this->db->where('ledger.warga', $wargaUuid);
 		$this->db->select('COALESCE(SUM(ABS(nilai)), 0) as total')
 			->from('ledger')
 			->where('deletedAt IS NULL', NULL, false)
