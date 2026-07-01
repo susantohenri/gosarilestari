@@ -28,10 +28,11 @@
       <div class="space-y-4">
         <?php foreach ($form as $field) : ?>
           <?php switch ($field['type']):
-              case 'hidden': ?>
+            case 'hidden': ?>
               <input class="form-control" type="<?= $field['type'] ?>" value="<?= $field['value'] ?>" name="<?= $field['name'] ?>" <?= $field['attr'] ?>>
               <?php break; ?>
-            <?php case 'select': ?>
+            <?php
+            case 'select': ?>
               <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-start">
                 <label class="md:col-span-3 text-sm font-medium text-slate-700 pt-2"><?= htmlspecialchars($field['label']) ?></label>
                 <div class="md:col-span-9">
@@ -46,7 +47,9 @@
                 </div>
               </div>
               <?php break; ?>
-            <?php case 'textarea': ?>
+            <?php
+            case 'textarea': ?>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.10.9/tinymce.min.js" referrerpolicy="origin"></script>
               <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-start">
                 <label class="md:col-span-3 text-sm font-medium text-slate-700 pt-2"><?= htmlspecialchars($field['label']) ?></label>
                 <div class="md:col-span-9">
@@ -54,7 +57,8 @@
                 </div>
               </div>
               <?php break; ?>
-            <?php case 'file': ?>
+            <?php
+            case 'file': ?>
               <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-start">
                 <label class="md:col-span-3 text-sm font-medium text-slate-700 pt-2"><?= htmlspecialchars($field['label']) ?></label>
                 <div class="md:col-span-9 space-y-2">
@@ -66,7 +70,8 @@
                 </div>
               </div>
               <?php break; ?>
-            <?php default: ?>
+            <?php
+            default: ?>
               <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-start">
                 <label class="md:col-span-3 text-sm font-medium text-slate-700 pt-2"><?= htmlspecialchars($field['label']) ?></label>
                 <div class="md:col-span-9">

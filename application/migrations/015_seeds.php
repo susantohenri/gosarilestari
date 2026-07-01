@@ -25,7 +25,7 @@ class Migration_seeds extends CI_Migration
         $warga = $this->Roles->create(['name' => 'Warga']);
 
         $baseEntities = ['User', 'Role', 'Permission', 'Menu', 'Petugas'];
-        $petugasEntities = ['Warga', 'Rtrw', 'KategoriSampah', 'ProdukTukar'];
+        $petugasEntities = ['Warga', 'Rtrw', 'KategoriSampah', 'ProdukTukar', 'Informasi'];
         $transaksiEntities = ['SetorSampah', 'SetorTunai', 'TukarProduk'];
         $wargaEntities = ['TukarProduk', 'Notifikasi'];
         $allPermissions = ['index', 'create', 'read', 'update', 'delete'];
@@ -121,6 +121,16 @@ class Migration_seeds extends CI_Migration
             'role' => $warga,
             'action' => 'read',
             'entity' => 'Ledger'
+        ]);
+        $this->Permissions->create([
+            'role' => $warga,
+            'action' => 'index',
+            'entity' => 'Informasi'
+        ]);
+        $this->Permissions->create([
+            'role' => $warga,
+            'action' => 'read',
+            'entity' => 'Informasi'
         ]);
 
         $this->Users->create([

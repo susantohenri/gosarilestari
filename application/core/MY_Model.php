@@ -210,6 +210,7 @@ class MY_Model extends CI_Model
     public function prepopulate($uuid)
     {
         $record = $this->findOne($uuid);
+        if (!$record) return [];
         foreach ($this->form as &$f) {
             if (isset($f['attributes']) && in_array(['data-autocomplete' => 'true'], $f['attributes'])) {
                 $model = '';

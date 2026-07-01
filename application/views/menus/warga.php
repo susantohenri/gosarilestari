@@ -7,5 +7,6 @@
 <?php sidebar_section_end(); ?>
 
 <?php sidebar_section('Sistem'); ?>
+<?php sidebar_link('Informasi', 'Informasi', 'newspaper', 'Informasi', $current); ?>
 <?php sidebar_link('Notifikasi', 'Notifikasi', 'bell', 'Notifikasi', $current); ?>
 <?php sidebar_section_end(); ?>

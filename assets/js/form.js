@@ -55,6 +55,28 @@ function formInit(scope) {
   scope.find('[data-number="true"]').keyup(function () {
     $(this).val(currency(getNumber($(this))))
   })
+
+  const textareas = scope.find('textarea');
+  if (textareas.length > 0) {
+    textareas.each(function () {
+      const name = $(this).attr('name');
+      tinymce.init({
+        selector: `[name="${name}"]`,
+        license_key: 'gpl',
+        suffix: '.min',
+        base_url: 'https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.10.9',
+        plugins: 'advlist autolink lists link image charmap print preview anchor paste',
+        toolbar: 'undo redo | fontselect fontsizeselect | bold italic underline backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+        // 3. Konfigurasi ekstra untuk handle Copy-Paste dari Google Docs
+        paste_data_images: true,      // Mengizinkan paste gambar lokal/blob sebagai Base64
+        paste_as_text: false,          // Memastikan format teks kaya (Rich Text) tidak hilang
+        paste_webkit_styles: "all",    // Memaksa browser mempertahankan style (seperti underline dari Google Docs)
+        paste_merge_formats: true,     // Menggabungkan format teks yang serupa agar rapi
+        // 4. Mencegah TinyMCE menghapus tag otomatis saat proses pembersihan teks
+        extended_valid_elements: 'img[class|src|border|alt|title|hlspace|vspace|width|height|align|onmouseover|onmouseout|name]',
+      });
+    });
+  }
 }
 
 function getNumber(element) {
