@@ -119,6 +119,16 @@ class Wargas extends MY_Model
 		return parent::dt();
 	}
 
+	public function find($param = [])
+	{
+		$this
+			->db
+			->select("{$this->table}.*")
+			->join('role', 'user.role = role.uuid')
+			->where('role.name', 'Warga');
+		return parent::find($param);
+	}
+
 	public function findOne($param)
 	{
 		$record = parent::findOne($param);

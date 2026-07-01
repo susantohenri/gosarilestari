@@ -55,4 +55,21 @@ class Informasis extends MY_Model
             ->where("{$this->table}.deletedAt", null)
             ->generate();
     }
+
+    function create($data)
+    {
+        $uuid = parent::create($data);
+        $href = site_url("Informasi/Read/{$uuid}");
+        $this->load->model(['Wargas', 'Notifikasis']);
+        $wargas = $this->Wargas->find();
+        foreach ($wargas as $warga) {
+            $this->Notifikasis->create([
+                'user' => $warga->uuid,
+                'period' => strtoupper(base_convert(time() + rand(), 10, 36)),
+                'judul' => "Informasi Baru: {$data['title']}",
+                'informasi' => "Informasi terbaru, silakan klik link berikut: <u><a href='{$href}'>{$data['title']}</a></u>"
+            ]);
+        }
+        return $uuid;
+    }
 }
