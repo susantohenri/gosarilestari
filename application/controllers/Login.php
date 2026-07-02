@@ -79,16 +79,7 @@ class Login extends CI_Controller
                     'status' => 1,
                     'activatedAt' => null
                 ]);
-                $admins = $this->Users->getAdmins();
-                $wargaUrl = site_url("Warga/Read/{$uuid}");
-                foreach ($admins as $admin) {
-                    $this->Notifikasis->create([
-                        'user' => $admin->uuid,
-                        'period' => strtoupper(base_convert(time() + rand(), 10, 36)),
-                        'judul' => 'Permohonan aktivasi warga baru - ' . $nama,
-                        'informasi' => "Silakan klik link berikut untuk melihat detail permohonan warga baru: <u><a href='{$wargaUrl}'>{$nama}</a></u>"
-                    ]);
-                }
+                $this->Notifikasis->permohonanAktivasi($uuid);
                 $this->session->set_flashdata('register_success', 'Registrasi berhasil. Silakan masuk.');
                 redirect(site_url('Login'));
             }

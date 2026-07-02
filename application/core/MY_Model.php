@@ -86,8 +86,10 @@ class MY_Model extends CI_Model
         $this
             ->db
             ->select("CONCAT(
-                '<a class=\"mr-1 border p-1 rounded-sm\" href=\"{$edit}', {$this->table}.uuid, '\"><i class=\"fa fa-file-lines text-yellow-500\"></i></a>'
-                '<a class=\"ml-1 border p-1 rounded-sm\" href=\"{$delete}', {$this->table}.uuid, '\"><i class=\"fa fa-trash text-red-700\"></i></a>'
+                '<div class=\"flex flex-wrap gap-2\">',
+                '<a class=\"px-2 py-1 text-xs text-white bg-yellow-500 rounded hover:bg-yellow-600\" href=\"{$edit}', {$this->table}.uuid, '\"><i class=\"fa fa-file-lines\"></i></a>'
+                '<a class=\"px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600\" href=\"{$delete}', {$this->table}.uuid, '\"><i class=\"fa fa-trash\"></i></a>',
+                '</div>'
             ) as aksi", false);
 
         return $this

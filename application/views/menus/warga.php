@@ -2,8 +2,9 @@
 
 <?php sidebar_section('Menu Utama'); ?>
 <?php sidebar_link('Dashboard', 'Dashboard', 'home', 'Dashboard', $current); ?>
+<?php sidebar_link('Pembayaran', 'Pembayaran', 'money-bill-wave', 'Pembayaran', $current); ?>
+<?php sidebar_link('Penukaran', 'Penukaran', 'cart-shopping', 'Penukaran', $current); ?>
 <?php sidebar_link('Ledger', 'Ledger', 'clock-rotate-left', 'Riwayat Transaksi', $current); ?>
-<?php sidebar_link('TukarProduk', 'TukarProduk', 'cart-shopping', 'Tukar Produk', $current); ?>
 <?php sidebar_section_end(); ?>
 
 <?php sidebar_section('Sistem'); ?>

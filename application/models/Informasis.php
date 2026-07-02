@@ -59,17 +59,9 @@ class Informasis extends MY_Model
     function create($data)
     {
         $uuid = parent::create($data);
-        $href = site_url("Informasi/Read/{$uuid}");
-        $this->load->model(['Wargas', 'Notifikasis']);
-        $wargas = $this->Wargas->find();
-        foreach ($wargas as $warga) {
-            $this->Notifikasis->create([
-                'user' => $warga->uuid,
-                'period' => strtoupper(base_convert(time() + rand(), 10, 36)),
-                'judul' => "Informasi Baru: {$data['title']}",
-                'informasi' => "Informasi terbaru, silakan klik link berikut: <u><a href='{$href}'>{$data['title']}</a></u>"
-            ]);
-        }
+        $data['uuid'] = $uuid;
+        $this->load->model('Notifikasis');
+        $this->Notifikasis->informasiBaru($data);
         return $uuid;
     }
 }

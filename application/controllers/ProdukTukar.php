@@ -36,11 +36,6 @@ class ProdukTukar extends MY_Controller
 		}
 		$vars = [];
 		$vars['page_name'] = 'custom-tables/table-produk-tukar';
-		$vars['js'] = [
-			// 'jquery.dataTables.min.js',
-			// 'table.js'
-		];
-		$vars['thead'] = $this->$model->thead;
 		$vars['overview'] = $this->$model->getOverView();
 		$vars['products'] = $this->$model->find();
 		$vars['categories'] = $this->$model->getCategories();

@@ -117,8 +117,9 @@ class Ledgers extends MY_Model
 		$flows = $this->find(['warga' => $record['warga'], 'status' => 1, 'deletedAt' => null]);
 		$saldo = 0;
 		foreach ($flows as $flow) $saldo += $flow->nilai;
-		$this->load->model('Wargas');
+		$this->load->model(['Wargas', 'Notifikasis']);
 		$this->Wargas->updateSaldo($record['warga'], $saldo);
+		$this->Notifikasis->perubahanSaldo($record);
 		return $uuid;
 	}
 

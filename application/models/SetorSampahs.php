@@ -123,7 +123,7 @@ class SetorSampahs extends MY_Model
 			$kategoriSampah = $this->KategoriSampahs->findOne($created['kategorisampah']);
 			$this->Ledgers->save(array_merge($ledgerObj, [
 				'tipe' => 'SETOR_SAMPAH',
-				'keterangan' => "{$kategoriSampah['nama']} {$created['berat']} Kg",
+				'keterangan' => "Setor sampah {$kategoriSampah['nama']} {$created['berat']} Kg",
 				'nilai' => $created['pendapatan']
 			]));
 		}

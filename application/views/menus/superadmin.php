@@ -7,8 +7,8 @@
 <?php sidebar_link('KategoriSampah', 'KategoriSampah', 'tags', 'Kategori Sampah', $current); ?>
 <?php sidebar_link('ProdukTukar', 'ProdukTukar', 'box-open', 'Produk Tukar', $current); ?>
 <?php sidebar_link('SetorSampah', 'SetorSampah', 'recycle', 'Setor Sampah', $current); ?>
-<?php sidebar_link('SetorTunai', 'SetorTunai', 'money-bill-wave', 'Setor Tunai', $current); ?>
-<?php sidebar_link('TukarProduk', 'TukarProduk', 'cart-shopping', 'Tukar Produk', $current); ?>
+<?php sidebar_link('Pembayaran', 'Pembayaran', 'money-bill-wave', 'Pembayaran', $current); ?>
+<?php sidebar_link('Penukaran', 'Penukaran', 'cart-shopping', 'Penukaran', $current); ?>
 <?php sidebar_link('Ledger', 'Ledger', 'clock-rotate-left', 'Riwayat Transaksi', $current); ?>
 <?php sidebar_section_end(); ?>
 

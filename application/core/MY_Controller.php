@@ -72,18 +72,9 @@ class MY_Controller extends CI_Controller
             if (isset($post['delete'])) {
                 $this->$model->delete($post['delete']);
             } else {
-                $db_debug = $this->db->db_debug;
-                $this->db->db_debug = false;
-
                 $result = $this->$model->save($post);
-
-                $error = $this->db->error();
-                $this->db->db_debug = $db_debug;
                 if (isset($result['error'])) {
-                    $error = $result['error'];
-                }
-                if (count($error)) {
-                    $this->session->set_flashdata('model_error', $error['message']);
+                    $this->session->set_flashdata('model_error', $result['error']);
                     redirect($this->controller);
                 }
             }

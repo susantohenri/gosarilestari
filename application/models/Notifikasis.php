@@ -233,4 +233,56 @@ class Notifikasis extends MY_Model
     return "Periode {$period}:\n{$textBelumBayar};\nSilakan tindak lanjuti melalui dashboard petugas.";
   }
 
+  function permohonanAktivasi($wargaUuid)
+  {
+    $this->load->model('Users');
+    $warga = $this->Users->findOne($wargaUuid);
+    $admins = $this->Users->getAdmins();
+    $wargaUrl = site_url("Warga/Read/{$wargaUuid}");
+    foreach ($admins as $admin) {
+      $this->create([
+        'user' => $admin->uuid,
+        'period' => $this->generateUniquePeriod(),
+        'judul' => 'Permohonan aktivasi warga baru - ' . $warga['nama'],
+        'informasi' => "Silakan klik link berikut untuk melihat detail permohonan warga baru: <u><a href='{$wargaUrl}'>{$warga['nama']}</a></u>"
+      ]);
+    }
+  }
+
+  function informasiBaru($info)
+  {
+    $this->load->model('Wargas');
+    $href = site_url("Informasi/Read/{$info['uuid']}");
+    $wargas = $this->Wargas->find();
+    foreach ($wargas as $warga) {
+      $this->Notifikasis->create([
+        'user' => $warga->uuid,
+        'period' => $this->generateUniquePeriod(),
+        'judul' => "Informasi Baru: {$info['title']}",
+        'informasi' => "Informasi terbaru, silakan klik link berikut: <u><a href='{$href}'>{$info['title']}</a></u>"
+      ]);
+    }
+  }
+
+  function perubahanSaldo($ledger)
+  {
+    $operasi = 'bertambah';
+    if (0 > $ledger['nilai']) {
+      $operasi = 'berkurang';
+      $ledger['nilai'] *= -1;
+    }
+    $nilai = 'Rp ' . number_format($ledger['nilai'], 0, ',', '.');
+
+    return $this->create([
+      'user' => $ledger['warga'],
+      'period' => $this->generateUniquePeriod(),
+      'judul' => "Saldo {$operasi} {$nilai}",
+      'informasi' => "{$ledger['keterangan']} berhasil, saldo anda {$operasi} sebesar {$nilai}"
+    ]);
+  }
+
+  protected function generateUniquePeriod()
+  {
+    return strtoupper(base_convert(time() + rand(), 10, 36));
+  }
 }
