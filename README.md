@@ -111,6 +111,12 @@ Then update the database credentials.
 
 ## Setup CRON for notification broadcast (UTC+0)
 
+### Kirim tagihan sampah bulanan ke semua warga setiap tanggal 1
 ```bash
-0 0 * * * /usr/bin/php /home/u940399048/domains/gosarilestari.com/public_html/index.php Cli BroadcastNotifikasi
+0 0 1 * * /usr/bin/php /home/u940399048/domains/gosarilestari.com/public_html/index.php Cli KirimTagihanBulananWarga
+```
+
+### Kirim reminder bulanan ke semua petugas setiap tanggal 5
+```bash
+0 0 5 * * /usr/bin/php /home/u940399048/domains/gosarilestari.com/public_html/index.php Cli kirimNotifikasiBulananPetugas
 ```

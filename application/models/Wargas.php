@@ -129,6 +129,21 @@ class Wargas extends MY_Model
 		return parent::find($param);
 	}
 
+	public function getAllUuid()
+	{
+		$this->db->select("{$this->table}.uuid");
+		return $this->find();
+	}
+
+	public function getSaldoMinus()
+	{
+		$this
+			->db
+			->select("{$this->table}.nama")
+			->where("{$this->table}.saldo <", 0, false);
+		return $this->find();
+	}
+
 	public function findOne($param)
 	{
 		$record = parent::findOne($param);
@@ -210,21 +225,25 @@ class Wargas extends MY_Model
 
 		return [
 			[
+				'color' => 'green',
 				'icon' => 'fa-user',
 				'label' => 'Total Warga',
 				'value' => count($wargas),
 			],
 			[
+				'color' => 'blue',
 				'icon' => 'fa-check',
 				'label' => 'Warga Aktif',
 				'value' => $wargaAktif,
 			],
 			[
+				'color' => 'red',
 				'icon' => 'fa-times',
 				'label' => 'Tidak Aktif',
 				'value' => $wargTidakAktif,
 			],
 			[
+				'color' => 'yellow',
 				'icon' => 'fa-wallet',
 				'label' => 'Total Saldo',
 				'rp' => true,

@@ -114,21 +114,25 @@ class ProdukTukars extends MY_Model
 
 		return [
 			[
+				'color' => 'blue',
 				'icon' => 'fa-cube',
 				'label' => 'Total Produk',
 				'value' => count($produks),
 			],
 			[
+				'color' => 'green',
 				'icon' => 'fa-check',
 				'label' => 'Aktif',
 				'value' => $aktif,
 			],
 			[
+				'color' => 'yellow',
 				'icon' => 'fa-bell',
 				'label' => 'Stok Rendah',
 				'value' => $stokRendah,
 			],
 			[
+				'color' => 'red',
 				'icon' => 'fa-times',
 				'label' => 'Habis',
 				'value' => $habis,

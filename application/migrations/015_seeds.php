@@ -165,16 +165,6 @@ class Migration_seeds extends CI_Migration
         ]);
 
         $this->Konfigurasis->create([
-            'nama' => 'TANGGAL_PENGIRIMAN_NOTIFIKASI_WARGA',
-            'nilai' => '1'
-        ]);
-
-        $this->Konfigurasis->create([
-            'nama' => 'TANGGAL_PENGIRIMAN_NOTIFIKASI_PETUGAS',
-            'nilai' => '5'
-        ]);
-
-        $this->Konfigurasis->create([
             'nama' => 'SAMPAH_TERKUMPUL',
             'nilai' => '0',
             'deletedAt' => date('Y-m-d H:i:s')

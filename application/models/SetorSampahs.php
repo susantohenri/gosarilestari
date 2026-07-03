@@ -377,4 +377,21 @@ class SetorSampahs extends MY_Model
 
 		return $pie;
 	}
+
+	public function wargaSetorSampahTakTerpilahBulanLalu()
+	{
+		return $this
+			->db
+			->query("
+					SELECT
+						u.nama
+					FROM {$this->table} ss
+					LEFT JOIN user u ON ss.warga = u.uuid
+					WHERE ss.kategori = 'merah'
+						AND ss.createdAt >= LAST_DAY(NOW() - INTERVAL 2 MONTH) + INTERVAL 1 DAY
+  					AND ss.createdAt < LAST_DAY(NOW() - INTERVAL 1 MONTH) + INTERVAL 1 DAY
+					GROUP BY u.uuid
+			")
+			->result();
+	}
 }

@@ -81,7 +81,7 @@ class Ledgers extends MY_Model
 			->select("CONCAT(warga.nama, '<br>', warga.kode) as fwarga", false)
 			->select("CASE ledger.tipe WHEN 'SETOR_SAMPAH' THEN 'Setor Sampah' WHEN 'TUKAR_PRODUK' THEN 'Tukar Produk' WHEN 'POTONG_IURAN' THEN 'Potong Iuran' WHEN 'SETOR_TUNAI' THEN 'Setor Tunai' END as tipe")
 			->select("ledger.keterangan")
-			->select("user.nama as fpetugas", false)
+			->select("IF('SYSTEM' = {$this->table}.petugas, 'SYSTEM', user.nama) as fpetugas", false)
 			->select("DATE_FORMAT(ledger.createdAt, '%d %b %Y %H:%i') as fwaktu", false)
 			->select("CONCAT('Rp ', FORMAT(ledger.nilai, 0, 'id_ID')) as fnilai", false)
 			->select("'' as aksi", false)
@@ -167,23 +167,27 @@ class Ledgers extends MY_Model
 
 		return [
 			[
+				'color' => 'blue',
 				'icon' => 'fa-clock',
 				'label' => 'Total Transaksi',
 				'value' => count($transaksi),
 			],
 			[
+				'color' => 'green',
 				'icon' => 'fa-recycle',
 				'label' => 'Setor Sampah',
 				'rp' => true,
 				'value' => $setorSampah,
 			],
 			[
+				'color' => 'yellow',
 				'icon' => 'fa-gift',
 				'label' => 'Tukar Produk',
 				'rp' => true,
 				'value' => $tukarProduk * -1,
 			],
 			[
+				'color' => 'red',
 				'icon' => 'fa-file-text',
 				'label' => 'Potong Iuran',
 				'rp' => true,
@@ -329,5 +333,24 @@ class Ledgers extends MY_Model
 
 		$perubahan = $bulan_ini - $bulan_lalu;
 		return ($perubahan / abs($bulan_lalu)) * 100;
+	}
+
+	public function getWargaTertagih()
+	{
+		return $this
+			->db
+			->query("
+				SELECT
+					u.uuid
+				FROM user u
+				LEFT JOIN role r ON u.role = r.uuid
+				LEFT JOIN ledger l ON l.warga = u.uuid
+					AND l.tipe = 'POTONG_IURAN'
+					AND MONTH(l.createdAt) = MONTH(NOW())
+					AND YEAR(l.createdAt) = YEAR(NOW())
+				WHERE r.name = 'Warga'
+					AND l.uuid IS NULL
+			")
+			->result();
 	}
 }

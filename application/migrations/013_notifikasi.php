@@ -17,16 +17,12 @@ class Migration_notifikasi extends CI_Migration
         `status` tinyint NOT NULL DEFAULT '1',
         `kode` varchar(6) NOT NULL,
         `user` varchar(36) NOT NULL,
-        `jenis` enum('RINGKASAN_WARGA','RINGKASAN_PETUGAS') NOT NULL,
-        `period` char(7) NOT NULL COMMENT 'format MM-YYYY, contoh 07-2026',
         `judul` varchar(255) NOT NULL,
         `informasi` text NOT NULL,
         `isRead` tinyint NOT NULL DEFAULT '0',
         PRIMARY KEY (`uuid`),
         UNIQUE KEY `orders` (`orders`),
-        UNIQUE KEY `uniq_user_jenis_period` (`user`, `jenis`, `period`),
-        KEY `idx_notifikasi_user` (`user`),
-        KEY `idx_notifikasi_period` (`period`)
+        KEY `idx_notifikasi_user` (`user`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
     ");
   }

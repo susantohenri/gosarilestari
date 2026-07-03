@@ -8,7 +8,7 @@
     <?php foreach ($overview as $ov) : ?>
       <article class="rounded-2xl border border-line bg-white p-4 shadow-panel">
         <div class="flex items-start gap-3">
-          <div class="bg-slate-100 flex h-12 w-12 items-center justify-center rounded-xl bg-brandSoft text-brand">
+          <div class="bg-slate-100 bg-<?= $ov['color'] ?>-50 text-<?= $ov['color'] ?>-600 flex h-12 w-12 items-center justify-center rounded-xl bg-brandSoft text-brand">
             <i class="fa-solid <?= $ov['icon'] ?> w-5 text-center"></i>
           </div>
           <div>

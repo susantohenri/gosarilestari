@@ -5,8 +5,6 @@
     </a>
   </div>
   <div class="p-4 md:p-6">
-    <h2 class="text-center"><?= $informasi['title'] ?></h2>
-    <br>
     <?= $informasi['content'] ?>
   </div>
 </div>
