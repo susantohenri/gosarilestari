@@ -116,7 +116,27 @@ class Wargas extends MY_Model
 			->where('role.name', 'Warga')
 			->where('activatedAt <>', null, false)
 		;
-		return parent::dt();
+
+		$controller = $this->router->class;
+		$edit = site_url("{$controller}/Read/");
+		$delete = site_url("{$controller}/Delete/");
+		$printQr = site_url("ExportImport/printQrWarga/");
+
+		$this
+			->db
+			->select("CONCAT(
+                '<div class=\"flex flex-wrap gap-2\">',
+                '<a target=\"_blank\" class=\"px-2 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600\" href=\"{$printQr}', {$this->table}.uuid, '\"><i class=\"fa fa-qrcode\"></i></a>'
+                '<a class=\"px-2 py-1 text-xs text-white bg-yellow-500 rounded hover:bg-yellow-600\" href=\"{$edit}', {$this->table}.uuid, '\"><i class=\"fa fa-file-lines\"></i></a>'
+                '<a class=\"px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600\" href=\"{$delete}', {$this->table}.uuid, '\"><i class=\"fa fa-trash\"></i></a>',
+                '</div>'
+            ) as aksi", false);
+
+		return $this
+			->datatables
+			->from($this->table)
+			->where("{$this->table}.deletedAt", null)
+			->generate();
 	}
 
 	public function find($param = [])

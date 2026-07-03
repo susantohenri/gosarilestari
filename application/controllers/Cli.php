@@ -47,7 +47,7 @@ class CLI extends CI_Controller
             ]));
     }
 
-    public function kirimNotifikasiBulananPetugas()
+    public function KirimNotifikasiBulananPetugas()
     {
         $this->load->model('Notifikasis');
         $this->Notifikasis->reminderBulananPetugas();

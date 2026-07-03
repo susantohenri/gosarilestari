@@ -394,4 +394,27 @@ class SetorSampahs extends MY_Model
 			")
 			->result();
 	}
+
+	public function getForm($uuid = false, $isSubform = false)
+	{
+		$form = parent::getForm($uuid, $isSubform);
+
+		if (!$uuid && $wargaUuid = $this->input->get('warga')) {
+			$this->load->model('Wargas');
+			$warga = $this->Wargas->findOne($wargaUuid);
+			if (!$warga) return $form;
+
+			$form = array_map(function ($field) use ($warga) {
+				if ('warga' === $field['name']) {
+					$field['options'] = [[
+						'text' => $warga['nama'],
+						'value' => $warga['uuid'],
+					]];
+				}
+				return $field;
+			}, $form);
+		}
+
+		return $form;
+	}
 }

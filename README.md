@@ -118,5 +118,5 @@ Then update the database credentials.
 
 ### Kirim reminder bulanan ke semua petugas setiap tanggal 5
 ```bash
-0 0 5 * * /usr/bin/php /home/u940399048/domains/gosarilestari.com/public_html/index.php Cli kirimNotifikasiBulananPetugas
+0 0 5 * * /usr/bin/php /home/u940399048/domains/gosarilestari.com/public_html/index.php Cli KirimNotifikasiBulananPetugas
 ```

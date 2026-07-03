@@ -362,4 +362,15 @@ class ExportImport extends MY_Controller
 		$data = $this->Ledgers->getTransactionDetails($ledger);
 		$this->load->view('print-receipt', $data);
 	}
+
+	public function printQrWarga($uuid)
+	{
+		$this->load->model(['Wargas', 'Rtrws']);
+		$warga = $this->Wargas->findOne($uuid);
+		$rtrw = $this->Rtrws->findOne($warga['rtrw']);
+		$this->load->view('print-qr', [
+			'warga' => $warga,
+			'rtrw' => $rtrw
+		]);
+	}
 }

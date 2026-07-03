@@ -28,7 +28,7 @@ window.onload = function () {
     ajax,
     columns: thead,
     fnRowCallback: function (nRow, aData, iDisplayIndex) {
-      $(nRow).css('cursor', 'pointer').click(function () {
+      $(nRow).find('a').css('cursor', 'pointer').click(function () {
         if (!allow_read) return false;
         fetchTransactionDetails(aData.uuid);
       });
