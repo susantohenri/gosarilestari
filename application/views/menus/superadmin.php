@@ -17,4 +17,5 @@
 <?php sidebar_link('Informasi', 'Informasi', 'newspaper', 'Informasi', $current); ?>
 <?php sidebar_link('Konfigurasi', 'Konfigurasi', 'gear', 'Konfigurasi', $current); ?>
 <?php sidebar_link('Notifikasi', 'Notifikasi', 'bell', 'Notifikasi', $current); ?>
+<?php sidebar_link('Profile', 'Profile', 'user', 'Profile', $current); ?>
 <?php sidebar_section_end(); ?>
