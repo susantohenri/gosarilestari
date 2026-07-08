@@ -59,13 +59,13 @@ class Pembayarans extends MY_Model
     public function dt()
     {
         if ('Warga' === $this->session->userdata('role_name')) {
-            $this->db->where('warga.uuid', $this->session->userdata('uuid'));
+            $this->datatables->where('warga.uuid', $this->session->userdata('uuid'));
         }
 
         if ($customFilter = $this->input->post('customFilter')) {
             parse_str($customFilter, $params);
             if ('' !== $params['kode']) {
-                $this->db->like("{$this->table}.kode", $params['kode']);
+                $this->datatables->like("{$this->table}.kode", $params['kode']);
             }
         }
 

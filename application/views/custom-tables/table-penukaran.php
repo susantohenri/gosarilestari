@@ -58,7 +58,7 @@
     <?php endforeach ?>
   </div>
 
-  <div class="grid grid-cols-4 gap-5 mt-2 products">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-2 products">
 
     <?php foreach ($products as $prod): ?>
       <div class="border border-slate-200 rounded-2xl overflow-hidden" data-kategori="<?= $prod->kategori ?>">

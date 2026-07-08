@@ -93,13 +93,13 @@ class Wargas extends MY_Model
 	{
 		parse_str($this->input->post('customFilter'), $params);
 		if ('' !== $params['fnama']) {
-			$this->db->like("CONCAT(user.nama, user.kode)", $params['fnama'], false);
+			$this->datatables->like("CONCAT(user.nama, user.kode)", $params['fnama'], false);
 		}
 		if ('' !== $params['rtrw']) {
-			$this->db->where('rtrw.uuid', $params['rtrw']);
+			$this->datatables->where('rtrw.uuid', $params['rtrw']);
 		}
 		if ('' !== $params['status']) {
-			$this->db->where('user.status', $params['status']);
+			$this->datatables->where('user.status', $params['status']);
 		}
 		$this->datatables
 			->select("{$this->table}.uuid")

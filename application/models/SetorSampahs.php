@@ -18,6 +18,7 @@ class SetorSampahs extends MY_Model
 			(object) array('mData' => 'fpetugas', 'sTitle' => 'PETUGAS'),
 			(object) array('mData' => 'fberat', 'sTitle' => 'BERAT'),
 			(object) array('mData' => 'fkategori', 'sTitle' => 'KATEGORI'),
+			(object) array('mData' => 'fjenis', 'sTitle' => 'JENIS'),
 			(object) array('mData' => 'fpendapatan', 'sTitle' => 'PENDAPATAN'),
 		);
 
@@ -66,8 +67,8 @@ class SetorSampahs extends MY_Model
 	function dt()
 	{
 		if ($mapFilter = $this->input->post('mapFilter')) {
-			$this->db->where('rtrw.uuid', $mapFilter['rtrw']);
-			$this->db->where('setorsampah.kategori', $mapFilter['kategori']);
+			$this->datatables->where('rtrw.uuid', $mapFilter['rtrw']);
+			$this->datatables->where('setorsampah.kategori', $mapFilter['kategori']);
 		}
 		$this->datatables
 			->select("{$this->table}.uuid")
@@ -80,10 +81,11 @@ class SetorSampahs extends MY_Model
 			->select("CONCAT(FORMAT(berat, 1), ' KG') as fberat", false)
 			->select("CASE WHEN 'merah' = setorsampah.kategori THEN 'Tidak Terpilah' WHEN 'kuning' = setorsampah.kategori THEN 'Terpilah Sebagian' WHEN 'hijau' = setorsampah.kategori THEN 'Terpilah dg baik' END as fkategori", false)
 			->select("CONCAT('Rp ', FORMAT(pendapatan, 0, 'id_ID')) as fpendapatan", false)
-			->select('"" as aksi')
+			->select('kategorisampah.nama as fjenis')
 			->join('user warga', 'warga.uuid = setorsampah.warga', 'left')
 			->join('rtrw', 'rtrw.uuid = warga.rtrw', 'left')
 			->join('user', 'user.uuid = setorsampah.petugas', 'left')
+			->join('kategorisampah', 'kategorisampah.uuid = setorsampah.kategorisampah', 'left')
 		;
 		return parent::dt();
 	}
