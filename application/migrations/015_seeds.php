@@ -350,6 +350,20 @@ class Migration_seeds extends CI_Migration
                     'terjual' => 10
                 ],
                 [
+                    'nama' => 'Gas LPG 12KG',
+                    'kategori' => 'Gas Non Subsidi',
+                    'harga' => 16000,
+                    'stok' => 22,
+                    'terjual' => 10
+                ],
+                [
+                    'nama' => 'Gas Bright 5.5KG',
+                    'kategori' => 'Gas Non Subsidi',
+                    'harga' => 125000,
+                    'stok' => 11,
+                    'terjual' => 6
+                ],
+                [
                     'nama' => 'Gas Bright 12KG',
                     'kategori' => 'Gas Non Subsidi',
                     'harga' => 125000,

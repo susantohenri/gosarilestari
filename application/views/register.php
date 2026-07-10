@@ -8,6 +8,7 @@
   <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/css/all.min.css') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/webfonts/all.min.css') ?>">
+  <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/select2.min.css') ?>">
   <script src="<?= base_url('assets/js/tailwindcss.min.js') ?>"></script>
   <script src="<?= base_url('assets/js/tailwind.config.js') ?>"></script>
 </head>
@@ -75,6 +76,11 @@
       </p>
     </div>
   </div>
+  <script src="<?= base_url('assets/js/jquery.min.js') ?>"></script>
+  <script src="<?= base_url('assets/js/select2.full.min.js') ?>"></script>
+  <script type="text/javascript">
+    jQuery('[name="rtrw"]').select2()
+  </script>
 </body>
 
 </html>

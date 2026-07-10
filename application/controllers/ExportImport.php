@@ -15,6 +15,7 @@ class ExportImport extends MY_Controller
 		$this->pdf->filename = "Laporan GO-SARI Lestari {$date}.pdf";
 
 		switch ($this->session->userdata('role_name')) {
+			case 'Admin':
 			case 'Petugas':
 				$views = 'pdfs/export-laporan-petugas-pdf';
 				$data = [

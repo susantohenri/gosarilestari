@@ -80,7 +80,7 @@ class Login extends CI_Controller
                     'activatedAt' => null
                 ]);
                 $this->Notifikasis->permohonanAktivasi($uuid);
-                $this->session->set_flashdata('register_success', 'Registrasi berhasil. Silakan masuk.');
+                $this->session->set_flashdata('register_success', 'Registrasi berhasil. Silakan menunggu proses aktivasi.');
                 redirect(site_url('Login'));
             }
         }
