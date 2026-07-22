@@ -132,6 +132,7 @@ class Wargas extends MY_Model
                 '</div>'
             ) as aksi", false);
 
+		$this->db->order_by("{$this->table}.createdAt", 'desc');
 		return $this
 			->datatables
 			->from($this->table)
@@ -205,6 +206,7 @@ class Wargas extends MY_Model
 			->where('activatedAt <>', null, false)
 			->limit(10)
 			->like($field, $term ?? '')
+			->order_by("{$this->table}.createdAt", 'desc')
 			->get($this->table)
 			->result();
 	}

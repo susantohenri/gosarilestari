@@ -130,7 +130,7 @@
   <?php endforeach;
   endif; ?>
   <script>
-    if ('service-worker' in navigator) {
+    if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('<?= base_url('service-worker.js') ?>')
           .then(reg => console.log('Service Worker terdaftar!', reg))

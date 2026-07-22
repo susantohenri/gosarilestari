@@ -92,6 +92,7 @@ class MY_Model extends CI_Model
                 '</div>'
             ) as aksi", false);
 
+        $this->db->order_by("{$this->table}.createdAt", 'desc');
         return $this
             ->datatables
             ->from($this->table)
@@ -112,12 +113,16 @@ class MY_Model extends CI_Model
 
     public function select2($field, $term)
     {
-        return $this->db
+        return
+            $this->db
             ->select("uuid as id", false)
             ->select("$field as text", false)
             ->where('deletedAt', null)
             ->limit(10)
-            ->like($field, $term ?? '')->get($this->table)->result();
+            ->like($field, $term ?? '')
+            ->order_by('createdAt', 'desc')
+            ->get($this->table)
+            ->result();
     }
 
     public function delete($uuid)

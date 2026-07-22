@@ -96,6 +96,7 @@ class Ledgers extends MY_Model
                 '<a class=\"px-2 py-1 text-xs text-white bg-yellow-500 rounded hover:bg-yellow-600\"><i class=\"fa fa-file-lines\"></i></a>'
             ) as aksi", false);
 
+		$this->db->order_by("{$this->table}.createdAt", 'desc');
 		return $this
 			->datatables
 			->from($this->table)
