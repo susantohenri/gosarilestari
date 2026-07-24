@@ -16,7 +16,7 @@
   <div class="w-full max-w-md">
     <div class="text-center mb-8">
       <div class="inline-flex items-center gap-2 text-brand-600 mb-2">
-        <i class="fa-solid fa-leaf text-3xl"></i>
+        <img src="<?= base_url('icon-32x32.png') ?>">
         <span class="font-bold text-2xl text-slate-800">GO SARI Lestari</span>
       </div>
       <p class="text-sm text-slate-500">Aplikasi Pengelolaan Sampah Mandiri</p>

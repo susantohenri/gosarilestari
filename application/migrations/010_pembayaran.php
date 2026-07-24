@@ -17,12 +17,14 @@ class Migration_pembayaran extends CI_Migration
         `status` ENUM('WARGA', 'AGEN', 'KASIR'),
         `kode` varchar(6) NOT NULL,
         `warga` varchar(36) NOT NULL,
-        `petugas` varchar(36) NOT NULL,
+        `agen` varchar(36) NOT NULL,
+        `kasir` varchar(36) NOT NULL,
         `nominal` FLOAT NOT NULL DEFAULT 0,
         `catatan` varchar(255) NOT NULL,
         PRIMARY KEY (`uuid`),
         KEY `warga` (`warga`),
-        KEY `petugas` (`petugas`)
+        KEY `agen` (`agen`),
+        KEY `kasir` (`kasir`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
   }

@@ -116,7 +116,7 @@ Then update the database credentials.
 0 0 1 * * /usr/bin/php /home/u940399048/domains/gosarilestari.com/public_html/index.php Cli KirimTagihanBulananWarga
 ```
 
-### Kirim reminder bulanan ke semua petugas setiap tanggal 5
+### Kirim reminder bulanan ke semua agen setiap tanggal 10
 ```bash
-0 0 5 * * /usr/bin/php /home/u940399048/domains/gosarilestari.com/public_html/index.php Cli KirimNotifikasiBulananPetugas
+0 0 10 * * /usr/bin/php /home/u940399048/domains/gosarilestari.com/public_html/index.php Cli KirimNotifikasiBulananAgen
 ```

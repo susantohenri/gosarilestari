@@ -17,14 +17,14 @@ class Migration_penukaran extends CI_Migration
         `status` ENUM('PENDING', 'APPROVED'),
         `kode` varchar(6) NOT NULL,
         `warga` varchar(36) NOT NULL,
-        `petugas` varchar(36) NOT NULL,
+        `kasir` varchar(36) NOT NULL,
         `produktukar` varchar(36) NOT NULL,
         `harga` FLOAT NOT NULL DEFAULT 0,
         `qty` INT(11) NOT NULL,
         `total` FLOAT NOT NULL DEFAULT 0,
         PRIMARY KEY (`uuid`),
         KEY `warga` (`warga`),
-        KEY `petugas` (`petugas`),
+        KEY `kasir` (`kasir`),
         KEY `produktukar` (`produktukar`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");

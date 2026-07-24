@@ -47,10 +47,10 @@ class CLI extends CI_Controller
             ]));
     }
 
-    public function KirimNotifikasiBulananPetugas()
+    public function KirimNotifikasiBulananAgen()
     {
         $this->load->model('Notifikasis');
-        $this->Notifikasis->reminderBulananPetugas();
+        $this->Notifikasis->reminderBulananAgen();
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode([

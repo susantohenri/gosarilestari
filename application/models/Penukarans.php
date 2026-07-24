@@ -13,7 +13,7 @@ class Penukarans extends MY_Model
             (object) ['mData' => 'kode', 'sTitle' => 'KODE'],
             (object) ['mData' => 'fwaktu', 'sTitle' => 'TANGGAL'],
             (object) ['mData' => 'fwarga', 'sTitle' => 'WARGA'],
-            (object) ['mData' => 'fpetugas', 'sTitle' => 'PETUGAS'],
+            (object) ['mData' => 'fkasir', 'sTitle' => 'KASIR'],
             (object) ['mData' => 'fproduk', 'sTitle' => 'PRODUK'],
             (object) ['mData' => 'fqty', 'sTitle' => 'QTY'],
             (object) ['mData' => 'ftotal', 'sTitle' => 'TOTAL'],
@@ -86,13 +86,13 @@ class Penukarans extends MY_Model
             ->select("{$this->table}.kode")
             ->select("DATE_FORMAT({$this->table}.createdAt, '%d %b %Y %H:%i') AS fwaktu", false)
             ->select("warga.nama AS fwarga", false)
-            ->select("petugas.nama AS fpetugas", false)
+            ->select("kasir.nama AS fkasir", false)
             ->select("produk.nama AS fproduk", false)
             ->select("FORMAT({$this->table}.qty, 0) as fqty", false)
             ->select("CONCAT('Rp ', FORMAT({$this->table}.total, 0, 'id_ID')) as ftotal", false)
             ->select("{$this->table}.status")
             ->join('user AS warga', "warga.uuid = {$this->table}.warga", 'left')
-            ->join('user AS petugas', "petugas.uuid = {$this->table}.petugas", 'left')
+            ->join('user AS kasir', "kasir.uuid = {$this->table}.kasir", 'left')
             ->join('produktukar AS produk', "produk.uuid = {$this->table}.produktukar", 'left')
         ;
 
@@ -168,7 +168,7 @@ class Penukarans extends MY_Model
                     if (isset($field['value']) && 'APPROVED' === $field['value']) {
                         $field['options'] = [['text' => 'APPROVED', 'value' => 'APPROVED']];
                     }
-                    // petugas or admin create penukaran, first option: approved
+                    // kasir or admin create penukaran, first option: approved
                     if (!$isWarga && !$uuid) {
                         $field['options'] = [
                             ['text' => 'APPROVED', 'value' => 'APPROVED'],
@@ -236,7 +236,7 @@ class Penukarans extends MY_Model
 
     protected function approve($penukaran, $produk)
     {
-        $penukaran['petugas'] = $this->session->userdata('uuid');
+        $penukaran['kasir'] = $this->session->userdata('uuid');
         $penukaran['approvedAt'] = date('Y-m-d H:i:s');
         $uuid = parent::update($penukaran);
 
@@ -245,7 +245,7 @@ class Penukarans extends MY_Model
             'kode' => $penukaran['kode'],
             'transaksi' => $penukaran['uuid'],
             'warga' => $penukaran['warga'],
-            'petugas' => $penukaran['petugas'],
+            'petugas' => $penukaran['kasir'],
             'tipe' => 'TUKAR_PRODUK',
             'keterangan' => "Penukaran produk {$produk['nama']}",
             'nilai' => $penukaran['total'] * -1

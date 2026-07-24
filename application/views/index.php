@@ -26,7 +26,7 @@
   <aside id="sidebar" class="overflow-y-auto w-64 bg-white border-r border-slate-200 flex flex-col z-40 -translate-x-full md:translate-x-0 md:relative md:flex shrink-0">
     <div class="h-16 flex items-center px-6 border-b border-slate-200">
       <a href="<?= base_url() ?>" class="flex items-center gap-2 text-brand-600">
-        <i class="fa-solid fa-leaf text-xl"></i>
+         <img src="<?= base_url('icon-32x32.png') ?>">
         <span class="font-bold text-lg text-slate-800">GO SARI Lestari</span>
       </a>
     </div>

@@ -99,4 +99,10 @@ class Kasirs extends MY_Model
 		$record['role'] = $this->getRoleKasir();
 		return parent::create($record);
 	}
+
+	public function getAllUuid()
+	{
+		$this->db->select("{$this->table}.uuid");
+		return $this->find();
+	}
 }

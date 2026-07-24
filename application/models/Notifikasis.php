@@ -79,41 +79,20 @@ class Notifikasis extends MY_Model
     return $notif;
   }
 
-  function reminderBulananPetugas()
+  function reminderBulananAgen()
   {
-    $periode = date('F Y');
-    $judul = "Pengingat bulan {$periode}";
-    $informasis = [];
+    $judul = "Pengingat bulan " . date('F Y');
 
     // warga belum bayar tagihan
     $this->load->model('Wargas');
-    $wargas = $this->Wargas->getSaldoMinus();
-    $countWarga = count($wargas);
-    if (0 < $countWarga) {
-      $namas = array_map(function ($warga) {
-        return $warga->nama;
-      }, $wargas);
-      $namas = implode(', ', $namas);
-      $informasis[] = "<b>Berikut nama {$countWarga} warga yg belum membayar tagihan bulan lalu:</b> {$namas}";
-    }
+    $minus = $this->Wargas->getSaldoMinus();
 
     // warga setor sampah tak tepilah
     $this->load->model('SetorSampahs');
-    $wargas = $this->SetorSampahs->wargaSetorSampahTakTerpilahBulanLalu();
-    $countWarga = count($wargas);
-    if (0 < $countWarga) {
-      $namas = array_map(function ($warga) {
-        return $warga->nama;
-      }, $wargas);
-      $namas = implode(', ', $namas);
-      $informasis[] = "<b>Berikut nama {$countWarga} warga yg belum memilah sampah bulan lalu:</b> {$namas}";
-    }
+    $takTerpilah = $this->SetorSampahs->wargaSetorSampahTakTerpilahBulanLalu();
 
-    $informasi = 0 < count($informasis) ?
-      implode("<br><br>", $informasis) :
-      'Tidak ada warga yg perlu ditindaklanjuti, semua warga sudah memilah sampah & membayar tagihan';
-
-    $petugas = $this
+    // agen
+    $agens = $this
       ->db
       ->query("
 				SELECT
@@ -122,14 +101,45 @@ class Notifikasis extends MY_Model
 				LEFT JOIN role r ON u.role = r.uuid
 				LEFT JOIN notifikasi n ON n.user = u.uuid
 					AND n.judul = '{$judul}'
-				WHERE r.name = 'Petugas'
+				WHERE r.name = 'Agen'
 					AND n.uuid IS NULL
 			")
       ->result();
 
-    foreach ($petugas as $ptgs) {
+    foreach ($agens as $agen) {
+      $agenId = $agen->uuid;
+      $informasis = [];
+
+      $wargaMinus = array_filter($minus, function ($warga) use ($agenId) {
+        return $warga->agen === $agenId;
+      });
+      $countMinus = count($wargaMinus);
+      if (0 < $countMinus) {
+        $namas = array_map(function ($warga) {
+          return $warga->nama;
+        }, $wargaMinus);
+        $namas = implode(', ', $namas);
+        $informasis[] = "<b>Berikut nama {$countMinus} warga yg belum membayar tagihan:</b> {$namas}";
+      }
+
+      $wargaTakTerpilah = array_filter($takTerpilah, function ($warga) use ($agenId) {
+        return $warga->agen === $agenId;
+      });
+      $countTakTerpilah = count($wargaTakTerpilah);
+      if (0 < $countTakTerpilah) {
+        $namas = array_map(function ($warga) {
+          return $warga->nama;
+        }, $wargaTakTerpilah);
+        $namas = implode(', ', $namas);
+        $informasis[] = "<b>Berikut nama {$countTakTerpilah} warga yg belum memilah sampah bulan lalu:</b> {$namas}";
+      }
+
+      $informasi = 0 < count($informasis) ?
+        implode("<br><br>", $informasis) :
+        'Tidak ada warga yg perlu ditindaklanjuti, semua warga anda sudah memilah sampah & membayar tagihan';
+
       $this->create([
-        'user' => $ptgs->uuid,
+        'user' => $agenId,
         'judul' => $judul,
         'informasi' => $informasi
       ]);
@@ -179,5 +189,19 @@ class Notifikasis extends MY_Model
       'judul' => "Saldo {$operasi} {$nilai}",
       'informasi' => "{$ledger['keterangan']} berhasil, saldo anda {$operasi} sebesar {$nilai}"
     ]);
+  }
+
+  function pembayaranBaru($pembayaran)
+  {
+    $this->load->model('Kasirs');
+    $href = site_url("Pembayaran/Read/{$pembayaran['uuid']}");
+    $kasirs = $this->Kasirs->getAllUuid();
+    foreach ($kasirs as $kasir) {
+      $this->Notifikasis->create([
+        'user' => $kasir->uuid,
+        'judul' => "Pembayaran Baru: {$pembayaran['kode']}",
+        'informasi' => "Pembayaran baru, silakan klik link berikut: <u><a href='{$href}'>{$pembayaran['kode']}</a></u>"
+      ]);
+    }
   }
 }

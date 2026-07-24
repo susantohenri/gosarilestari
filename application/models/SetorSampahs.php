@@ -386,7 +386,8 @@ class SetorSampahs extends MY_Model
 			->db
 			->query("
 					SELECT
-						u.nama
+						u.nama,
+						u.agen
 					FROM {$this->table} ss
 					LEFT JOIN user u ON ss.warga = u.uuid
 					WHERE ss.kategori = 'merah'

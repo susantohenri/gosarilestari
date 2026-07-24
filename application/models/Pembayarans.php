@@ -13,7 +13,8 @@ class Pembayarans extends MY_Model
             (object) ['mData' => 'kode', 'sTitle' => 'KODE'],
             (object) ['mData' => 'fwaktu', 'sTitle' => 'TANGGAL'],
             (object) ['mData' => 'fwarga', 'sTitle' => 'WARGA'],
-            (object) ['mData' => 'fpetugas', 'sTitle' => 'PETUGAS'],
+            (object) ['mData' => 'fagen', 'sTitle' => 'AGEN'],
+            (object) ['mData' => 'fkasir', 'sTitle' => 'KASIR'],
             (object) ['mData' => 'fnominal', 'sTitle' => 'NOMINAL'],
             (object) ['mData' => 'catatan', 'sTitle' => 'CATATAN'],
             (object) ['mData' => 'status', 'sTitle' => 'POSISI'],
@@ -83,12 +84,14 @@ class Pembayarans extends MY_Model
             ->select("{$this->table}.kode")
             ->select("DATE_FORMAT({$this->table}.createdAt, '%d %b %Y %H:%i') AS fwaktu", false)
             ->select("warga.nama AS fwarga", false)
-            ->select("petugas.nama AS fpetugas", false)
+            ->select("agen.nama AS fagen", false)
+            ->select("kasir.nama AS fkasir", false)
             ->select("CONCAT('Rp ', FORMAT({$this->table}.nominal, 0, 'id_ID')) as fnominal", false)
             ->select("{$this->table}.catatan")
             ->select("{$this->table}.status")
             ->join('user AS warga', "warga.uuid = {$this->table}.warga", 'left')
-            ->join('user AS petugas', "petugas.uuid = {$this->table}.petugas", 'left')
+            ->join('user AS agen', "agen.uuid = {$this->table}.agen", 'left')
+            ->join('user AS kasir', "kasir.uuid = {$this->table}.kasir", 'left')
         ;
 
         $controller = $this->router->class;
@@ -110,13 +113,31 @@ class Pembayarans extends MY_Model
             ->generate();
     }
 
+    function save($record)
+    {
+        if ('AGEN' === $record['status'] && 'Agen' === $this->session->userdata('role_name')) {
+            $record['agen'] = $this->session->userdata('uuid');
+        }
+        return parent::save($record);
+    }
+
     function create($record)
     {
         if ('KASIR' === $record['status']) {
             $uuid = parent::create($record);
             $created = $this->findOne($uuid);
-            return $this->approve($created);
-        } else return parent::create($record);
+            $this->approve($created);
+        } else {
+            $created = parent::create($record);
+        }
+
+        if ('WARGA' === $record['status']) {
+            $pymt = $this->findOne($created);
+            $this->load->model('Notifikasis');
+            $this->Notifikasis->pembayaranBaru($pymt);
+        }
+
+        return $created;
     }
 
     function update($next)
@@ -262,7 +283,7 @@ class Pembayarans extends MY_Model
 
     protected function approve($pembayaran)
     {
-        $pembayaran['petugas'] = $this->session->userdata('uuid');
+        $pembayaran['kasir'] = $this->session->userdata('uuid');
         $pembayaran['approvedAt'] = date('Y-m-d H:i:s');
         $uuid = parent::update($pembayaran);
 
@@ -272,7 +293,7 @@ class Pembayarans extends MY_Model
             'kode' => $pembayaran['kode'],
             'transaksi' => $pembayaran['uuid'],
             'warga' => $pembayaran['warga'],
-            'petugas' => $pembayaran['petugas'],
+            'petugas' => $pembayaran['kasir'],
             'tipe' => 'SETOR_TUNAI',
             'keterangan' => "Setor tunai senilai Rp {$nominal}",
             'nilai' => $pembayaran['nominal']

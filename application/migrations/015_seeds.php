@@ -399,7 +399,7 @@ class Migration_seeds extends CI_Migration
                 $this->Pembayarans->save([
                     'warga' => $warga->uuid,
                     'nominal' => rand(30, 90) * 1000,
-                    'status' => ['WARGA', 'AGEN', 'KASIR'][rand(0, 1)]
+                    'status' => ['WARGA', 'AGEN', 'KASIR'][rand(0, 2)]
                 ]);
             }
 

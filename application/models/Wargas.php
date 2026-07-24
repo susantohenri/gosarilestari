@@ -186,6 +186,7 @@ class Wargas extends MY_Model
 		$this
 			->db
 			->select("{$this->table}.nama")
+			->select("{$this->table}.agen")
 			->where("{$this->table}.saldo <", 0, false);
 		return $this->find();
 	}

@@ -63,15 +63,12 @@ class ExportImport extends MY_Controller
 
 		$output = fopen('php://output', 'w');
 
-		fputcsv($output, ['username', 'password', 'nama', 'kontak', 'alamat', 'rtrw']);
+		fputcsv($output, ['nama', 'kontak', 'alamat']);
 
 		$sample_row = [
-			'ahmadrizki',
-			'123456',
 			'Ahmad Rizki',
 			'081234567890',
 			'Jl. Merdeka No. 45',
-			'Kembangputihan RT 006'
 		];
 
 		fputcsv($output, $sample_row);
@@ -114,7 +111,7 @@ class ExportImport extends MY_Controller
 		$headers = fgetcsv($file);
 
 		// Validasi header
-		$expected_headers = ['username', 'password', 'nama', 'kontak', 'alamat', 'rtrw'];
+		$expected_headers = ['nama', 'kontak', 'alamat'];
 		$headers = array_map(function ($header) {
 			return trim(str_replace("\xEF\xBB\xBF", '', $header));
 		}, $headers);
@@ -126,10 +123,8 @@ class ExportImport extends MY_Controller
 			return;
 		}
 
-		$this->load->model(['Wargas', 'Rtrws']);
-		$rtrws = $this->Rtrws->find();
-		$rtrw = [];
-		foreach ($rtrws as $item) $rtrw[$item->nama] = $item->uuid;
+		$this->load->model('Wargas');
+
 		// Mulai transaction
 		$this->db->trans_start();
 
@@ -143,25 +138,21 @@ class ExportImport extends MY_Controller
 			$row_number++;
 
 			// Skip baris kosong
-			if (count($data) < 6 || (count($data) == 1 && empty($data[0]))) {
+			if (count($data) < 3 || (count($data) == 1 && empty($data[0]))) {
 				continue;
 			}
 
 			// Bersihkan data
 			$user_data = [
-				'username' => trim($data[0]),
-				'password' => trim($data[1]),
-				'nama' => trim($data[2]),
-				'kontak' => trim($data[3]),
-				'alamat' => trim($data[4]),
-				'rtrw' => $rtrw[trim($data[5])],
+				'nama' => trim($data[0]),
+				'kontak' => trim($data[1]),
+				'username' => trim($data[1]),
+				'alamat' => trim($data[2]),
 			];
 
 			// Validasi dasar
 			if (
-				empty($user_data['username'])
-				|| empty($user_data['password'])
-				|| empty($user_data['nama'])
+				empty($user_data['nama'])
 			) {
 				$failed_count++;
 				$failed_rows[] = $row_number;
@@ -182,10 +173,10 @@ class ExportImport extends MY_Controller
 		// Commit atau rollback
 		if ($failed_count == 0) {
 			$this->db->trans_complete();
-			$this->session->set_flashdata('success', "Berhasil import $success_count data user");
+			$this->session->set_flashdata('model_error', "Berhasil import $success_count data user");
 		} else {
 			$this->db->trans_rollback();
-			$this->session->set_flashdata('error', "Gagal import! $success_count berhasil, $failed_count gagal. Baris error: " . implode(', ', array_slice($failed_rows, 0, 10)));
+			$this->session->set_flashdata('model_error', "Gagal import! $success_count berhasil, $failed_count gagal. Baris error: " . implode(', ', array_slice($failed_rows, 0, 10)));
 		}
 
 		redirect(site_url('Warga'));
