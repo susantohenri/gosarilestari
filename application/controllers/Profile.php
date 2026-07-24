@@ -17,6 +17,12 @@ class Profile extends MY_Controller
             case 'Admin':
                 $this->model = 'Users';
                 break;
+            case 'Kasir':
+                $this->model = 'Kasirs';
+                break;
+            case 'Agen':
+                $this->model = 'Agens';
+                break;
             case 'Petugas':
                 $this->model = 'Petugass';
                 break;

@@ -41,7 +41,15 @@ class Pembayaran extends MY_Controller
 
 		// approved Pembayaran shouldn't be updated or deleted
 		$found = $this->$model->findOne($id);
-		if ('APPROVED' === $found['status']) {
+		if ('KASIR' === $found['status']) {
+			$this->load->model('Permissions');
+			$vars['permission'] = array_filter($this->Permissions->getPermissions(), function ($perm) {
+				return !in_array($perm, ['update_Pembayaran', 'delete_Pembayaran']);
+			});
+		}
+
+		// warga shouldn't be able to update pembayaran which is already in AGEN
+		if ('AGEN' === $found['status'] && 'Warga' === $this->session->userdata('role_name')) {
 			$this->load->model('Permissions');
 			$vars['permission'] = array_filter($this->Permissions->getPermissions(), function ($perm) {
 				return !in_array($perm, ['update_Pembayaran', 'delete_Pembayaran']);

@@ -14,7 +14,7 @@ class Migration_pembayaran extends CI_Migration
         `updatedAt` datetime DEFAULT NULL,
         `approvedAt` datetime DEFAULT NULL,
         `deletedAt` datetime DEFAULT NULL,
-        `status` ENUM('PENDING', 'APPROVED'),
+        `status` ENUM('WARGA', 'AGEN', 'KASIR'),
         `kode` varchar(6) NOT NULL,
         `warga` varchar(36) NOT NULL,
         `petugas` varchar(36) NOT NULL,

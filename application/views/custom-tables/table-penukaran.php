@@ -25,7 +25,7 @@
   <div class="p-4 md:p-6">
     <div class="flex flex-col gap-3 border-b border-line p-4 lg:flex-row lg:items-center lg:justify-between">
       <form name="custom_table_filter" class="flex flex-1 flex-col gap-3 md:flex-row">
-        <label class="flex items-center gap-3 rounded-xl border border-line bg-slate-50 px-4 py-3 md:w-[60%]">
+        <label class="flex items-center gap-3 rounded-xl border border-line bg-slate-50 px-4 py-3 md:w-full">
           <span class="text-slate-400 fa-solid fa-magnifying-glass"></span>
           <input name="kode" type="text" placeholder="Cari kode penukaran" class="w-full bg-transparent text-sm text-slate-500 outline-none">
         </label>

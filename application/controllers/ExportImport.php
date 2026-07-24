@@ -16,6 +16,8 @@ class ExportImport extends MY_Controller
 
 		switch ($this->session->userdata('role_name')) {
 			case 'Admin':
+			case 'Kasir':
+			case 'Agen':
 			case 'Petugas':
 				$views = 'pdfs/export-laporan-petugas-pdf';
 				$data = [

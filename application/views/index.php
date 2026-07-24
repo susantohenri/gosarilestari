@@ -32,16 +32,7 @@
     </div>
 
     <div class="flex-1 overflow-y-auto py-4">
-      <?php
-      if ($role_name === 'Admin') {
-        $menuFile = 'superadmin';
-      } elseif ($role_name === 'Petugas') {
-        $menuFile = 'petugas';
-      } else {
-        $menuFile = 'warga';
-      }
-      include "menus/{$menuFile}.php";
-      ?>
+      <?php include "menus/{$role_name}.php"; ?>
     </div>
 
     <?php
@@ -129,15 +120,6 @@
       <script type="text/javascript" src="<?= base_url("assets/js/{$script}") ?>"></script>
   <?php endforeach;
   endif; ?>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('<?= base_url('service-worker.js') ?>')
-          .then(reg => console.log('Service Worker terdaftar!', reg))
-          .catch(err => console.error('Gagal daftar Service Worker:', err));
-      });
-    }
-  </script>
   <script src="<?= base_url('assets/js/shell.js') ?>"></script>
 </body>
 

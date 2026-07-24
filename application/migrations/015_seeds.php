@@ -10,7 +10,6 @@ class Migration_seeds extends CI_Migration
             'Users',
             'Roles',
             'Permissions',
-            'Menus',
             'Konfigurasis',
             'Wargas',
             'Rtrws',
@@ -21,127 +20,84 @@ class Migration_seeds extends CI_Migration
             'Pembayarans',
             'Penukarans'
         ]);
-        $fas = ['database', 'desktop', 'download', 'ethernet', 'hdd', 'hdd', 'headphones', 'keyboard', 'keyboard', 'laptop', 'memory', 'microchip', 'mobile', 'mobile-alt', 'plug', 'power-off', 'print', 'satellite', 'satellite-dish', 'save', 'save', 'sd-card', 'server', 'sim-card', 'stream', 'tablet', 'tablet-alt', 'tv', 'upload'];
 
-        $admin = $this->Roles->create(['name' => 'Admin']);
-        $petugas = $this->Roles->create(['name' => 'Petugas']);
-        $warga = $this->Roles->create(['name' => 'Warga']);
+        $roles = [
+            'Admin' => [
+                [
+                    'action' => ['index', 'create', 'read', 'update', 'delete'],
+                    'entities' => ['User', 'Kasir', 'Agen', 'Petugas', 'Warga', 'Rtrw', 'KategoriSampah', 'ProdukTukar', 'Pembayaran', 'Penukaran', 'SetorSampah', 'Informasi']
+                ],
+                [
+                    'action' => ['index', 'read', 'update'],
+                    'entities' => ['Konfigurasi']
+                ],
+                [
+                    'action' => ['index', 'read'],
+                    'entities' => ['Notifikasi', 'Ledger']
+                ]
+            ],
+            'Kasir' => [
+                [
+                    'action' => ['index', 'create', 'read', 'update', 'delete'],
+                    'entities' => ['Warga', 'ProdukTukar', 'Penukaran']
+                ],
+                [
+                    'action' => ['index', 'read'],
+                    'entities' => ['Informasi', 'Notifikasi', 'Ledger']
+                ],
+                [
+                    'action' => ['index', 'create', 'read', 'update'],
+                    'entities' => ['Pembayaran']
+                ]
+            ],
+            'Agen' => [
+                [
+                    'action' => ['index', 'create', 'read', 'update'],
+                    'entities' => ['Pembayaran']
+                ],
+                [
+                    'action' => ['index', 'read'],
+                    'entities' => ['Warga', 'Informasi', 'Notifikasi', 'Ledger']
+                ]
+            ],
+            'Petugas' => [
+                [
+                    'action' => ['index', 'create', 'read'],
+                    'entities' => ['SetorSampah']
+                ],
+                [
+                    'action' => ['index', 'read'],
+                    'entities' => ['Informasi', 'Notifikasi', 'Ledger']
+                ]
+            ],
+            'Warga' => [
+                [
+                    'action' => ['index', 'create', 'read', 'update', 'delete'],
+                    'entities' => ['Pembayaran', 'Penukaran']
+                ],
+                [
+                    'action' => ['index', 'read'],
+                    'entities' => ['Informasi', 'Notifikasi', 'Ledger']
+                ]
+            ],
+        ];
 
-        $baseEntities = ['User', 'Role', 'Permission', 'Menu', 'Petugas'];
-        $petugasEntities = ['Warga', 'Rtrw', 'KategoriSampah', 'ProdukTukar', 'Informasi', 'Pembayaran', 'Penukaran'];
-        $transaksiEntities = ['SetorSampah'];
-        $wargaEntities = ['TukarProduk', 'Notifikasi'];
-        $allPermissions = ['index', 'create', 'read', 'update', 'delete'];
-        $wargaPermissions = ['index', 'read'];
-
-        // permission superadmin
-        foreach (array_merge($baseEntities, $petugasEntities, $transaksiEntities) as $entity) {
-            foreach ($allPermissions as $action) {
-                $this->Permissions->create([
-                    'role' => $admin,
-                    'action' => $action,
-                    'entity' => $entity
-                ]);
-            }
-            $this->Menus->create([
-                'role' => $admin,
-                'name' => $entity,
-                'url' => $entity,
-                'icon' => $fas[rand(0, count($fas) - 1)]
-            ]);
-        }
-
-        // permission petugas
-        foreach ($petugasEntities as $entity) {
-            foreach ($allPermissions as $action) {
-                $this->Permissions->create([
-                    'role' => $petugas,
-                    'action' => $action,
-                    'entity' => $entity
-                ]);
-            }
-            $this->Menus->create([
-                'role' => $petugas,
-                'name' => $entity,
-                'url' => $entity,
-                'icon' => $fas[rand(0, count($fas) - 1)]
-            ]);
-        }
-        foreach ($transaksiEntities as $entity) {
-            foreach (['index', 'create', 'read'] as $action) {
-                $this->Permissions->create([
-                    'role' => $petugas,
-                    'action' => $action,
-                    'entity' => $entity
-                ]);
-            }
-            $this->Menus->create([
-                'role' => $petugas,
-                'name' => $entity,
-                'url' => $entity,
-                'icon' => $fas[rand(0, count($fas) - 1)]
-            ]);
-        }
-        foreach (['index', 'read', 'update'] as $action) {
-            $this->Permissions->create([
-                'role' => $petugas,
-                'action' => $action,
-                'entity' => 'Konfigurasi'
-            ]);
-        }
-        foreach (['Ledger', 'Notifikasi'] as $entity) {
-            foreach (['index', 'read'] as $action) {
-                $this->Permissions->create([
-                    'role' => $petugas,
-                    'action' => $action,
-                    'entity' => $entity
-                ]);
-            }
-        }
-
-        // permission warga
-        foreach ($wargaEntities as $entity) {
-            foreach ($wargaPermissions as $action) {
-                $this->Permissions->create([
-                    'role' => $warga,
-                    'action' => $action,
-                    'entity' => $entity
-                ]);
-            }
-            $this->Menus->create([
-                'role' => $warga,
-                'name' => $entity,
-                'url' => $entity,
-                'icon' => $fas[rand(0, count($fas) - 1)]
-            ]);
-        }
-        $this->Permissions->create([
-            'role' => $warga,
-            'action' => 'create',
-            'entity' => 'TukarProduk'
-        ]);
-        $this->Permissions->create([
-            'role' => $warga,
-            'action' => 'read',
-            'entity' => 'Ledger'
-        ]);
-        $this->Permissions->create([
-            'role' => $warga,
-            'action' => 'index',
-            'entity' => 'Informasi'
-        ]);
-        $this->Permissions->create([
-            'role' => $warga,
-            'action' => 'read',
-            'entity' => 'Informasi'
-        ]);
-        foreach (['Pembayaran', 'Penukaran'] as $entity) {
-            foreach ($allPermissions as $action) {
-                $this->Permissions->create([
-                    'role' => $warga,
-                    'action' => $action,
-                    'entity' => $entity
-                ]);
+        foreach ($roles as $role => $permissions) {
+            $roleId = $this->Roles->create(['name' => $role]);
+            if ('Admin' === $role) $admin = $roleId;
+            if ('Kasir' === $role) $kasir = $roleId;
+            if ('Agen' === $role) $agen = $roleId;
+            if ('Petugas' === $role) $petugas = $roleId;
+            foreach ($permissions as $permission) {
+                foreach ($permission['action'] as $action) {
+                    foreach ($permission['entities'] as $entity) {
+                        $this->Permissions->create([
+                            'role' => $roleId,
+                            'entity' => $entity,
+                            'action' => $action
+                        ]);
+                    }
+                }
             }
         }
 
@@ -325,11 +281,22 @@ class Migration_seeds extends CI_Migration
         }
 
         if ('development' === ENVIRONMENT) {
-            //  petugas
             $this->Users->create([
-                'username' => '081901088918',
+                'username' => 'kasir',
                 'password' => md5('123'),
-                'nama' => 'Ahmad Rizki',
+                'nama' => 'Saya Kasir',
+                'role' => $kasir
+            ]);
+            $this->Users->create([
+                'username' => 'agen',
+                'password' => md5('123'),
+                'nama' => 'Saya Agen',
+                'role' => $agen
+            ]);
+            $this->Users->create([
+                'username' => 'petugas',
+                'password' => md5('123'),
+                'nama' => 'Saya Petugas',
                 'role' => $petugas
             ]);
 
@@ -432,7 +399,7 @@ class Migration_seeds extends CI_Migration
                 $this->Pembayarans->save([
                     'warga' => $warga->uuid,
                     'nominal' => rand(30, 90) * 1000,
-                    'status' => ['PENDING', 'APPROVED'][rand(0, 1)]
+                    'status' => ['WARGA', 'AGEN', 'KASIR'][rand(0, 1)]
                 ]);
             }
 

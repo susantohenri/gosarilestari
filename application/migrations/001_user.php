@@ -24,6 +24,7 @@ class Migration_user extends CI_Migration
         `kontak` varchar(255) NOT NULL,
         `alamat` varchar(255) NOT NULL,
         `rtrw` varchar(36) NOT NULL,
+        `agen` varchar(36) NOT NULL,
         `saldo` float NOT NULL DEFAULT 0,
         PRIMARY KEY (`uuid`),
         KEY `role` (`role`)

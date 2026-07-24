@@ -16,7 +16,7 @@ class Pembayarans extends MY_Model
             (object) ['mData' => 'fpetugas', 'sTitle' => 'PETUGAS'],
             (object) ['mData' => 'fnominal', 'sTitle' => 'NOMINAL'],
             (object) ['mData' => 'catatan', 'sTitle' => 'CATATAN'],
-            (object) ['mData' => 'status', 'sTitle' => 'STATUS'],
+            (object) ['mData' => 'status', 'sTitle' => 'POSISI'],
             (object) ['mData' => 'aksi', 'sTitle' => 'AKSI'],
         ];
 
@@ -49,8 +49,9 @@ class Pembayarans extends MY_Model
                 'name' => 'status',
                 'label' => 'Status',
                 'options' => [
-                    ['text' => 'PENDING', 'value' => 'PENDING'],
-                    ['text' => 'APPROVED', 'value' => 'APPROVED'],
+                    ['text' => 'WARGA', 'value' => 'WARGA'],
+                    ['text' => 'AGEN', 'value' => 'AGEN'],
+                    ['text' => 'KASIR', 'value' => 'KASIR'],
                 ]
             )
         ];
@@ -58,8 +59,13 @@ class Pembayarans extends MY_Model
 
     public function dt()
     {
-        if ('Warga' === $this->session->userdata('role_name')) {
-            $this->datatables->where('warga.uuid', $this->session->userdata('uuid'));
+        switch ($this->session->userdata('role_name')) {
+            case 'Warga':
+                $this->datatables->where('warga.uuid', $this->session->userdata('uuid'));
+                break;
+            case 'Agen':
+                $this->datatables->where('warga.agen', $this->session->userdata('uuid'));
+                break;
         }
 
         if ($customFilter = $this->input->post('customFilter')) {
@@ -91,18 +97,10 @@ class Pembayarans extends MY_Model
 
         $this
             ->db
-            ->select("if('PENDING' = {$this->table}.status,
-                CONCAT(
-                    '<div class=\"flex flex-wrap gap-2\">',
-                    '<a class=\"px-2 py-1 text-xs text-white bg-yellow-500 rounded hover:bg-yellow-600\" href=\"{$edit}', {$this->table}.uuid, '\"><i class=\"fa fa-file-lines\"></i></a>'
-                    '<a class=\"px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600\" href=\"{$delete}', {$this->table}.uuid, '\"><i class=\"fa fa-trash\"></i></a>',
-                    '</div>'
-                ),
-                CONCAT(
-                    '<div class=\"flex flex-wrap gap-2\">',
-                    '<a class=\"px-2 py-1 text-xs text-white bg-yellow-500 rounded hover:bg-yellow-600\" href=\"{$edit}', {$this->table}.uuid, '\"><i class=\"fa fa-file-lines\"></i></a>'
-                    '</div>'
-                )
+            ->select("CONCAT(
+                '<div class=\"flex flex-wrap gap-2\">',
+                '<a class=\"px-2 py-1 text-xs text-white bg-yellow-500 rounded hover:bg-yellow-600\" href=\"{$edit}', {$this->table}.uuid, '\"><i class=\"fa fa-file-lines\"></i></a>'
+                '</div>'
             ) as aksi", false);
 
         return $this
@@ -114,7 +112,7 @@ class Pembayarans extends MY_Model
 
     function create($record)
     {
-        if ('APPROVED' === $record['status']) {
+        if ('KASIR' === $record['status']) {
             $uuid = parent::create($record);
             $created = $this->findOne($uuid);
             return $this->approve($created);
@@ -124,45 +122,137 @@ class Pembayarans extends MY_Model
     function update($next)
     {
         $prev = $this->findOne($next['uuid']);
-        if ('APPROVED' === $prev['status']) return ['error' => 'Update tidak diizinkan'];
-        if ('APPROVED' === $next['status']) {
+        if ('KASIR' === $prev['status']) return ['error' => 'Update tidak diizinkan'];
+
+        if ('AGEN' === $prev['status']) {
+            switch ($next['status']) {
+                case 'WARGA':
+                    return ['error' => 'Update tidak diizinkan'];
+                case 'AGEN':
+                    break;
+                case 'KASIR':
+                    break;
+            }
+        }
+
+        if ('KASIR' === $next['status']) {
             return $this->approve(array_merge($prev, $next));
         }
         return parent::update($next);
     }
 
+    /*
+        skenario pembayaran
+        1. warga bayar tunai ke kasir
+            - kasir buat pembayaran baru, statusnya KASIR
+        2. warga bayar transfer ke kasir
+            - warga buat pembayaran baru, statusnya WARGA
+            - kasir cek mutasi,
+                - jika sesuai, update status ke KASIR
+                - jika tidak sesuai, minta warga edit/hapus
+        3. warga bayar tunai ke agen
+            - agen buat pembayaran baru, statusnya AGEN
+            - warga bisa validasi melalui akunnya
+                - jika tidak sesuai, warga bisa menghapus & meminta agen input ulang
+            - agen setor ke kasir
+                - kasir hitung uang tunai
+                    - jika sesuai, update status ke KASIR
+                    - jika tidak, status tetap di AGEN
+        4. warga bayar transfer ke agen
+            - warga buat pembayaran baru, statusnya WARGA
+            - agen cek mutasi
+                - jika sesuai, agen update status ke AGEN
+                - jika tidak sesuai, agen minta warga edit/hapus
+            - agen setor ke kasir
+                - kasir hitung uang tunai
+                    - jika sesuai, update status ke KASIR
+                    - jika tidak, status tetap di AGEN
+    */
     public function getForm($uuid = false, $isSubform = false)
     {
-        $isWarga = 'Warga' === $this->session->userdata('role_name');
+        $roleName = $this->session->userdata('role_name');
+        // $current = !!$uuid ? $this->findOne($uuid) : ['status' => null];
+
         $form = parent::getForm($uuid, $isSubform);
-        $form = array_map(function ($field) use ($isWarga, $uuid) {
+        $form = array_map(function ($field) use ($roleName, $uuid) {
             switch ($field['name']) {
                 case 'warga':
-                    // warga can only create & update belongs to his own
-                    if ($isWarga) {
-                        $field['options'] = [
-                            [
-                                'text' => $this->session->userdata('nama'),
-                                'value' => $this->session->userdata('uuid')
-                            ]
-                        ];
-                        $field['attr'] = '';
+                    switch ($roleName) {
+                        case 'Warga':
+                            // warga can only create & update belongs to his own
+                            $field['options'] = [
+                                [
+                                    'text' => $this->session->userdata('nama'),
+                                    'value' => $this->session->userdata('uuid')
+                                ]
+                            ];
+                            $field['attr'] = '';
+                            break;
+                        case 'Agen':
+                        case 'Kasir':
+                            // agen & kasir aren't allowed to change warga
+                            if (!!$uuid) {
+                                $field['attr'] .= ' disabled="disabled"';
+                            }
+                            break;
+                        case 'Admin':
+                            break;
                     }
                     break;
                 case 'status':
-                    // warga not allowed to change status
-                    if ($isWarga) {
-                        if (!$uuid) {
-                            $field['options'] = [['text' => 'PENDING', 'value' => 'PENDING']];
-                        } else {
-                            $field['options'] = array_filter($field['options'], function ($option) use ($field) {
-                                return $option['value'] === $field['value'];
-                            });
-                        }
+                    switch ($roleName) {
+                        case 'Warga':
+                            if (!$uuid) {
+                                // warga can only create WARGA payment
+                                $field['options'] = [['text' => 'WARGA', 'value' => 'WARGA']];
+                            }
+                            break;
+                        case 'Agen':
+                            if (!$uuid) {
+                                // agen can only create AGEN payment
+                                $field['options'] = [['text' => 'AGEN', 'value' => 'AGEN']];
+                            } else {
+                                // agen only allowed to change status from current status to AGEN
+                                $field['options'] = array_filter($field['options'], function ($option) use ($field) {
+                                    return $option['value'] === $field['value'];
+                                });
+                                if ('AGEN' !== $field['value']) $field['options'][] = ['text' => 'AGEN', 'value' => 'AGEN'];
+                            }
+                            break;
+                        case 'Kasir':
+                            if (!$uuid) {
+                                // kasir can only create KASIR payment
+                                $field['options'] = [['text' => 'KASIR', 'value' => 'KASIR']];
+                            } else {
+                                // kasir only allowed to change status from current status to KASIR
+                                $field['options'] = array_filter($field['options'], function ($option) use ($field) {
+                                    return $option['value'] === $field['value'];
+                                });
+                                if ('KASIR' !== $field['value']) $field['options'][] = ['text' => 'KASIR', 'value' => 'KASIR'];
+                            }
+                            break;
+                        case 'Admin':
+                            break;
                     }
-                    if (isset($field['value']) && 'APPROVED' === $field['value']) {
-                        $field['options'] = [['text' => 'APPROVED', 'value' => 'APPROVED']];
+                    if ('Warga' === $roleName) {
                     }
+                    break;
+                case 'nominal':
+                case 'catatan':
+                    switch ($roleName) {
+                        case 'Warga':
+                            break;
+                        case 'Agen':
+                        case 'Kasir':
+                            // agen & kasir aren't allowed to change nominal & catatan
+                            if (!!$uuid) {
+                                $field['attr'] .= ' readonly="true"';
+                            }
+                            break;
+                        case 'Admin':
+                            break;
+                    }
+
                     break;
             }
             return $field;

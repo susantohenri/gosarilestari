@@ -3,10 +3,12 @@
 <?php sidebar_section('Menu Utama'); ?>
 <?php sidebar_link('Dashboard', 'Dashboard', 'house', 'Overview', $current); ?>
 <?php sidebar_link('Warga', 'Warga', 'users', 'Manajemen Warga', $current); ?>
+<?php sidebar_link('ProdukTukar', 'ProdukTukar', 'box-open', 'Produk Tukar', $current); ?>
 <?php sidebar_section_end(); ?>
 
 <?php sidebar_section('Transaksi'); ?>
-<?php sidebar_link('SetorSampah', 'SetorSampah', 'recycle', 'Setor Sampah', $current); ?>
+<?php sidebar_link('Pembayaran', 'Pembayaran', 'money-bill-wave', 'Pembayaran', $current); ?>
+<?php sidebar_link('Penukaran', 'Penukaran', 'cart-shopping', 'Penukaran Produk', $current); ?>
 <?php sidebar_link('Ledger', 'Ledger', 'clock-rotate-left', 'Riwayat Transaksi', $current); ?>
 <?php sidebar_section_end(); ?>
 

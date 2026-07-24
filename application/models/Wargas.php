@@ -49,6 +49,17 @@ class Wargas extends MY_Model
 				)
 			),
 			array(
+				'name' => 'agen',
+				'label' => 'Agen',
+				'options' => array(),
+				'width' => 2,
+				'attributes' => array(
+					array('data-autocomplete' => 'true'),
+					array('data-model' => 'Agens'),
+					array('data-field' => 'nama')
+				)
+			),
+			array(
 				'name' => 'saldo',
 				'width' => 2,
 				'label' => 'Saldo',
@@ -98,6 +109,9 @@ class Wargas extends MY_Model
 		if ('' !== $params['rtrw']) {
 			$this->datatables->where('rtrw.uuid', $params['rtrw']);
 		}
+		if ('' !== $params['agen']) {
+			$this->datatables->where("{$this->table}.agen", $params['agen']);
+		}
 		if ('' !== $params['status']) {
 			$this->datatables->where('user.status', $params['status']);
 		}
@@ -122,15 +136,26 @@ class Wargas extends MY_Model
 		$delete = site_url("{$controller}/Delete/");
 		$printQr = site_url("ExportImport/printQrWarga/");
 
-		$this
-			->db
-			->select("CONCAT(
+		if ('Admin' === $this->session->userdata('role_name')) {
+			$this
+				->db
+				->select("CONCAT(
                 '<div class=\"flex flex-wrap gap-2\">',
                 '<a target=\"_blank\" class=\"px-2 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600\" href=\"{$printQr}', {$this->table}.uuid, '\"><i class=\"fa fa-qrcode\"></i></a>'
                 '<a class=\"px-2 py-1 text-xs text-white bg-yellow-500 rounded hover:bg-yellow-600\" href=\"{$edit}', {$this->table}.uuid, '\"><i class=\"fa fa-file-lines\"></i></a>'
                 '<a class=\"px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600\" href=\"{$delete}', {$this->table}.uuid, '\"><i class=\"fa fa-trash\"></i></a>',
                 '</div>'
             ) as aksi", false);
+		} else {
+			$this
+				->db
+				->select("CONCAT(
+                '<div class=\"flex flex-wrap gap-2\">',
+                '<a target=\"_blank\" class=\"px-2 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600\" href=\"{$printQr}', {$this->table}.uuid, '\"><i class=\"fa fa-qrcode\"></i></a>'
+                '<a class=\"px-2 py-1 text-xs text-white bg-yellow-500 rounded hover:bg-yellow-600\" href=\"{$edit}', {$this->table}.uuid, '\"><i class=\"fa fa-file-lines\"></i></a>'
+                '</div>'
+            ) as aksi", false);
+		}
 
 		$this->db->order_by("{$this->table}.createdAt", 'desc');
 		return $this
@@ -195,6 +220,10 @@ class Wargas extends MY_Model
 
 	public function select2($field, $term)
 	{
+		if ('Agen' === $this->session->userdata('role_name')) {
+			$this->db->where('agen', $this->session->userdata('uuid'));
+		}
+
 		return $this
 			->db
 			->select("{$this->table}.uuid as id", false)

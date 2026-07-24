@@ -16,7 +16,9 @@
 <?php sidebar_section_end(); ?>
 
 <?php sidebar_section('Sistem'); ?>
-<?php sidebar_link('Petugas', 'Petugas', 'user-gear', 'Petugas', $current); ?>
+<?php sidebar_link('Kasir', 'Kasir', 'cash-register', 'Kasir', $current); ?>
+<?php sidebar_link('Agen', 'Agen', 'user-tie', 'Agen', $current); ?>
+<?php sidebar_link('Petugas', 'Petugas', 'truck', 'Petugas', $current); ?>
 <?php sidebar_link('Informasi', 'Informasi', 'newspaper', 'Informasi', $current); ?>
 <?php sidebar_link('Konfigurasi', 'Konfigurasi', 'gear', 'Konfigurasi', $current); ?>
 <?php sidebar_link('Notifikasi', 'Notifikasi', 'bell', 'Notifikasi', $current); ?>
