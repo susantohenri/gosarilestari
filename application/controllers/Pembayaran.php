@@ -57,6 +57,10 @@ class Pembayaran extends MY_Controller
 		}
 
 		$vars['page_name'] = 'form';
+		if ('KASIR' !== $found['status'] && 'Kasir' === $this->session->userdata('role_name')) {
+			$vars['page_name'] = 'form-approval';
+		}
+
 		$vars['form'] = $this->$model->getForm($id);
 		$vars['uuid'] = $id;
 		$vars['js'] = [
