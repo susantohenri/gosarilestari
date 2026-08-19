@@ -25,7 +25,7 @@
         <i class="fa-solid fa-arrow-trend-up"></i> <?= number_format($card_saldo['progress'], 1) ?>%
       </span>
     </div>
-    <div class="text-slate-500 text-sm font-medium mb-1">Saldo Beredar</div>
+    <div class="text-slate-500 text-sm font-medium mb-1"><?= 'Warga' == $role_name ? 'Saldo' : 'Saldo Beredar' ?></div>
     <div class="text-2xl font-bold text-slate-800">Rp <?= number_format($card_saldo['beredar'], 0, ',', '.') ?></div>
   </div>
 
@@ -148,8 +148,7 @@
       <thead>
         <tr>
           <th>warga</th>
-          <th style="text-align: right;">tagihan belum terbayar</th>
-          <th style="text-align: right;">sampah belum terpilah</th>
+          <th style="text-align: right;">saldo</th>
         </tr>
       </thead>
     </table>
