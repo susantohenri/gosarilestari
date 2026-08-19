@@ -231,7 +231,9 @@ class Pembayarans extends MY_Model
                         case 'Agen':
                             if (!$uuid) {
                                 // agen can only create AGEN payment
-                                $field['options'] = [['text' => 'AGEN', 'value' => 'AGEN']];
+                                // $field['options'] = [['text' => 'AGEN', 'value' => 'AGEN']];
+                                $field['type'] = 'hidden';
+                                $field['value'] = 'AGEN';
                             } else {
                                 // agen only allowed to change status from current status to AGEN
                                 $field['options'] = array_filter($field['options'], function ($option) use ($field) {
