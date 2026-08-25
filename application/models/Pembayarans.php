@@ -47,6 +47,11 @@ class Pembayarans extends MY_Model
                 'label' => 'Catatan'
             ),
             array(
+                'name' => 'buktitransfer',
+                'label' => 'Bukti Pembayaran',
+                'type' => 'file'
+            ),
+            array(
                 'name' => 'status',
                 'label' => 'Status',
                 'options' => [
@@ -117,6 +122,17 @@ class Pembayarans extends MY_Model
     {
         if ('AGEN' === $record['status'] && 'Agen' === $this->session->userdata('role_name')) {
             $record['agen'] = $this->session->userdata('uuid');
+        }
+
+        if (isset($_FILES['buktitransfer']) && $_FILES['buktitransfer']['error'] == 0) {
+            $location = 'buktitransfer';
+            $newfile = $_FILES['buktitransfer'];
+            $oldfile = null;
+            if (isset($record['uuid'])) {
+                $oldRecord = $this->findOne($record['uuid']);
+                if ('' !== $oldRecord['buktitransfer']) $oldfile = $oldRecord['buktitransfer'];
+            }
+            $record['buktitransfer'] = $this->fileupload($location, $newfile, $oldfile);
         }
         return parent::save($record);
     }
@@ -302,5 +318,24 @@ class Pembayarans extends MY_Model
         ]);
 
         return $uuid;
+    }
+
+    function cleanUpFiles()
+    {
+        $records = $this
+            ->db
+            ->select('uuid')
+            ->select('buktitransfer')
+            ->where('status', 'KASIR')
+            ->where('buktitransfer !=', '')
+            ->where('createdAt <', 'DATE_SUB(NOW(), INTERVAL 30 DAY)', FALSE)
+            ->get($this->table)
+            ->result();
+        foreach ($records as $record) {
+            if (file_exists($record->buktitransfer)) {
+                unlink($record->buktitransfer);
+            }
+            $this->db->where('uuid', $record->uuid)->set('buktitransfer', '')->update($this->table);
+        }
     }
 }

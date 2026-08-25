@@ -120,3 +120,8 @@ Then update the database credentials.
 ```bash
 0 0 10 * * /usr/bin/php /home/u940399048/domains/gosarilestari.com/public_html/index.php Cli KirimNotifikasiBulananAgen
 ```
+
+### Hapus bukti pembayaran setiap hari jam 00:00
+```bash
+0 0 * * * /usr/bin/php /home/u940399048/domains/gosarilestari.com/public_html/index.php Cli HapusBuktiPembayaran
+```

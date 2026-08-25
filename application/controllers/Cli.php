@@ -58,4 +58,10 @@ class CLI extends CI_Controller
                 'message' => 'Cron executed',
             ]));
     }
+
+    public function HapusBuktiPembayaran()
+    {
+        $this->load->model('Pembayarans');
+        $this->Pembayarans->cleanUpFiles();
+    }
 }

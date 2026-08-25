@@ -20,3 +20,6 @@ system
 
 #env
 application/config/production/database.php
+
+#user uploaded files
+buktitransfer/
