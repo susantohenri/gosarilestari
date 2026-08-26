@@ -43,12 +43,14 @@ class Penukaran extends MY_Controller
 		$model = $this->model;
 		$vars = [];
 
-		// approved penukaran shouldn't be updated or deleted
+		// approved penukaran shouldn't be updated
+		// still can be deleted only by admin & kasir
 		$found = $this->$model->findOne($id);
 		if ('APPROVED' === $found['status']) {
 			$this->load->model('Permissions');
-			$vars['permission'] = array_filter($this->Permissions->getPermissions(), function ($perm) {
-				return !in_array($perm, ['update_Penukaran', 'delete_Penukaran']);
+			$permissionToTakenOut = in_array($this->session->userdata('role_name'), ['Admin', 'Kasir']) ? ['update_Pembayaran'] : ['update_Pembayaran', 'delete_Pembayaran'];
+			$vars['permission'] = array_filter($this->Permissions->getPermissions(), function ($perm) use ($permissionToTakenOut) {
+				return !in_array($perm, $permissionToTakenOut);
 			});
 		}
 

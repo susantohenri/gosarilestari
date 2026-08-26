@@ -253,4 +253,16 @@ class Penukarans extends MY_Model
 
         return $uuid;
     }
+
+    function delete($uuid)
+    {
+        $penukaran = $this->findOne($uuid);
+        parent::delete($uuid);
+        if ('APPROVED' === $penukaran['status']) {
+            $this->load->model(['Ledgers', 'ProdukTukars']);
+            $ledger = $this->Ledgers->findOne(['transaksi' => $uuid]);
+            $this->Ledgers->delete($ledger['uuid']);
+            $this->ProdukTukars->unsold($penukaran['produktukar'], $penukaran['qty']);
+        }
+    }
 }

@@ -84,6 +84,15 @@ class ProdukTukars extends MY_Model
 			->update($this->table);
 	}
 
+	public function unsold($uuid, $qty)
+	{
+		return $this->db
+			->where('uuid', $uuid)
+			->set('stok', 'stok + ' . $qty, FALSE)
+			->set('terjual', 'terjual - ' . $qty, FALSE)
+			->update($this->table);
+	}
+
 	public function getOverView()
 	{
 		$this->load->model('Konfigurasis');

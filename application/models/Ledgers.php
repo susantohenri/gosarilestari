@@ -127,13 +127,26 @@ class Ledgers extends MY_Model
 	function save($record)
 	{
 		$uuid = parent::save($record);
+		$this->updateSaldo($record);
+		return $uuid;
+	}
+
+	function delete($uuid)
+	{
+		$record = $this->findOne($uuid);
+		parent::delete($uuid);
+		$this->updateSaldo($record);
+		return $uuid;
+	}
+
+	function updateSaldo($record)
+	{
 		$flows = $this->find(['warga' => $record['warga'], 'status' => 1, 'deletedAt' => null]);
 		$saldo = 0;
 		foreach ($flows as $flow) $saldo += $flow->nilai;
 		$this->load->model(['Wargas', 'Notifikasis']);
 		$this->Wargas->updateSaldo($record['warga'], $saldo);
 		$this->Notifikasis->perubahanSaldo($record);
-		return $uuid;
 	}
 
 	public function create($record)

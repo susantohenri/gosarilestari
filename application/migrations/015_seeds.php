@@ -39,15 +39,11 @@ class Migration_seeds extends CI_Migration
             'Kasir' => [
                 [
                     'action' => ['index', 'create', 'read', 'update', 'delete'],
-                    'entities' => ['Warga', 'ProdukTukar', 'Penukaran']
+                    'entities' => ['Warga', 'ProdukTukar', 'Pembayaran', 'Penukaran']
                 ],
                 [
                     'action' => ['index', 'read'],
                     'entities' => ['Informasi', 'Notifikasi', 'Ledger']
-                ],
-                [
-                    'action' => ['index', 'create', 'read', 'update'],
-                    'entities' => ['Pembayaran']
                 ]
             ],
             'Agen' => [

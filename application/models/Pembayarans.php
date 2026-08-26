@@ -332,10 +332,27 @@ class Pembayarans extends MY_Model
             ->get($this->table)
             ->result();
         foreach ($records as $record) {
-            if (file_exists($record->buktitransfer)) {
-                unlink($record->buktitransfer);
-            }
-            $this->db->where('uuid', $record->uuid)->set('buktitransfer', '')->update($this->table);
+            $this->unlinkBuktiTransfer((array)$record);
+        }
+    }
+
+    protected function unlinkBuktiTransfer($record)
+    {
+        if (file_exists($record['buktitransfer'])) {
+            unlink($record['buktitransfer']);
+        }
+        $this->db->where('uuid', $record['uuid'])->set('buktitransfer', '')->update($this->table);
+    }
+
+    function delete($uuid)
+    {
+        $record = $this->findOne($uuid);
+        parent::delete($uuid);
+        $this->unlinkBuktiTransfer($record);
+        if ('KASIR' === $record['status']) {
+            $this->load->model('Ledgers');
+            $ledger = $this->Ledgers->findOne(['transaksi' => $uuid]);
+            $this->Ledgers->delete($ledger['uuid']);
         }
     }
 }

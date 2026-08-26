@@ -39,12 +39,14 @@ class Pembayaran extends MY_Controller
 		$model = $this->model;
 		$vars = [];
 
-		// approved Pembayaran shouldn't be updated or deleted
+		// approved Pembayaran shouldn't be updated
+		// still can be deleted only by admin & kasir
 		$found = $this->$model->findOne($id);
 		if ('KASIR' === $found['status']) {
 			$this->load->model('Permissions');
-			$vars['permission'] = array_filter($this->Permissions->getPermissions(), function ($perm) {
-				return !in_array($perm, ['update_Pembayaran', 'delete_Pembayaran']);
+			$permissionToTakenOut = in_array($this->session->userdata('role_name'), ['Admin', 'Kasir']) ? ['update_Pembayaran'] : ['update_Pembayaran', 'delete_Pembayaran'];
+			$vars['permission'] = array_filter($this->Permissions->getPermissions(), function ($perm) use ($permissionToTakenOut) {
+				return !in_array($perm, $permissionToTakenOut);
 			});
 		}
 
